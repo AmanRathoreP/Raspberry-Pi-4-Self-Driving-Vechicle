@@ -1,0 +1,1 @@
+This directory contains some of the useful files which are necessary for build but not need to have version control with git
