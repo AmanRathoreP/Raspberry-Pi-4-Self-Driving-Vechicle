@@ -238,3 +238,8 @@ cython_debug/
 
 # My personally added ignores
 .vscode/
+*.uf2
+others/*
+resources/*
+!README.md
+*.uf2
