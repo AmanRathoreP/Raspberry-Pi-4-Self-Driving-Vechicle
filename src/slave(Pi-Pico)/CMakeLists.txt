@@ -11,8 +11,12 @@ set(CMAKE_CXX_STANDARD 17)
 # # Initialize the SDK
 pico_sdk_init()
 
+include_directories(${PROJECT_SOURCE_DIR})
+
 add_executable(main
-    src/main.c)
+    src/main.c
+    src/global_vars.c
+    src/functions.c)
 
 FILE(GLOB FreeRTOS_src FreeRTOS-Kernel/*.c)
 
