@@ -7,6 +7,8 @@
 #include "FreeRTOSConfig.h"
 #include "task.h"
 
+#include "hardware/pwm.h"
+
 #include <string.h>
 
 #include "global_vars.h"
@@ -16,11 +18,33 @@ struct __MOTOR_CONTROLs
 {
     struct __MOTOR
     {
-        unsigned short int speed;
+        uint16_t speed;
         bool terminal_1;
         bool terminal_2;
     } motor_right, motor_left;
 };
+
+void __trigger_pwm_speed(uint8_t my_pin_1, uint8_t my_pin_2, uint16_t speed_1, uint16_t speed_2)
+{
+    /**
+     * @brief this function takes two pins and also control their pulse width.
+     * @param speed_1 this should be range from [0, 65535]
+     * @param speed_2 this should be range from [0, 65535]
+     *
+     */
+
+    static bool __called_or_not = false;
+    static uint slice_num;
+    slice_num = pwm_gpio_to_slice_num(my_pin_1);
+    if (!(__called_or_not))
+    {
+        pwm_set_wrap(slice_num, 65535);
+        __called_or_not = true;
+    }
+    pwm_set_chan_level(slice_num, PWM_CHAN_A, speed_1);
+    pwm_set_chan_level(slice_num, PWM_CHAN_B, speed_2);
+    pwm_set_enabled(slice_num, true);
+}
 
 void GreenLEDTask(void *param)
 {
@@ -67,6 +91,7 @@ void __get_motor_terminal_vals(char direction, struct __MOTOR_CONTROLs *motor)
      * @brief this function takes a char of direction and then according to that direction it provides different terminal values to  struct __MOTOR_CONTROLs *motor
      * @param direction direction in which you want vehicle to move
      * @param motor it is a address of you motor struct in which info will be stored
+     * @param speed takes speed of the motor, range should be [0,1024] for best results
      */
     switch (direction)
     {
@@ -118,6 +143,7 @@ void __mv_vehicle(struct __MOTOR_CONTROLs motor)
     gpio_put(MOTORs_PINs_motor_right_terminal_2, motor.motor_right.terminal_2);
     gpio_put(MOTORs_PINs_motor_left_terminal_1, motor.motor_left.terminal_1);
     gpio_put(MOTORs_PINs_motor_left_terminal_2, motor.motor_left.terminal_2);
+    __trigger_pwm_speed(MOTORs_PINs_motor_right_speed, MOTORs_PINs_motor_left_speed, motor.motor_right.speed, motor.motor_left.speed);
 }
 
 void mv_vehicle(void *param)
@@ -128,12 +154,21 @@ void mv_vehicle(void *param)
      */
     char user_input[1024];
     struct __MOTOR_CONTROLs my_motor;
+
+    __get_motor_terminal_vals('s', &my_motor);
+    my_motor.motor_right.speed = (int)(65535 / 3);
+    my_motor.motor_left.speed = (int)(65535 / 1.2);
+    __mv_vehicle(my_motor);
+
     while (true)
     {
         scanf("%1024s", user_input);
         printf("@%c@\n", user_input[0]);
 
         __get_motor_terminal_vals(user_input[0], &my_motor);
+        my_motor.motor_right.speed = 65535;
+        my_motor.motor_left.speed = 65535;
+        // my_motor.motor_left.speed = my_motor.motor_right.speed;
         __mv_vehicle(my_motor);
     }
 }

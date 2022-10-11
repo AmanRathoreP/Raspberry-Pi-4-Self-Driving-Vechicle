@@ -12,4 +12,7 @@ extern const short int MOTORs_PINs_motor_right_terminal_2;
 extern const short int MOTORs_PINs_motor_left_terminal_1;
 extern const short int MOTORs_PINs_motor_left_terminal_2;
 
+extern const short int MOTORs_PINs_motor_right_speed;
+extern const short int MOTORs_PINs_motor_left_speed;
+
 #endif
