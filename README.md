@@ -35,7 +35,7 @@ Will be available soon in the form of videos and images
 ## Author
 
 - [@Aman](https://www.github.com/AmanRathoreP)
-   - [GitHub](https://www.github.com/AmanRathoreP)
+   - [GitHub](https://www.github.com/AmanRathoreM)
    - [Instagram](https://www.instagram.com/aman__0864/)
    - [Telegram](https://t.me/aman0864)
    - Email -> *aman.proj.rel@gmail.com*

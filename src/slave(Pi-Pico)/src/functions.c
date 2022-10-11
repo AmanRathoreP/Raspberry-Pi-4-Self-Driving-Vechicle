@@ -16,7 +16,7 @@ struct __MOTOR_CONTROLs
 {
     struct __MOTOR
     {
-        unsigned short int speed;
+        uint8_t speed;
         bool terminal_1;
         bool terminal_2;
     } motor_right, motor_left;
