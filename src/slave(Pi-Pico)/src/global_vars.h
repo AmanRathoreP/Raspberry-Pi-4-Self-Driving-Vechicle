@@ -13,4 +13,7 @@ extern const uint8_t MOTORs_PINs_motor_right_terminal_2;
 extern const uint8_t MOTORs_PINs_motor_left_terminal_1;
 extern const uint8_t MOTORs_PINs_motor_left_terminal_2;
 
+extern const uint16_t MOTORs_PINs_motor_right_speed;
+extern const uint16_t MOTORs_PINs_motor_left_speed;
+
 #endif

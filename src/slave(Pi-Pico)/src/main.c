@@ -7,6 +7,8 @@
 #include "FreeRTOSConfig.h"
 #include "task.h"
 
+#include "hardware/pwm.h"
+
 #include <string.h>
 
 #include "global_vars.h"
@@ -27,6 +29,9 @@ int main()
     gpio_set_dir(MOTORs_PINs_motor_left_terminal_1, GPIO_OUT);
     gpio_init(MOTORs_PINs_motor_left_terminal_2);
     gpio_set_dir(MOTORs_PINs_motor_left_terminal_2, GPIO_OUT);
+
+    gpio_set_function(MOTORs_PINs_motor_right_speed, GPIO_FUNC_PWM);
+    gpio_set_function(MOTORs_PINs_motor_left_speed, GPIO_FUNC_PWM);
 
     TaskHandle_t gLEDtask = NULL;
 
