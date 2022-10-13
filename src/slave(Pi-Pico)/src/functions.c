@@ -10,6 +10,7 @@
 #include "hardware/pwm.h"
 
 #include <string.h>
+#include <stdlib.h>
 
 #include "global_vars.h"
 #include "functions.h"
@@ -21,6 +22,15 @@ struct __MOTOR_CONTROLs
         uint16_t speed;
         bool terminal_1;
         bool terminal_2;
+    } motor_right, motor_left;
+};
+
+struct __SERIAL_INFO
+{
+    char direction;
+    struct __MOTOR_CONTROLS_FROM_SERIAL
+    {
+        uint16_t speed;
     } motor_right, motor_left;
 };
 
@@ -83,6 +93,22 @@ void msgRead(void *param)
             // gpio_put(RED_LED, GPIO_OFF);
         }
     }
+}
+
+void __get_vals_from_string(char *serial_str, struct __SERIAL_INFO *info)
+{
+    /**
+     * @brief this function takes a string i.e. a char array of serial data received and provides speed and direction which was given by master(pi 4 in my case)
+     *
+     */
+    char *token = strtok(serial_str, "-");
+
+    info->direction = *token;
+    token = strtok(NULL, "-");
+    info->motor_right.speed = (uint16_t)(atoi(token));
+    token = strtok(NULL, "-");
+    info->motor_left.speed = (uint16_t)(atoi(token));
+    token = strtok(NULL, "-");
 }
 
 void __get_motor_terminal_vals(char direction, struct __MOTOR_CONTROLs *motor)
@@ -154,21 +180,23 @@ void mv_vehicle(void *param)
      */
     char user_input[1024];
     struct __MOTOR_CONTROLs my_motor;
+    struct __SERIAL_INFO my_motor_serial_instructions;
 
     __get_motor_terminal_vals('s', &my_motor);
-    my_motor.motor_right.speed = (int)(65535 / 3);
-    my_motor.motor_left.speed = (int)(65535 / 1.2);
+    my_motor.motor_right.speed = 0;
+    my_motor.motor_left.speed = 0;
     __mv_vehicle(my_motor);
 
     while (true)
     {
         scanf("%1024s", user_input);
-        printf("@%c@\n", user_input[0]);
+        __get_vals_from_string(user_input, &my_motor_serial_instructions);
+
+        printf("@@%c@%d@%d@@\n", my_motor_serial_instructions.direction, my_motor_serial_instructions.motor_right.speed, my_motor_serial_instructions.motor_left.speed);
 
         __get_motor_terminal_vals(user_input[0], &my_motor);
-        my_motor.motor_right.speed = 65535;
-        my_motor.motor_left.speed = 65535;
-        // my_motor.motor_left.speed = my_motor.motor_right.speed;
+        my_motor.motor_right.speed = my_motor_serial_instructions.motor_right.speed;
+        my_motor.motor_left.speed = my_motor_serial_instructions.motor_left.speed;
         __mv_vehicle(my_motor);
     }
 }
