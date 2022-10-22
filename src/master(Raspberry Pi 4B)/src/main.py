@@ -1,17 +1,22 @@
-import sys
 import serial
-import time
+from packages.my_SDC_class import SDC
+from time import sleep as sl
 
-ser = serial.Serial('/dev/ttyACM0', 115200, timeout=80)
+my_sdc = SDC()
+
+# * timeout=0.001 is also enough
+ser = serial.Serial('/dev/ttyACM0', 115200, timeout=0.009)
 
 # listen for the input, exit if nothing received in timeout period
 while True:
+    data_to_send = my_sdc.get_vehicle_data()
+    ser.write(data_to_send.encode())
+    sl(1)
 
-   ser.write(f'''{input("Enter data to serial: ")}\n'''.encode())
-   # ser.write("0\n".encode())
-
-   line = ser.readline()
-   if len(line) == 0:
-      print("Time out! Exit.\n")
-      sys.exit()
-   print(line.decode())
+    try:
+        my_sdc.serial_msg = ser.readline().decode().replace('\n', '')
+    except:
+        my_sdc.add_log("Error in reading serial message!")
+    if len(my_sdc.serial_msg) == 0:
+        my_sdc.add_log("Time out! in serial connection")
+    my_sdc.add_log(f"Data received {my_sdc.serial_msg}")
