@@ -1,28 +1,24 @@
 import serial
 from packages.my_SDC_class import *
-from time import sleep as sl
-
-#! my_sdc = SDC() #* This is declared in the end of the file "my_SDC_class.py"
 
 # * timeout=0.001 is also enough
 ser = serial.Serial('/dev/ttyACM0', 115200, timeout=0.009)
 
-camera = picamera.PiCamera(resolution='VGA')
-camera.resolution = (16*80, 9*80)
-camera.framerate = 20
-# camera.color_effects = (128, 128)
-camera.start_preview()
-my_sdc.add_log("initializing camera...")
-time.sleep(2)  # * giving time to camera to initialize
-my_sdc.add_log("camera initialized!")
-output = ProcessOutput()
-camera.start_recording(output, format='mjpeg')
+listensocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+addr, port = "0.0.0.0", 8947
+listensocket.bind((addr, port))
+# Starts server
+listensocket.listen(999)
+print("Server started at " + socket.gethostname() + " on port " + str(port))
+# Accepts the incoming connection
+(clientsocket, address) = listensocket.accept()
+print("New connection made!")
 
-#* listen for the input, exit if nothing received in timeout period
-while not output.done:
-    camera.wait_recording(0.069)
-    my_sdc.add_log("img captured", send_data_to_observer=False)
-    data_to_send = my_sdc.get_vehicle_data()
+while True:
+    # Gets the incoming message
+    message = f"{clientsocket.recv(1024).decode()}"
+    #! data_to_send = my_sdc.get_vehicle_data()
+    data_to_send = message
     ser.write(data_to_send.encode())
 
     try:
@@ -36,5 +32,3 @@ while not output.done:
 
 my_sdc.add_log(
     "Endless while loop ended! Camera is somehow unable to fetch images")
-camera.stop_recording()
-camera.close()

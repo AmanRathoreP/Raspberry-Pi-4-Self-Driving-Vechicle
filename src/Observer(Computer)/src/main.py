@@ -1,40 +1,50 @@
-import numpy as np
-import cv2
 import socket
+# import random
+import keyboard as kb
+from time import sleep as sl
+from numpy import arange
 
-host, port = "192.168.0.103", 8141
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+print("connecting to rpi...")
+s.connect(('192.168.0.105', 8947))  # Connects to server
+print("rpi connected!")
 
+vehicle_vals = {"direction": 'x',
+                "right_side_motors": 65535, "left_side_motors": 65535}
+gears = arange(0.7, 1.001, 0.06)
 
-server = socket.socket()
-server.bind((host, port))
-server.listen(0)
-connection, client_address = server.accept()
-connection = connection.makefile('rb')
-host_name = socket.gethostname()
-host_ip = socket.gethostbyname(host_name)
+while True:
+    print(
+        f"""{vehicle_vals["direction"]}-{vehicle_vals["left_side_motors"]}-{vehicle_vals["right_side_motors"]}""")
+    s.send(f"""{vehicle_vals["direction"]}-{vehicle_vals["left_side_motors"]}-{vehicle_vals["right_side_motors"]}\n""".encode(
+    ))  # Encodes and sends message (x)
 
-try:
-    print("Host: ", host_name + ' ' + host_ip)
-    print("Connection from: ", client_address)
-    print("Streaming...")
-    print("Press 'q' to exit")
+    if (kb.is_pressed('q')):
+        vehicle_vals["right_side_motors"] = int(gears[1]*65535)
+        vehicle_vals["left_side_motors"] = int(gears[1]*65535)
+    elif (kb.is_pressed('w')):
+        vehicle_vals["right_side_motors"] = int(gears[2]*65535)
+        vehicle_vals["left_side_motors"] = int(gears[2]*65535)
+    elif (kb.is_pressed('e')):
+        vehicle_vals["right_side_motors"] = int(gears[3]*65535)
+        vehicle_vals["left_side_motors"] = int(gears[3]*65535)
+    elif (kb.is_pressed('r')):
+        vehicle_vals["right_side_motors"] = int(gears[4]*65535)
+        vehicle_vals["left_side_motors"] = int(gears[4]*65535)
+    elif (kb.is_pressed('t')):
+        vehicle_vals["right_side_motors"] = int(gears[5]*65535)
+        vehicle_vals["left_side_motors"] = int(gears[5]*65535)
 
-    # need bytes here
-    stream_bytes = b' '
-    while True:
-        stream_bytes += connection.read(1024)
-        first = stream_bytes.find(b'\xff\xd8')
-        last = stream_bytes.find(b'\xff\xd9')
-        if first != -1 and last != -1:
-            jpg = stream_bytes[first:last + 2]
-            stream_bytes = stream_bytes[last + 2:]
-            image = cv2.imdecode(np.frombuffer(
-                jpg, dtype=np.uint8), cv2.IMREAD_COLOR)
-            cv2.imshow('image', image)
-
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-except Exception as e:
-    print(e)
-    connection.close()
-    server.close()
+    if (kb.is_pressed("space")):
+        vehicle_vals["direction"] = 'x'
+    elif (kb.is_pressed("left")):
+        vehicle_vals["direction"] = 'l'
+    elif (kb.is_pressed("right")):
+        vehicle_vals["direction"] = 'r'
+    elif (kb.is_pressed("down")):
+        vehicle_vals["direction"] = 'b'
+    elif (kb.is_pressed("up")):
+        vehicle_vals["direction"] = 'f'
+    else:
+        vehicle_vals["direction"] = 'x'
+    sl(0.0001)
