@@ -110,44 +110,72 @@ class SDC:
     serial_msg = None
     img_click_time = None
     img = None
-    send_data = False
+    send_data = {"image": False, "string": False}
 
     def send_img(self):
-        self.observer_connection_obj.write(
-            struct.pack('<L',  self.observer_stream.tell()))
-        self.observer_connection_obj.flush()
-        self.observer_stream.seek(0)
-        self.observer_connection_obj.write(self.observer_stream.read())
-        self.observer_stream.seek(0)
-        self.observer_stream.truncate()
-
-        print("Sending")
+        if self.send_data["image"]:
+            try:
+                self.observer_connection_obj.write(
+                    struct.pack('<L',  self.observer_stream.tell()))
+                self.observer_connection_obj.flush()
+                self.observer_stream.seek(0)
+                self.observer_connection_obj.write(self.observer_stream.read())
+                self.observer_stream.seek(0)
+                self.observer_stream.truncate()
+            except:
+                #! self.send_data["image"] = False
+                self.add_log(
+                    "Unable to send image data to image server!")
+            else:
+                self.add_log("Image successfully sent to the img server!")
 
     def __init__(self, send_data):
         self.add_log("Creating object...")
         self.send_data = send_data
-        if send_data:
-            self.add_log("Connecting to observer...")
-            try:
-                self.observer = socket.socket(
-                    socket.AF_INET, socket.SOCK_STREAM)
-                # * Connects to server
-                self.observer.connect(("192.168.0.103", 8141))
-                self.observer_connection_obj = self.observer.makefile('wb')
-                self.observer_stream = io.BytesIO()
-                self.send_data = True  # * this is necessary because call of func "SDC.add_log()" before establishing socket connection had forced SDC.send_data = False
-                self.add_log("Observer connected successfully!")
-            except:
-                self.send_data = False
-                self.add_log(
-                    "Unable to establish socket connection!, forcing \"send_data = False\"")
-        self.add_log(
-            "Object successfully created!")
 
-    def add_log(self, my_log, send_data_to_observer=False):
+        if self.send_data["string"]:
+            self.add_log("Connecting to observer...")
+            self.add_log("Connecting to string data server...")
+            self.observer_str_data = socket.socket(
+                socket.AF_INET, socket.SOCK_STREAM)
+            try:
+                # * Connects to server
+                self.observer_str_data.connect(("192.168.0.103", 8474))
+                # * this is necessary because call of func "SDC.add_log()" before establishing socket connection had forced SDC.send_data = False
+            except:
+                self.send_data = {"image": False, "string": False}
+                self.add_log(
+                    "Unable to establish socket connection with string data server!, forcing all elements of dict \"send_data = False\"")
+            else:
+                self.send_data["string"] = True
+                self.send_data["image"] = send_data["image"]
+                self.add_log("string data server connected successfully!")
+
+            if self.send_data["image"]:
+                # * Images will be only send if string data is been send to server/servers
+                self.add_log("Connecting to image server...")
+                time.sleep(0.69)
+                try:
+                    self.observer = socket.socket(
+                        socket.AF_INET, socket.SOCK_STREAM)
+                    # * Connects to server
+                    self.observer.connect(("192.168.0.103", 8141))
+                    self.observer_connection_obj = self.observer.makefile('wb')
+                    self.observer_stream = io.BytesIO()
+                except:
+                    self.send_data["image"] = False
+                    self.add_log(
+                        "Unable to send image data to image server, forcing \"send_data[\"image\"] = False\" ")
+                else:
+                    self.add_log("image server connected successfully!")
+
+            self.add_log(
+                "Object successfully created!")
+
+    def add_log(self, my_log, send_data_to_observer=True):
         self.last_log = f"{format(time.time(),'.10f')}-> {my_log}"
         print(self.last_log)
-        if (self.send_data & send_data_to_observer):
+        if (self.send_data["string"] & send_data_to_observer):
             self.__send_data_to_observer(self.last_log)
 
     def random_movement(self):
@@ -165,7 +193,7 @@ class SDC:
         force_send : bool, default=False
             This defines weather you want to send data to observer even when given object is configured to not send data to observer.
         """
-        if (self.send_data):
+        if (self.send_data["string"]):
             self.__send_data_to_observer(data_to_send)
         elif(force_send):
             self.add_log("Force send to observer!")
@@ -177,11 +205,11 @@ class SDC:
         """This takes the data in the form of string and sends it to the observer(computer in my case)
         """
         try:
-            self.observer.send(data.encode())
+            self.observer_str_data.send(data.encode())
         except:
-            self.send_data = False
+            self.send_data = {"image": False, "string": False}
             self.add_log(
-                "Unable communicate to observer via socket!, forcing \"send_data = False\"")
+                "Unable communicate to observer via socket!, forcing all elements of dict \"send_data = False\"")
 
 
-my_sdc = SDC(True)
+my_sdc = SDC({"string": True, "image": True})
