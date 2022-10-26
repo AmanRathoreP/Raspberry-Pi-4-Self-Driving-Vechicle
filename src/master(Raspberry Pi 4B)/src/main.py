@@ -1,8 +1,8 @@
 import serial
-from packages.my_SDC_class import *
+from packages.my_class import *
 from time import sleep as sl
 
-#! my_sdc = SDC() #* This is declared in the end of the file "my_SDC_class.py"
+#! my_sdc = SDC() #* This is declared in the end of the file "my_class.py"
 
 # * timeout=0.001 is also enough
 ser = serial.Serial('/dev/ttyACM0', 115200, timeout=0.009)
