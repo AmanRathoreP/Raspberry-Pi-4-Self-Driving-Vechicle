@@ -8,9 +8,9 @@ from time import sleep as sl
 ser = serial.Serial('/dev/ttyACM0', 115200, timeout=0.009)
 
 camera = picamera.PiCamera(resolution='VGA')
-camera.resolution = (340, 240)
-camera.framerate = 90
-camera.color_effects = (128, 128)
+camera.resolution = (16*80, 9*80)
+camera.framerate = 20
+# camera.color_effects = (128, 128)
 camera.start_preview()
 my_sdc.add_log("initializing camera...")
 time.sleep(2)  # * giving time to camera to initialize
@@ -32,7 +32,7 @@ while not output.done:
     if len(my_sdc.serial_msg) == 0:
         my_sdc.add_log("Time out! in serial connection")
     my_sdc.add_log(
-        f"Data received {my_sdc.serial_msg}", send_data_to_observer=True)
+        f"Data received {my_sdc.serial_msg}",)
 
 my_sdc.add_log(
     "Endless while loop ended! Camera is somehow unable to fetch images")
