@@ -11,6 +11,14 @@ from PIL import Image as PILImage
 import socket
 import io
 import struct
+import RPi.GPIO as GPIO
+
+IR_RIGHT = 40
+IR_LEFT = 38
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(IR_RIGHT, GPIO.IN)
+GPIO.setup(IR_LEFT, GPIO.IN)
 
 
 class ImageProcessor(threading.Thread):
@@ -113,19 +121,31 @@ class SDC:
     send_data = False
 
     def send_img(self):
-        self.observer_connection_obj.write(
-            struct.pack('<L',  self.observer_stream.tell()))
-        self.observer_connection_obj.flush()
-        self.observer_stream.seek(0)
-        self.observer_connection_obj.write(self.observer_stream.read())
-        self.observer_stream.seek(0)
-        self.observer_stream.truncate()
+        if self.send_data == True:
+            self.observer_connection_obj.write(
+                struct.pack('<L',  self.observer_stream.tell()))
+            self.observer_connection_obj.flush()
+            self.observer_stream.seek(0)
+            self.observer_connection_obj.write(self.observer_stream.read())
+            self.observer_stream.seek(0)
+            self.observer_stream.truncate()
 
-        print("Sending")
+            self.add_log("sending img")
+        else:
+            self.add_log("img not sent")
 
     def __init__(self, send_data):
         self.add_log("Creating object...")
+        self.instantaneous_left_speed = 43000*0.85713
+        self.instantaneous_right_speed = 43000*0.85713
+        self.avg_speed = 47900
+        self.turning_speed_multiplier = 1.1
+        self.vehicle_data = f"""b-0-0\n"""
+        self.__ir_data_time = 0
         self.send_data = send_data
+        
+        self.__update_ir_data()
+        
         if send_data:
             self.add_log("Connecting to observer...")
             try:
@@ -151,10 +171,24 @@ class SDC:
             self.__send_data_to_observer(self.last_log)
 
     def random_movement(self):
-        return f"""{random.choice(['f','b','r','l'])}-{random.randint(15535,65535)}-{random.randint(15535,65535)}\n"""
+        self.vehicle_data=f"""{random.choice(['f','b','r','l'])}-{random.randint(15535,65535)}-{random.randint(15535,65535)}\n"""
+        return self.vehicle_data
 
     def get_vehicle_data(self):
-        return self.random_movement()
+        self.__update_ir_data()
+        if (time.time()-self.__ir_data_time > 0.251):
+            if (self.ir_data[0] == 1) & (self.ir_data[1] == 1):
+                self.vehicle_data = f"""f-{self.avg_speed}-{self.avg_speed}\n"""
+            elif (self.ir_data[0] == 0) & (self.ir_data[1] == 1):
+                self.__ir_data_time = time.time()
+                self.vehicle_data = f"""l-{self.avg_speed*self.turning_speed_multiplier}-{self.avg_speed*self.turning_speed_multiplier}\n"""
+            elif (self.ir_data[0] == 1) & (self.ir_data[1] == 0):
+                self.__ir_data_time = time.time()
+                self.vehicle_data = f"""r-{self.avg_speed*self.turning_speed_multiplier}-{self.avg_speed*self.turning_speed_multiplier}\n"""
+            else:
+                self.add_log("Both IR sensors are returning True/1!")
+                self.vehicle_data = f"""b-0-0\n"""
+        return self.vehicle_data
 
     def send_data_to_observer(self, data_to_send, force_send=False):
         """This takes the data in the form of ... and send it to the observer(computer in my case)
@@ -182,6 +216,12 @@ class SDC:
             self.send_data = False
             self.add_log(
                 "Unable communicate to observer via socket!, forcing \"send_data = False\"")
+
+    def __update_ir_data(self):
+        """
+        This function gets IR data from sensors
+        """
+        self.ir_data = [GPIO.input(IR_LEFT), GPIO.input(IR_RIGHT)]
 
 
 my_sdc = SDC(True)
