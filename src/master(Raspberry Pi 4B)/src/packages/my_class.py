@@ -20,6 +20,42 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(IR_RIGHT, GPIO.IN)
 GPIO.setup(IR_LEFT, GPIO.IN)
 
+_base_img = cv2.imread(
+    "/home/aman/PROJECT/project_files/master_code/src/stop sign.png", 0)
+
+
+class img_prs():
+    def __init__(self, img, show_img=False) -> None:
+        self.raw_img = img
+        self.processed_img = self.raw_img
+        self.img_result = ""
+        # self.img_result = "img not processed!"
+
+    def __find_features(self, MIN_MATCH_COUNT=13):
+        # Initiate SIFT detector
+        sift = cv2.SIFT_create()
+        # find the keypoints and descriptors with SIFT
+        kp1, des1 = sift.detectAndCompute(_base_img, None)
+        kp2, des2 = sift.detectAndCompute(self.raw_img, None)
+        FLANN_INDEX_KDTREE = 1
+        index_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)
+        search_params = dict(checks=50)
+        flann = cv2.FlannBasedMatcher(index_params, search_params)
+        matches = flann.knnMatch(des1, des2, k=2)
+        # store all the good matches as per Lowe's ratio test.
+        good = []
+        for m, n in matches:
+            if m.distance < 0.7*n.distance:
+                good.append(m)
+        if len(good) > MIN_MATCH_COUNT:
+            self.img_result = 'y'  # * "y" = yes if stop sign is detected
+        else:
+            self.img_result = 'n'  # * "n" = no if stop sign is not detected
+
+    def final_result(self):
+        self.__find_features(11)
+        return self.img_result
+
 
 class ImageProcessor(threading.Thread):
     def __init__(self, owner):
@@ -55,8 +91,18 @@ class ImageProcessor(threading.Thread):
                     my_sdc.img_click_time = time.time()
                     my_sdc.img = cv2.cvtColor(imdecode(np.fromstring(
                         self.stream.getvalue(), dtype=np.uint8), 1), cv2.COLOR_BGR2GRAY)
-                    #! imw( f"captured_imgs/clicked on - {my_sdc.img_click_time}.jpg", my_sdc.img)
-                    my_sdc.send_img()
+                    # my_sdc.add_log(img_prs(my_sdc.img).final_result()*50)
+                    try:
+                        if 'y' in img_prs(my_sdc.img).final_result():
+                            print("stop sign detected!")
+                            my_sdc.avg_speed = 0
+                        else:
+                            print("no "*24)
+                            my_sdc.avg_speed = 47900
+                        my_sdc.send_img()
+                    except Exception as e:
+                        my_sdc.avg_speed = 47900
+                        my_sdc.add_log(e)
 
                 finally:
                     # * Reset the stream and event

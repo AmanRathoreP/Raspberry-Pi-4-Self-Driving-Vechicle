@@ -9,8 +9,8 @@ ser = serial.Serial('/dev/ttyACM0', 115200, timeout=0.009)
 
 camera = picamera.PiCamera(resolution='VGA')
 camera.resolution = (16*80, 9*80)
-camera.framerate = 20
-# camera.color_effects = (128, 128)
+camera.framerate = 10
+camera.color_effects = (128, 128)
 camera.start_preview()
 my_sdc.add_log("initializing camera...")
 time.sleep(2)  # * giving time to camera to initialize

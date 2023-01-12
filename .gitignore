@@ -243,3 +243,10 @@ others/*
 resources/*
 !README.md
 *.uf2
+
+#* Vids should't be included!
+*.mp4
+*.mov
+*.wmv
+*.avi
+*.h264
