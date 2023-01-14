@@ -23,6 +23,8 @@ GPIO.setup(IR_LEFT, GPIO.IN)
 _base_img = cv2.imread(
     "/home/aman/PROJECT/project_files/master_code/src/stop sign.png", 0)
 
+no_of_times_there_is_no_stop_sign = 0
+stop_sign_detected_first_time = True
 
 class img_prs():
     def __init__(self, img, show_img=False) -> None:
@@ -53,7 +55,7 @@ class img_prs():
             self.img_result = 'n'  # * "n" = no if stop sign is not detected
 
     def final_result(self):
-        self.__find_features(11)
+        self.__find_features(21)
         return self.img_result
 
 
@@ -92,16 +94,26 @@ class ImageProcessor(threading.Thread):
                     my_sdc.img = cv2.cvtColor(imdecode(np.fromstring(
                         self.stream.getvalue(), dtype=np.uint8), 1), cv2.COLOR_BGR2GRAY)
                     # my_sdc.add_log(img_prs(my_sdc.img).final_result()*50)
+                    global no_of_times_there_is_no_stop_sign
+                    global stop_sign_detected_first_time
                     try:
                         if 'y' in img_prs(my_sdc.img).final_result():
-                            print("stop sign detected!")
+                            stop_sign_detected_first_time = False
+                            print("stop sign detected!"*5)
                             my_sdc.avg_speed = 0
+                            no_of_times_there_is_no_stop_sign = 0
                         else:
-                            print("no "*24)
-                            my_sdc.avg_speed = 47900
+                            if no_of_times_there_is_no_stop_sign >= 7:
+                                print("no "*24)
+                                my_sdc.avg_speed = 47900
+                            stop_sign_detected_first_time = True
+                            no_of_times_there_is_no_stop_sign += 1
                         my_sdc.send_img()
                     except Exception as e:
-                        my_sdc.avg_speed = 47900
+                        if no_of_times_there_is_no_stop_sign >= 7:
+                            my_sdc.avg_speed = 47900
+                        stop_sign_detected_first_time = True
+                        no_of_times_there_is_no_stop_sign += 1
                         my_sdc.add_log(e)
 
                 finally:
