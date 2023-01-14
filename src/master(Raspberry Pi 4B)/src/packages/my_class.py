@@ -20,11 +20,6 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(IR_RIGHT, GPIO.IN)
 GPIO.setup(IR_LEFT, GPIO.IN)
 
-_base_img = cv2.imread(
-    "/home/aman/PROJECT/project_files/master_code/src/stop sign.png", 0)
-
-no_of_times_there_is_no_stop_sign = 0
-stop_sign_detected_first_time = True
 
 class img_prs():
     def __init__(self, img, show_img=False) -> None:
@@ -33,30 +28,38 @@ class img_prs():
         self.img_result = ""
         # self.img_result = "img not processed!"
 
-    def __find_features(self, MIN_MATCH_COUNT=13):
-        # Initiate SIFT detector
-        sift = cv2.SIFT_create()
-        # find the keypoints and descriptors with SIFT
-        kp1, des1 = sift.detectAndCompute(_base_img, None)
-        kp2, des2 = sift.detectAndCompute(self.raw_img, None)
-        FLANN_INDEX_KDTREE = 1
-        index_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)
-        search_params = dict(checks=50)
-        flann = cv2.FlannBasedMatcher(index_params, search_params)
-        matches = flann.knnMatch(des1, des2, k=2)
-        # store all the good matches as per Lowe's ratio test.
-        good = []
-        for m, n in matches:
-            if m.distance < 0.7*n.distance:
-                good.append(m)
-        if len(good) > MIN_MATCH_COUNT:
-            self.img_result = 'y'  # * "y" = yes if stop sign is detected
+    def __detect_stop_sign(self):
+        self.processed_img = cv2.cvtColor(
+            self.processed_img, cv2.COLOR_BGR2RGB)
+        self.processed_img = cv2.flip(self.processed_img, -1)
+        self.processed_img = self.processed_img[:, :8*90]
+
+        r, g, b = cv2.split(self.processed_img)
+        r[r < 120] = 0
+        self.processed_img = cv2.merge([r, g, b])
+
+        # hsv = cv2.cvtColor(self.processed_img, cv2.COLOR_BGR2HSV)
+        # light_blue = np.array([110, 20, 20])
+        # dark_blue = np.array([255, 255, 255])
+        # mask = cv2.inRange(hsv, light_blue, dark_blue)
+        # self.processed_img = cv2.bitwise_and(
+        #     self.processed_img, self.processed_img, mask=mask)
+        # cv2.imwrite(str(round(time.time(), 15))+".jpg", self.processed_img)
+        probability = round((self.processed_img.mean(axis=0).mean(
+            axis=0)[0]*100)/(self.processed_img.mean(axis=0).mean(axis=0).sum()), 6)
+        # self.processed_img = cv2.cvtColor(
+        #     self.processed_img, cv2.COLOR_BGR2RGB)
+
+        if probability < 30:
+            self.img_result = 'y'
         else:
-            self.img_result = 'n'  # * "n" = no if stop sign is not detected
+            self.img_result = 'n'
+        print(probability)
+        # self.processed_img = np.hstack((self.raw_img, self.processed_img))
 
     def final_result(self):
-        self.__find_features(21)
-        return self.img_result
+        self.__detect_stop_sign()
+        return self.img_result, self.processed_img
 
 
 class ImageProcessor(threading.Thread):
@@ -92,29 +95,17 @@ class ImageProcessor(threading.Thread):
 
                     my_sdc.img_click_time = time.time()
                     my_sdc.img = cv2.cvtColor(imdecode(np.fromstring(
-                        self.stream.getvalue(), dtype=np.uint8), 1), cv2.COLOR_BGR2GRAY)
-                    # my_sdc.add_log(img_prs(my_sdc.img).final_result()*50)
-                    global no_of_times_there_is_no_stop_sign
-                    global stop_sign_detected_first_time
-                    try:
-                        if 'y' in img_prs(my_sdc.img).final_result():
-                            stop_sign_detected_first_time = False
-                            print("stop sign detected!"*5)
-                            my_sdc.avg_speed = 0
-                            no_of_times_there_is_no_stop_sign = 0
-                        else:
-                            if no_of_times_there_is_no_stop_sign >= 7:
-                                print("no "*24)
-                                my_sdc.avg_speed = 47900
-                            stop_sign_detected_first_time = True
-                            no_of_times_there_is_no_stop_sign += 1
-                        my_sdc.send_img()
-                    except Exception as e:
-                        if no_of_times_there_is_no_stop_sign >= 7:
-                            my_sdc.avg_speed = 47900
-                        stop_sign_detected_first_time = True
-                        no_of_times_there_is_no_stop_sign += 1
-                        my_sdc.add_log(e)
+                        self.stream.getvalue(), dtype=np.uint8), 1), cv2.COLOR_BGR2RGB)
+
+                    img_result, my_sdc.img = img_prs(my_sdc.img).final_result()
+
+                    if 'y' in img_result:
+                        # print("stop sign detected!"*5)
+                        my_sdc.avg_speed = 0
+                    else:
+                        # print("no "*50)
+                        my_sdc.avg_speed = 47900
+                    my_sdc.send_img()
 
                 finally:
                     # * Reset the stream and event
@@ -201,9 +192,9 @@ class SDC:
         self.vehicle_data = f"""b-0-0\n"""
         self.__ir_data_time = 0
         self.send_data = send_data
-        
+
         self.__update_ir_data()
-        
+
         if send_data:
             self.add_log("Connecting to observer...")
             try:
@@ -224,12 +215,12 @@ class SDC:
 
     def add_log(self, my_log, send_data_to_observer=False):
         self.last_log = f"{format(time.time(),'.10f')}-> {my_log}"
-        print(self.last_log)
+        #! print(self.last_log)
         if (self.send_data & send_data_to_observer):
             self.__send_data_to_observer(self.last_log)
 
     def random_movement(self):
-        self.vehicle_data=f"""{random.choice(['f','b','r','l'])}-{random.randint(15535,65535)}-{random.randint(15535,65535)}\n"""
+        self.vehicle_data = f"""{random.choice(['f','b','r','l'])}-{random.randint(15535,65535)}-{random.randint(15535,65535)}\n"""
         return self.vehicle_data
 
     def get_vehicle_data(self):
