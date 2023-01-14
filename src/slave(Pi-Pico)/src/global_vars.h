@@ -5,6 +5,10 @@
 #include <stdint.h>  //* to use uint8_t, uint16_t, uint32, etc. data types
 
 extern const uint8_t GREEN_LED;
+extern const uint8_t LEFT_INDICATOR;
+extern const uint8_t RIGHT_INDICATOR;
+extern const uint8_t STOP_INDICATOR;
+extern const uint8_t BUZZER;
 extern const bool GPIO_ON;
 extern const bool GPIO_OFF;
 

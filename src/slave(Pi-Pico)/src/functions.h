@@ -12,5 +12,7 @@ void mv_vehicle(void *);
 void __mv_vehicle(struct __MOTOR_CONTROLs);
 void __trigger_pwm_speed(uint8_t, uint8_t, uint16_t, uint16_t);
 void __get_vals_from_string(char *, struct __SERIAL_INFO *);
+void __indicators(char);
+void __turn_buzzer_on(void);
 
 #endif

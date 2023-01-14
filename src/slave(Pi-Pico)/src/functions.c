@@ -119,6 +119,11 @@ void __get_motor_terminal_vals(char direction, struct __MOTOR_CONTROLs *motor)
      * @param motor it is a address of you motor struct in which info will be stored
      * @param speed takes speed of the motor, range should be [0,1024] for best results
      */
+    if ((motor->motor_right.speed == 0) || (motor->motor_left.speed == 0))
+    {
+        direction = 'b';
+    }
+    __indicators(direction);
     switch (direction)
     {
     case 'f':
@@ -198,5 +203,74 @@ void mv_vehicle(void *param)
         my_motor.motor_right.speed = my_motor_serial_instructions.motor_right.speed;
         my_motor.motor_left.speed = my_motor_serial_instructions.motor_left.speed;
         __mv_vehicle(my_motor);
+    }
+}
+
+void __indicators(char direction)
+{
+    /**
+     * @brief This function is responsible for all the working of indicators weather stop indicator, turn indicator or even horn
+     * @param direction this is the direction of the vehicle
+     *
+     */
+
+    switch (direction)
+    {
+
+    case 'f':
+        gpio_put(LEFT_INDICATOR, false);
+        gpio_put(RIGHT_INDICATOR, false);
+        gpio_put(STOP_INDICATOR, false);
+        break;
+    case 'b':
+        gpio_put(LEFT_INDICATOR, false);
+        gpio_put(RIGHT_INDICATOR, false);
+        gpio_put(STOP_INDICATOR, true);
+        __turn_buzzer_on();
+        break;
+
+    case 'r':
+        gpio_put(LEFT_INDICATOR, false);
+        gpio_put(STOP_INDICATOR, false);
+        gpio_put(RIGHT_INDICATOR, true);
+        __turn_buzzer_on();
+        break;
+
+    case 'l':
+        gpio_put(RIGHT_INDICATOR, false);
+        gpio_put(STOP_INDICATOR, false);
+        gpio_put(LEFT_INDICATOR, true);
+        __turn_buzzer_on();
+        break;
+
+    default:
+        gpio_put(LEFT_INDICATOR, false);
+        gpio_put(RIGHT_INDICATOR, false);
+        gpio_put(STOP_INDICATOR, true);
+        __turn_buzzer_on();
+        break;
+    }
+}
+
+void __turn_buzzer_on(void)
+{
+    /**
+     * @brief this function is dedicated to the most effective controlling of horn/buzzer
+     *
+     */
+    static bool running = false;
+
+    if (!(running))
+    {
+        //* It is not previously called
+        running = true;
+        gpio_put(BUZZER, true);
+        vTaskDelay(69);
+        gpio_put(BUZZER, false);
+        running = false;
+    }
+    else
+    {
+        //* Nothing will execute
     }
 }

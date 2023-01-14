@@ -21,3 +21,7 @@ const uint16_t MOTORs_PINs_motor_left_speed = MOTORs_PINs.motor_left.speed;
 const bool GPIO_ON = 1;
 const bool GPIO_OFF = 0;
 const uint8_t GREEN_LED = 25;
+const uint8_t LEFT_INDICATOR = 14;
+const uint8_t RIGHT_INDICATOR = 15;
+const uint8_t STOP_INDICATOR = 11;
+const uint8_t BUZZER = 10;

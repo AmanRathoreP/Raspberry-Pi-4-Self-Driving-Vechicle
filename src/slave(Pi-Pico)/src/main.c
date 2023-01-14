@@ -29,6 +29,14 @@ int main()
     gpio_set_dir(MOTORs_PINs_motor_left_terminal_1, GPIO_OUT);
     gpio_init(MOTORs_PINs_motor_left_terminal_2);
     gpio_set_dir(MOTORs_PINs_motor_left_terminal_2, GPIO_OUT);
+    gpio_init(LEFT_INDICATOR);
+    gpio_set_dir(LEFT_INDICATOR, GPIO_OUT);
+    gpio_init(RIGHT_INDICATOR);
+    gpio_set_dir(RIGHT_INDICATOR, GPIO_OUT);
+    gpio_init(STOP_INDICATOR);
+    gpio_set_dir(STOP_INDICATOR, GPIO_OUT);
+    gpio_init(BUZZER);
+    gpio_set_dir(BUZZER, GPIO_OUT);
 
     gpio_set_function(MOTORs_PINs_motor_right_speed, GPIO_FUNC_PWM);
     gpio_set_function(MOTORs_PINs_motor_left_speed, GPIO_FUNC_PWM);
@@ -47,22 +55,6 @@ int main()
         NULL,
         1,
         &gLEDtask);
-
-    // xTaskCreate(
-    //     msgPrint,
-    //     "Msg sending over USB",
-    //     1024,
-    //     NULL,
-    //     tskIDLE_PRIORITY,
-    //     &msgHandler);
-
-    // xTaskCreate(
-    //     msgRead,
-    //     "Msg over USB in terms of reading",
-    //     1024,
-    //     NULL,
-    //     tskIDLE_PRIORITY,
-    //     &msgHandler_read);
 
     xTaskCreate(
         mv_vehicle,
