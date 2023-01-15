@@ -33,29 +33,41 @@ class img_prs():
             self.processed_img, cv2.COLOR_BGR2RGB)
         self.processed_img = cv2.flip(self.processed_img, -1)
         self.processed_img = self.processed_img[:, :8*90]
+        self.raw_img = self.processed_img
 
+        self.processed_img = self.raw_img[:,:int(self.raw_img.shape[1]/2)].copy()
+        self.processed_img = cv2.blur(self.processed_img, (70, 70))
         r, g, b = cv2.split(self.processed_img)
-        r[r < 120] = 0
+        r[r > 250] = 255
+        g[g < 30] = 0
+        b[b < 30] = 0
         self.processed_img = cv2.merge([r, g, b])
 
-        # hsv = cv2.cvtColor(self.processed_img, cv2.COLOR_BGR2HSV)
-        # light_blue = np.array([110, 20, 20])
-        # dark_blue = np.array([255, 255, 255])
-        # mask = cv2.inRange(hsv, light_blue, dark_blue)
-        # self.processed_img = cv2.bitwise_and(
-        #     self.processed_img, self.processed_img, mask=mask)
-        # cv2.imwrite(str(round(time.time(), 15))+".jpg", self.processed_img)
-        probability = round((self.processed_img.mean(axis=0).mean(
-            axis=0)[0]*100)/(self.processed_img.mean(axis=0).mean(axis=0).sum()), 6)
-        # self.processed_img = cv2.cvtColor(
-        #     self.processed_img, cv2.COLOR_BGR2RGB)
+        hsv = cv2.cvtColor(self.processed_img, cv2.COLOR_BGR2HSV)
+        mask = cv2.inRange(hsv, np.array(
+            [60, 70, 49]),  np.array([255, 255, 255]))
+        self.processed_img = cv2.bitwise_and(
+            self.processed_img, self.processed_img, mask=mask)
 
-        if probability < 30:
+        r, g, b = cv2.split(self.processed_img)
+
+        checker_array_red = np.zeros(r.shape, dtype=np.uint8)+50
+        checker_array_green = np.zeros(r.shape, dtype=np.uint8)+50
+        checker_array_blue = np.zeros(r.shape, dtype=np.uint8)+50
+        output = np.logical_not(np.logical_and(np.logical_and(np.greater(
+            r, checker_array_red), np.greater(g, checker_array_green)), np.greater(b, checker_array_blue)))
+        r = np.multiply(r, output)
+        g = np.multiply(g, output)
+        b = np.multiply(b, output)
+
+        self.processed_img = cv2.merge([r, g, b])
+
+        res = self.processed_img.mean(axis=0).mean(axis=0)
+        result = (res[2]/res.sum())*100
+        if (result > 50) and (result < 90):
             self.img_result = 'y'
         else:
             self.img_result = 'n'
-        print(probability)
-        # self.processed_img = np.hstack((self.raw_img, self.processed_img))
 
     def final_result(self):
         self.__detect_stop_sign()
@@ -100,10 +112,9 @@ class ImageProcessor(threading.Thread):
                     img_result, my_sdc.img = img_prs(my_sdc.img).final_result()
 
                     if 'y' in img_result:
-                        # print("stop sign detected!"*5)
+                        my_sdc.add_log("stop sign detected!")
                         my_sdc.avg_speed = 0
                     else:
-                        # print("no "*50)
                         my_sdc.avg_speed = 47900
                     my_sdc.send_img()
 
@@ -215,7 +226,7 @@ class SDC:
 
     def add_log(self, my_log, send_data_to_observer=False):
         self.last_log = f"{format(time.time(),'.10f')}-> {my_log}"
-        #! print(self.last_log)
+        print(self.last_log)
         if (self.send_data & send_data_to_observer):
             self.__send_data_to_observer(self.last_log)
 
