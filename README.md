@@ -4,14 +4,17 @@
 </div>
 
 <p align="center">
-  This is a Self-Driving car (SDC) project which uses pi pico as a slave device and various sensor in order to work properly.<br><img alt="GitHub all releases" src="https://img.shields.io/github/downloads/AmanRathoreP/Bluetooth-wireless-car-with-various-features/total">
+  This is a Self-Driving car (SDV) project which uses pi pico as a slave device and various sensor in order to work properly.
+  <!-- TODO add some of the github badges and shields-->
 </p>
 
 
 ## Features
 
-* Traffic signs detection
-* ...
+* Stop signs detection
+* Road lane following
+* Turn Indicators
+* Stop light(back side SDV)
 
 ## Quick start
 
@@ -53,27 +56,39 @@ First setup pico-sdk c environment ...
 
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](issues.md)
 
-Thank you for considering contributing to Bluetooth wireless car!
+Thank you for considering contributing to Raspberry pi Self Driving car!
 
 First note we have a code of conduct, please follow it in all your interactions with the program files.
 
 We welcome any type of contribution, _not only code_. You can help with:
 - **QA**: File bug reports, the more details you can give the better (e.g. images or videos)
+- **New Features**: You can suggest an modifications or just ask for advancements in the old features of SDV.
 - **Code**: Take a look at the [open issues](issues.md). Even if you can't write the code yourself, you can comment on them, showing that you care about a given issue matters. It helps us to handel them
-- **New Features**: You can suggest an modifications or just ask for advancements in the old features of SDC.
 
 ## Demo
 
-Will be available soon in the form of videos and images
+<!-- You can find some of the images or videos [here](demo.md) -->
+![img1](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/20230122_092916.jpg)
+![img2](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/20230122_092934.jpg)
+![gif1](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/20230119_105513_AdobeExpress%20(1).gif)
 
 ## Author
 
 - [@Aman](https://www.github.com/AmanRathoreP)
    - [GitHub](https://www.github.com/AmanRathoreM)
-   - [Instagram](https://www.instagram.com/aman__0864/)
    - [Telegram](https://t.me/aman0864)
    - Email -> *aman.proj.rel@gmail.com*
 
+## Facts
+- History
+  - This is the 8<sup>th</sup> version of the vehicle. Previous versions are not tracked by any version control system.
+  - It was initially started in 2019-20 as just an obstacle avoiding vehicle.
+  - The idea of this project came years(2010-11) back while playing with a old school RC car.
+- Development
+  - The project got a kick start while I was working on another project related to a science competition.
+  - Later I decided to showcase this same SDV at the competition.
+  - The development of this particular version(from scratch) took about 50hrs. However the knowledge and research is of years of hardwork.
+  - A similar vehicle was developed in order to test the hardware potential of the chassis. [Here is the GitHub repo of that project](https://github.com/AmanRathoreP/Bluetooth-wireless-car-with-various-features "Bluetooth-wireless-car-with-various-features"). However, the code base of both the projects are quite different.
 ## License
 
 [MIT License](https://choosealicense.com/licenses/mit/)
