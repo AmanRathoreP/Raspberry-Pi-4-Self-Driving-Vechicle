@@ -283,3 +283,7 @@ replay_pid*
 # End of https://www.toptal.com/developers/gitignore/api/java
 
 *.log*
+src/observer_Computer/.classpath
+src/observer_Computer/.project
+src/observer_Computer/.settings/*
+.VSCodeCounter/

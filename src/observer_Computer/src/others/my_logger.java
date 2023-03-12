@@ -1,4 +1,4 @@
-package src;
+package src.others;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
