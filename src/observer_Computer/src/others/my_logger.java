@@ -37,6 +37,13 @@ public class my_logger {
      */
 
     public my_logger(String logFileName) {
+        /*
+         * This constructor initializes the logger with the specified log file name.
+         * If the file does not exist, it will set `log_data` to false
+         * If some of the `SecurityException` occurs then it will set `log_data` to
+         * false
+         * If `log_data` is set to false then no logging will occurs
+         */
         try {
             this.fileHandler = new FileHandler(logFileName);
         } catch (SecurityException e) {
@@ -54,12 +61,23 @@ public class my_logger {
     }
 
     public void addLog(String message, Level log_level) {
+        /*
+         * This method logs the specified message with logging specified levels
+         * if `log_data` is false then it won't log anything
+         * INFO: For messages that provide useful information about the application.
+         * WARNING: For messages that indicate issues that should be addressed.
+         * SEVERE: For messages that indicate serious problems or errors.
+         */
         if (this.log_data) {
             LOGGER.log(log_level, message);
         }
     }
 
     public void addLog(String message) {
+        /*
+         * This method logs the specified message with the default logging level (INFO)
+         * if `log_data` is false then it won't log anything
+         */
         this.addLog(message, Level.INFO);
     }
 
