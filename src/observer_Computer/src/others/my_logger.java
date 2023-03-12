@@ -13,7 +13,16 @@ import java.io.IOException;
 public class my_logger {
     private static final Logger LOGGER = Logger.getLogger(my_logger.class.getName());
     private Handler fileHandler;
-    private Formatter simpleFormatter;
+    private boolean log_data = true;
+    private final static Formatter simpleFormatter = new SimpleFormatter() {
+        private static final String format = "[%1$tF %1$tT] [%2$s] [%3$s] %4$s %n";
+
+        @Override
+        public String format(LogRecord record) {
+            return String.format(format, new Date(record.getMillis()), record.getLevel(),
+                    record.getSourceClassName(), record.getMessage());
+        }
+    };
 
     public Level log_level;
     /*
@@ -29,29 +38,25 @@ public class my_logger {
 
     public my_logger(String logFileName) {
         try {
-            fileHandler = new FileHandler(logFileName);
+            this.fileHandler = new FileHandler(logFileName);
         } catch (SecurityException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
+            this.log_data = false;
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
-        }
-        simpleFormatter = new SimpleFormatter() {
-            private static final String format = "[%1$tF %1$tT] [%2$s] [%3$s] %4$s %n";
+            this.log_data = false;
 
-            @Override
-            public String format(LogRecord record) {
-                return String.format(format, new Date(record.getMillis()), record.getLevel(),
-                        record.getSourceClassName(), record.getMessage());
-            }
-        };
-        fileHandler.setFormatter(simpleFormatter);
-        LOGGER.addHandler(fileHandler);
+        }
+        if (this.log_data) {
+            this.fileHandler.setFormatter(simpleFormatter);
+            LOGGER.addHandler(this.fileHandler);
+        }
     }
 
     public void addLog(String message, Level log_level) {
-        LOGGER.log(log_level, message);
+        if (this.log_data) {
+            LOGGER.log(log_level, message);
+        }
     }
 
     public void addLog(String message) {
