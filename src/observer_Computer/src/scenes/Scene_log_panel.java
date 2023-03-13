@@ -12,13 +12,12 @@ import javax.swing.text.BadLocationException;
 
 public class Scene_log_panel extends JPanel {
 
-     private static final long serialVersionUID = 1L;
-    final private int maxLogs = 500;
+    private static final long serialVersionUID = 1L;
+    static final private int maxLogs = 100;
     private JTextArea logTextArea;
 
     public Scene_log_panel() {
         super(new BorderLayout());
-        // setPreferredSize(new Dimension(400, 300));
 
         // Create a border with a title for the panel
         Border border = BorderFactory.createLineBorder(new Color(0, 0, 0, 50), 1);
@@ -45,16 +44,16 @@ public class Scene_log_panel extends JPanel {
          */
         // TODO: Stop the logging process when user is scrolling the logs
         // TODO: Add a button for the user to stop the logging
-        // TODO: Also add a keyboard shotcut to stop the logging process while scrolling
+        // TODO: Also add a keyboard shortcut to stop the logging process while
+        // scrolling
         // TODO: Add option of selecting multiple logs and then copy them at once
         logTextArea.append(message + "\n");
         logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
         // Remove oldest logs if maximum number of lines is exceeded
         int numLines = logTextArea.getLineCount();
         if (numLines > maxLogs) {
-            int startOffset = logTextArea.getLineStartOffset(0);
-            int endOffset = logTextArea.getLineEndOffset(numLines - maxLogs);
-            logTextArea.replaceRange("", startOffset, endOffset);
+            logTextArea.replaceRange("", logTextArea.getLineStartOffset(0),
+                    logTextArea.getLineEndOffset(numLines - maxLogs));
         }
     }
 
