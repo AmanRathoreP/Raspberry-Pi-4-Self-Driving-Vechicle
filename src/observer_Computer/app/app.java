@@ -19,6 +19,8 @@ import javax.swing.JMenuItem;
 
 import src.scenes.Scene_home_panel;
 import src.scenes.Scene_log_panel;
+import src.scenes.Scene_stream_via_establishing_socket;
+import src.scenes.Scene_stream_via_local_file;
 import src.others.basic_utilities;
 import src.others.my_logger;
 
@@ -33,6 +35,8 @@ public class app extends JFrame implements Runnable {
     private JPanel contentPanel;
     private Scene_log_panel scene_log_panel;
     private Scene_home_panel scene_home_panel;
+    private Scene_stream_via_establishing_socket scene_stream_via_establishing_socket;
+    private Scene_stream_via_local_file scene_stream_via_local_file;
 
     private static my_logger logger;
 
@@ -77,6 +81,16 @@ public class app extends JFrame implements Runnable {
         menu_item_for_scene_log_panel.addActionListener(e -> show_scene("Log Scene"));
         menu_navigate.add(menu_item_for_scene_log_panel);
 
+        JMenu menu_item_for_streaming = new JMenu("Streaming");
+        menu_navigate.add(menu_item_for_streaming);
+        JMenuItem menu_item_for_scene_stream_via_establishing_socket = new JMenuItem("Via Socket");
+        menu_item_for_scene_stream_via_establishing_socket
+                .addActionListener(e -> show_scene("Socket Server Streaming Scene"));
+        menu_item_for_streaming.add(menu_item_for_scene_stream_via_establishing_socket);
+        JMenuItem menu_item_for_scene_stream_via_local_file = new JMenuItem("Via Local File");
+        menu_item_for_scene_stream_via_local_file.addActionListener(e -> show_scene("Local File Streaming Scene"));
+        menu_item_for_streaming.add(menu_item_for_scene_stream_via_local_file);
+
         JMenu menu_help = new JMenu("Help");
         JMenuItem menu_item_for_scene_usage_panel = new JMenuItem("Usage");
         menu_help.add(menu_item_for_scene_usage_panel);
@@ -100,9 +114,13 @@ public class app extends JFrame implements Runnable {
         scene_home_panel = new Scene_home_panel(window_size_width, window_size_height, 100, 10, 5,
                 "This is a home screen");
         new Thread(scene_home_panel).start();
+        scene_stream_via_establishing_socket = new Scene_stream_via_establishing_socket();
+        scene_stream_via_local_file = new Scene_stream_via_local_file();
 
         contentPanel.add(scene_home_panel, "Home Scene");
         contentPanel.add(scene_log_panel, "Log Scene");
+        contentPanel.add(scene_stream_via_establishing_socket, "Socket Server Streaming Scene");
+        contentPanel.add(scene_stream_via_local_file, "Local File Streaming Scene");
 
         // * Show initial scene
         show_scene("Log Scene");
