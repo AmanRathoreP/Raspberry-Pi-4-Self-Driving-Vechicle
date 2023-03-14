@@ -42,11 +42,13 @@ public class Scene_stream_via_establishing_socket extends JPanel {
     private static final String DEFAULT_IP_ADDRESS = "127.0.0.1";
     private static final int DEFAULT_PORT = 8080;
     private static final short MAX_SECONDS_IN_SLIDER = 60;
-    private static final short MIN_SECONDS_IN_SLIDER = 10;
+    private static final short MIN_SECONDS_IN_SLIDER = 0;
     private static final short DEFAULT_SECONDS_IN_SLIDER = 20;
     private static final short MIN_MINUTES_IN_SLIDER = 0;
     private static final short MAX_MINUTES_IN_SLIDER = 13;
     private static final short DEFAULT_MINUTES_IN_SLIDER = 2;
+    private static final String COLOR_OF_PROGRESS_BARS_IN_NON_ACTIVE_STATE = "#E02652";
+    private static final String COLOR_OF_PROGRESS_BARS_IN_ACTIVE_STATE = "#A3B8CC";
     /* some constants ended */
 
     private JTextArea text_area_ip_address;
@@ -105,7 +107,8 @@ public class Scene_stream_via_establishing_socket extends JPanel {
         add(panel_right);
 
         panel_left.setLayout(new GridLayout(0, 1));
-        progress_bar_seconds_left = new dynamic_progress_bar("Seconds: ");
+        progress_bar_seconds_left = new dynamic_progress_bar("Seconds: ", COLOR_OF_PROGRESS_BARS_IN_ACTIVE_STATE,
+                COLOR_OF_PROGRESS_BARS_IN_NON_ACTIVE_STATE);
         progress_bar_seconds_left.setValue(DEFAULT_SECONDS_IN_SLIDER);
         progress_bar_seconds_left.setMinimum(MIN_SECONDS_IN_SLIDER);
         progress_bar_seconds_left.setMaximum(MAX_SECONDS_IN_SLIDER);
@@ -113,7 +116,8 @@ public class Scene_stream_via_establishing_socket extends JPanel {
         panel_left.add(progress_bar_seconds_left);
 
         panel_right.setLayout(new GridLayout(0, 1));
-        progress_bar_minutes_right = new dynamic_progress_bar("Minutes: ");
+        progress_bar_minutes_right = new dynamic_progress_bar("Minutes: ", COLOR_OF_PROGRESS_BARS_IN_ACTIVE_STATE,
+                COLOR_OF_PROGRESS_BARS_IN_NON_ACTIVE_STATE);
         progress_bar_minutes_right.setValue(DEFAULT_MINUTES_IN_SLIDER);
         progress_bar_minutes_right.setMinimum(MIN_MINUTES_IN_SLIDER);
         progress_bar_minutes_right.setMaximum(MAX_MINUTES_IN_SLIDER);
@@ -124,8 +128,46 @@ public class Scene_stream_via_establishing_socket extends JPanel {
             panel_center_top.startIn((progress_bar_seconds_left.getValue() * 1000)
                     + (progress_bar_minutes_right.getValue() * 60 * 1000));
             button_schedule_server_start.setEnabled(false);
+            button_start_server.setEnabled(false);
+            text_area_ip_address.setEnabled(false);
+            text_area_port.setEnabled(false);
+            ((dynamic_progress_bar) progress_bar_minutes_right).freeze_mouse_actions(true);
+            ((dynamic_progress_bar) progress_bar_seconds_left).freeze_mouse_actions(true);
+            progress_bar_minutes_right.setString("...");
+            Timer countdown_timer = new Timer(1000, new ActionListener() {
+                long remaining_time = (progress_bar_seconds_left.getValue() * 1000)
+                        + (progress_bar_minutes_right.getValue() * 60 * 1000);
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    remaining_time -= 1000;
+
+                    if (remaining_time <= 0) {
+                        ((Timer) e.getSource()).stop();
+                        // start();
+                    } else {
+                        progress_bar_seconds_left.setValue((int) ((remaining_time / 1000) % 60));
+                        progress_bar_minutes_right.setValue((int) ((remaining_time / (1000 * 60)) % 60));
+                    }
+                }
+            });
+
+            countdown_timer.start();
         });
-        button_start_server.addActionListener(e -> panel_center_bottom.start_connecting_animation());
+        button_start_server.addActionListener(e -> {
+            panel_center_top.start();
+            panel_center_bottom.start_connecting_animation();
+            button_schedule_server_start.setEnabled(false);
+            button_start_server.setEnabled(false);
+            text_area_ip_address.setEnabled(false);
+            text_area_port.setEnabled(false);
+            progress_bar_seconds_left.setValue(0);
+            progress_bar_minutes_right.setValue(0);
+            ((dynamic_progress_bar) progress_bar_minutes_right).freeze_mouse_actions(true);
+            ((dynamic_progress_bar) progress_bar_seconds_left).freeze_mouse_actions(true);
+            progress_bar_minutes_right.setString("...");
+
+        });
     }
 
 }
@@ -277,8 +319,14 @@ class panel_counter extends JPanel implements ActionListener {
 }
 
 class dynamic_progress_bar extends JProgressBar {
-    public dynamic_progress_bar(String string_that_will_come_in_front_of_value) {
+    public static boolean freeze_mouse_actions = false;
+    private static String non_active_color;
+
+    public dynamic_progress_bar(String string_that_will_come_in_front_of_value, String active_color,
+            String non_active_color) {
         super(JProgressBar.VERTICAL);
+        dynamic_progress_bar.non_active_color = non_active_color;
+        setForeground(Color.decode(active_color));
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -303,7 +351,17 @@ class dynamic_progress_bar extends JProgressBar {
     }
 
     private int calculate_value(int mouse_Y_axis_from_top) {
+        if (freeze_mouse_actions) {
+            return getValue();
+        }
         return (((int) ((getMaximum() - getMinimum())
                 * ((float) (getHeight() - mouse_Y_axis_from_top) / getHeight()))) + getMinimum());
+    }
+
+    public void freeze_mouse_actions(boolean freeze_or_not) {
+        dynamic_progress_bar.freeze_mouse_actions = freeze_or_not;
+        if (freeze_or_not) {
+            setForeground(Color.decode(non_active_color));
+        }
     }
 }
