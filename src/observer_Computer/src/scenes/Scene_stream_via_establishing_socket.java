@@ -61,7 +61,6 @@ public class Scene_stream_via_establishing_socket extends JPanel {
         panel_counter panel_center_top = new panel_counter();
         JPanel panel_center_mid = new JPanel();
         panel_connecting_animation panel_center_bottom = new panel_connecting_animation();
-        panel_center_top.startIn(1900);
 
         panel_center_mid.setLayout(new GridLayout(3, 0));
 
@@ -125,6 +124,7 @@ public class Scene_stream_via_establishing_socket extends JPanel {
         panel_right.add(slider_minutes_right);
         panel_right.add(progress_bar_minutes_right);
 
+        button_schedule_server_start.addActionListener(e -> panel_center_top.startIn(9000));
     }
 }
 
@@ -213,15 +213,26 @@ class panel_counter extends JPanel implements ActionListener {
     }
 
     public void startIn(long delay_in_millie_seconds) {
-        // TODO: also display Count down in which the counter is starting
-        Timer start_timer = new Timer((int) delay_in_millie_seconds, new ActionListener() {
+        Timer countdown_timer = new Timer(1000, new ActionListener() {
+            long remaining_time = delay_in_millie_seconds;
+
             @Override
             public void actionPerformed(ActionEvent e) {
-                start();
+                remaining_time -= 1000;
+
+                if (remaining_time <= 0) {
+                    ((Timer) e.getSource()).stop();
+                    start();
+                } else {
+                    label.setText(String.format("-%02d:%02d:%02d", (remaining_time
+                            / (1000 * 60 * 60)), ((remaining_time / (1000 * 60)) % 60),
+                            ((remaining_time / 1000)
+                                    % 60)));
+                }
             }
         });
-        start_timer.setRepeats(false);
-        start_timer.start();
+
+        countdown_timer.start();
     }
 
     @Override
