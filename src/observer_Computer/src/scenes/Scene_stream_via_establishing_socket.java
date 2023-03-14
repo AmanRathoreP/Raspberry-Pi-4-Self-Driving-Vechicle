@@ -36,6 +36,8 @@ public class Scene_stream_via_establishing_socket extends JPanel {
      * @author Aman Rathore
      *
      */
+
+    /* some constants started */
     private static final String DEFAULT_IP_ADDRESS = "127.0.0.1";
     private static final int DEFAULT_PORT = 8080;
     private static final short MAX_SECONDS_IN_SLIDER = 60;
@@ -48,6 +50,16 @@ public class Scene_stream_via_establishing_socket extends JPanel {
     private static final short MAJOR_MINUTES_IN_SLIDER = 4;
     private static final short MINOR_MINUTES_IN_SLIDER = 2;
     private static final short DEFAULT_MINUTES_IN_SLIDER = 2;
+    /* some constants ended */
+
+    private JTextArea text_area_ip_address;
+    private JTextArea text_area_port;
+    private JButton button_start_server;
+    private JButton button_schedule_server_start;
+    private JProgressBar progress_bar_seconds_left;
+    private JSlider slider_seconds_left;
+    private JProgressBar progress_bar_minutes_right;
+    private JSlider slider_minutes_right;
 
     public Scene_stream_via_establishing_socket() {
         // TODO: use different styles of cursors for different stuff
@@ -70,10 +82,10 @@ public class Scene_stream_via_establishing_socket extends JPanel {
 
         panel_center_mid_top.setLayout(new GridLayout(2, 0, 10, 10));
 
-        JTextArea text_area_ip_address = new JTextArea(DEFAULT_IP_ADDRESS);
-        JTextArea text_area_port = new JTextArea(String.valueOf(DEFAULT_PORT));
-        JButton button_start_server = new JButton("Start Server");
-        JButton button_schedule_server_start = new JButton("Schedule Server Start");
+        text_area_ip_address = new JTextArea(DEFAULT_IP_ADDRESS);
+        text_area_port = new JTextArea(String.valueOf(DEFAULT_PORT));
+        button_start_server = new JButton("Start Server");
+        button_schedule_server_start = new JButton("Schedule Server Start");
 
         text_area_ip_address.setFont(new Font("Arial", Font.BOLD, 20));
         text_area_port.setFont(new Font("Arial", Font.BOLD, 20));
@@ -98,10 +110,10 @@ public class Scene_stream_via_establishing_socket extends JPanel {
         add(panel_right);
 
         panel_left.setLayout(new GridLayout(0, 2));
-        JProgressBar progress_bar_seconds_left = new JProgressBar(JProgressBar.VERTICAL);
+        progress_bar_seconds_left = new JProgressBar(JProgressBar.VERTICAL);
         progress_bar_seconds_left.setValue(50);
         progress_bar_seconds_left.setStringPainted(true);
-        JSlider slider_seconds_left = new JSlider(JSlider.VERTICAL, MIN_SECONDS_IN_SLIDER, MAX_SECONDS_IN_SLIDER,
+        slider_seconds_left = new JSlider(JSlider.VERTICAL, MIN_SECONDS_IN_SLIDER, MAX_SECONDS_IN_SLIDER,
                 DEFAULT_SECONDS_IN_SLIDER);
         slider_seconds_left.setMinorTickSpacing(MINOR_SECONDS_IN_SLIDER);
         slider_seconds_left.setMajorTickSpacing(MAJOR_SECONDS_IN_SLIDER);
@@ -112,10 +124,10 @@ public class Scene_stream_via_establishing_socket extends JPanel {
         panel_left.add(slider_seconds_left);
 
         panel_right.setLayout(new GridLayout(0, 2));
-        JProgressBar progress_bar_minutes_right = new JProgressBar(JProgressBar.VERTICAL);
+        progress_bar_minutes_right = new JProgressBar(JProgressBar.VERTICAL);
         progress_bar_minutes_right.setValue(50);
         progress_bar_minutes_right.setStringPainted(true);
-        JSlider slider_minutes_right = new JSlider(JSlider.VERTICAL, MIN_MINUTES_IN_SLIDER, MAX_MINUTES_IN_SLIDER,
+        slider_minutes_right = new JSlider(JSlider.VERTICAL, MIN_MINUTES_IN_SLIDER, MAX_MINUTES_IN_SLIDER,
                 DEFAULT_MINUTES_IN_SLIDER);
         slider_minutes_right.setMinorTickSpacing(MINOR_MINUTES_IN_SLIDER);
         slider_minutes_right.setMajorTickSpacing(MAJOR_MINUTES_IN_SLIDER);
