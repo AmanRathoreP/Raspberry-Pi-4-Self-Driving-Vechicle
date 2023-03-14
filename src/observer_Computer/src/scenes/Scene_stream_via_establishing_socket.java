@@ -25,6 +25,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.JProgressBar;
@@ -42,7 +44,7 @@ public class Scene_stream_via_establishing_socket extends JPanel {
     private static final short MAX_SECONDS_IN_SLIDER = 60;
     private static final short MIN_SECONDS_IN_SLIDER = 10;
     private static final short DEFAULT_SECONDS_IN_SLIDER = 20;
-    private static final short MIN_MINUTES_IN_SLIDER = 1;
+    private static final short MIN_MINUTES_IN_SLIDER = 0;
     private static final short MAX_MINUTES_IN_SLIDER = 13;
     private static final short DEFAULT_MINUTES_IN_SLIDER = 2;
     /* some constants ended */
@@ -103,7 +105,7 @@ public class Scene_stream_via_establishing_socket extends JPanel {
         add(panel_right);
 
         panel_left.setLayout(new GridLayout(0, 1));
-        progress_bar_seconds_left = new dynamic_progress_bar();
+        progress_bar_seconds_left = new dynamic_progress_bar("Seconds: ");
         progress_bar_seconds_left.setValue(DEFAULT_SECONDS_IN_SLIDER);
         progress_bar_seconds_left.setMinimum(MIN_SECONDS_IN_SLIDER);
         progress_bar_seconds_left.setMaximum(MAX_SECONDS_IN_SLIDER);
@@ -111,7 +113,7 @@ public class Scene_stream_via_establishing_socket extends JPanel {
         panel_left.add(progress_bar_seconds_left);
 
         panel_right.setLayout(new GridLayout(0, 1));
-        progress_bar_minutes_right = new dynamic_progress_bar();
+        progress_bar_minutes_right = new dynamic_progress_bar("Minutes: ");
         progress_bar_minutes_right.setValue(DEFAULT_MINUTES_IN_SLIDER);
         progress_bar_minutes_right.setMinimum(MIN_MINUTES_IN_SLIDER);
         progress_bar_minutes_right.setMaximum(MAX_MINUTES_IN_SLIDER);
@@ -119,8 +121,9 @@ public class Scene_stream_via_establishing_socket extends JPanel {
         panel_right.add(progress_bar_minutes_right);
 
         button_schedule_server_start.addActionListener(e -> {
-            panel_center_top.startIn(9000);
-            panel_center_bottom.stop_connecting_animation();
+            panel_center_top.startIn((progress_bar_seconds_left.getValue() * 1000)
+                    + (progress_bar_minutes_right.getValue() * 60 * 1000));
+            button_schedule_server_start.setEnabled(false);
         });
         button_start_server.addActionListener(e -> panel_center_bottom.start_connecting_animation());
     }
@@ -274,7 +277,7 @@ class panel_counter extends JPanel implements ActionListener {
 }
 
 class dynamic_progress_bar extends JProgressBar {
-    public dynamic_progress_bar() {
+    public dynamic_progress_bar(String string_that_will_come_in_front_of_value) {
         super(JProgressBar.VERTICAL);
 
         addMouseListener(new MouseAdapter() {
@@ -288,6 +291,13 @@ class dynamic_progress_bar extends JProgressBar {
             @Override
             public void mouseDragged(MouseEvent e) {
                 setValue(calculate_value(e.getY()));
+            }
+        });
+
+        addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                setString(string_that_will_come_in_front_of_value + Integer.toString(getValue()));
             }
         });
     }
