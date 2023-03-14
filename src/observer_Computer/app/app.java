@@ -5,6 +5,8 @@ package app;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
@@ -12,10 +14,12 @@ import java.util.logging.Level;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 import src.scenes.Scene_home_panel;
 import src.scenes.Scene_log_panel;
@@ -23,14 +27,13 @@ import src.scenes.Scene_stream_via_establishing_socket;
 import src.scenes.Scene_stream_via_local_file;
 import src.others.basic_utilities;
 import src.others.my_logger;
+import src.others.my_literals;
 
 public class app extends JFrame implements Runnable {
     /**
      * @author Aman Rathore
      */
     private static final long serialVersionUID = 1L;
-    private final int window_size_width = 16 * 75;
-    private final int window_size_height = 9 * 75;
 
     private JPanel contentPanel;
     private Scene_log_panel scene_log_panel;
@@ -41,6 +44,18 @@ public class app extends JFrame implements Runnable {
     private static my_logger logger;
 
     public static void main(String[] args) throws InterruptedException {
+        try {
+            System.out.println(my_literals.update_literals(false));
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            logger.addLog(e.toString(), logger.log_level.WARNING);
+            // e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            logger.addLog(e.toString(), logger.log_level.WARNING);
+            // e.printStackTrace();
+        }
+
         basic_utilities obj = new basic_utilities();
         new Thread(obj).start();
         logger = new my_logger("logs\\logs.log");
@@ -58,7 +73,7 @@ public class app extends JFrame implements Runnable {
     public app() {
         super("My App");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(window_size_width, window_size_height);
+        setSize(my_literals.WINDOW_SIZE_WIDTH, my_literals.WINDOW_SIZE_HEIGHT);
         setLocationRelativeTo(null);
 
         // Create reusable menu bar
@@ -72,6 +87,27 @@ public class app extends JFrame implements Runnable {
         menu_actions.add(menu_item_new_window);
         menu_item_new_window
                 .addActionListener(e -> logger.addLog("New Window Button Pressed", Level.WARNING));
+        JMenuItem menu_item_reset_config = new JMenuItem("Reset Config File");
+        menu_actions.add(menu_item_reset_config);
+        menu_item_reset_config.addActionListener(e -> {
+            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(null,
+                    "If the configuration file is not present this action will create that file.\r\n"
+                            + "If file is present but lacking with some of the properties then it will\r\n"
+                            + "repair the file using variables from the running instance of app",
+                    "Warning!",
+                    JOptionPane.OK_CANCEL_OPTION)) {
+                try {
+                    my_literals.reset_config();
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    logger.addLog(e1.toString(), Level.WARNING);
+                    e1.printStackTrace();
+                }
+            } else {
+                // * Do not create any configuration file
+                logger.addLog("Not creating any type of configuration file it is been cancelled by the user!");
+            }
+        });
 
         JMenu menu_navigate = new JMenu("Navigate");
         JMenuItem menu_item_for_home_screen_panel = new JMenuItem("Home");
@@ -111,7 +147,8 @@ public class app extends JFrame implements Runnable {
         getContentPane().add(contentPanel, BorderLayout.CENTER);
 
         scene_log_panel = new Scene_log_panel();
-        scene_home_panel = new Scene_home_panel(window_size_width, window_size_height, 100, 10, 5,
+        scene_home_panel = new Scene_home_panel(my_literals.WINDOW_SIZE_WIDTH, my_literals.WINDOW_SIZE_HEIGHT, 100, 10,
+                5,
                 "This is a home screen");
         new Thread(scene_home_panel).start();
         scene_stream_via_establishing_socket = new Scene_stream_via_establishing_socket();
