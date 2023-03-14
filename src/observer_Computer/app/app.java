@@ -152,6 +152,8 @@ public class app extends JFrame implements Runnable {
                 "This is a home screen");
         new Thread(scene_home_panel).start();
         scene_stream_via_establishing_socket = new Scene_stream_via_establishing_socket();
+        Thread thread_for_scene_stream_via_establishing_socket = new Thread(scene_stream_via_establishing_socket);
+        thread_for_scene_stream_via_establishing_socket.start();
         scene_stream_via_local_file = new Scene_stream_via_local_file();
 
         contentPanel.add(scene_home_panel, "Home Scene");

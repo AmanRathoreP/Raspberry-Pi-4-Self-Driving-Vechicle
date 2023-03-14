@@ -32,7 +32,7 @@ import javax.swing.JTextArea;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
-public class Scene_stream_via_establishing_socket extends JPanel {
+public class Scene_stream_via_establishing_socket extends JPanel implements Runnable {
     /**
      * @author Aman Rathore
      *
@@ -41,7 +41,7 @@ public class Scene_stream_via_establishing_socket extends JPanel {
     /* some constants started */
     private static final String DEFAULT_IP_ADDRESS = "127.0.0.1";
     private static final int DEFAULT_PORT = 8080;
-    private static final short MAX_SECONDS_IN_SLIDER = 60;
+    private static final short MAX_SECONDS_IN_SLIDER = 59;
     private static final short MIN_SECONDS_IN_SLIDER = 0;
     private static final short DEFAULT_SECONDS_IN_SLIDER = 20;
     private static final short MIN_MINUTES_IN_SLIDER = 0;
@@ -58,6 +58,8 @@ public class Scene_stream_via_establishing_socket extends JPanel {
     private JProgressBar progress_bar_seconds_left;
     private JProgressBar progress_bar_minutes_right;
 
+    private panel_counter panel_center_top;
+
     public Scene_stream_via_establishing_socket() {
         // TODO: use different styles of cursors for different stuff
         setLayout(new GridLayout(0, 3));
@@ -67,7 +69,7 @@ public class Scene_stream_via_establishing_socket extends JPanel {
         JPanel panel_right = new JPanel();
         panel_center.setLayout(new GridLayout(3, 0));
 
-        panel_counter panel_center_top = new panel_counter();
+        panel_center_top = new panel_counter();
         JPanel panel_center_mid = new JPanel();
         panel_connecting_animation panel_center_bottom = new panel_connecting_animation();
 
@@ -141,10 +143,10 @@ public class Scene_stream_via_establishing_socket extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     remaining_time -= 1000;
-
                     if (remaining_time <= 0) {
                         ((Timer) e.getSource()).stop();
-                        // start();
+                        progress_bar_seconds_left.setValue(0);
+                        panel_center_bottom.start_connecting_animation();
                     } else {
                         progress_bar_seconds_left.setValue((int) ((remaining_time / 1000) % 60));
                         progress_bar_minutes_right.setValue((int) ((remaining_time / (1000 * 60)) % 60));
@@ -165,9 +167,27 @@ public class Scene_stream_via_establishing_socket extends JPanel {
             progress_bar_minutes_right.setValue(0);
             ((dynamic_progress_bar) progress_bar_minutes_right).freeze_mouse_actions(true);
             ((dynamic_progress_bar) progress_bar_seconds_left).freeze_mouse_actions(true);
-            progress_bar_minutes_right.setString("...");
-
         });
+
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            if (dynamic_progress_bar.freeze_mouse_actions == false) {
+                panel_center_top.label.setForeground(new Color(158, 0, 71));
+                panel_center_top.label
+                        .setText(String.format("+%02d:%02d:%02d", (0), (progress_bar_minutes_right.getValue()),
+                                (progress_bar_seconds_left.getValue())));
+                // System.out.print
+            }
+        }
     }
 
 }
@@ -252,7 +272,7 @@ class panel_counter extends JPanel implements ActionListener {
 
     private long start_time;
     private static Timer timer;
-    private JLabel label;
+    public JLabel label;
     private DecimalFormat formatter;
 
     public panel_counter() {
@@ -290,7 +310,7 @@ class panel_counter extends JPanel implements ActionListener {
                     ((Timer) e.getSource()).stop();
                     start();
                 } else {
-                    label.setText(String.format("-%02d:%02d:%02d", (remaining_time
+                    label.setText(String.format("+%02d:%02d:%02d", (remaining_time
                             / (1000 * 60 * 60)), ((remaining_time / (1000 * 60)) % 60),
                             ((remaining_time / 1000)
                                     % 60)));
