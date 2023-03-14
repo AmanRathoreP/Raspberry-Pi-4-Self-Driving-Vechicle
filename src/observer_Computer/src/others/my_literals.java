@@ -23,7 +23,6 @@ public class my_literals {
      *          the app restarts the initial constants will also be reset if their
      *          new or desired value is not stored in the configuration file
      */
-    // TODO: When some variables are not there in json file; app dosen't runs at all
     // TODO: Create a buton to creat configuration file whenever user wants
 
     public static final String CONFIG_FILE_NAME = "config.json";
@@ -31,13 +30,14 @@ public class my_literals {
             .toString();
     private final static my_logger logger = new my_logger("logs\\logs.log");
     private static boolean USE_CONFIG_FILE = true;
+    private static JSONObject jsonObject;
 
     /* constants started */
     public static int WINDOW_SIZE_WIDTH = 16 * 75;
     public static int WINDOW_SIZE_HEIGHT = 9 * 75;
     /* constants finished */
 
-    public static boolean update_literals(boolean force_use_of_config_file)
+    public static boolean update_literals(boolean use_of_config_file)
             throws FileNotFoundException, IOException {
         /**
          * @author Aman Rathore
@@ -46,20 +46,21 @@ public class my_literals {
          * @return true if the literals are updated according to config file
          * @return false if the literals are not updated according to config file due to
          *         some security or IO reasons etc.
-         * @param force_use_of_config_file put it true if you want to create or use a
-         *                                 config file forcefully(i.e. at any cost)
+         * @param use_of_config_file put it true if you want to use a config file
          * @throws FileNotFoundException if Json file is not present, use
-         *                               force_create_json = True if want to create and
-         *                               reset the configuration file
+         *                               reset_config() method to create a config file
          * @throws IOException           if Json file can't be read/write may be due to
          *                               security reasons
          **/
-        if (USE_CONFIG_FILE && force_use_of_config_file) {
-            JSONObject jsonObject;
+
+        USE_CONFIG_FILE = use_of_config_file;
+        if (USE_CONFIG_FILE) {
             try {
+                logger.addLog("trying to use config");
                 jsonObject = readJsonFile();
-                WINDOW_SIZE_WIDTH = Integer.parseInt(jsonObject.get("WINDOW_SIZE_WIDTH").toString());
-                WINDOW_SIZE_HEIGHT = Integer.parseInt(jsonObject.get("WINDOW_SIZE_HEIGHT").toString());
+                logger.addLog("json obj created");
+                WINDOW_SIZE_WIDTH = get_associated_value_from_json("WINDOW_SIZE_WIDTH", WINDOW_SIZE_WIDTH);
+                WINDOW_SIZE_HEIGHT = get_associated_value_from_json("WINDOW_SIZE_HEIGHT", WINDOW_SIZE_HEIGHT);
                 logger.addLog(jsonObject.toString());
             } catch (Exception e) {
                 // File donen't exists on the location
@@ -80,8 +81,9 @@ public class my_literals {
     public static void reset_config() throws IOException {
         /**
          * @author Aman Rathore
-         * @apiNote reset the values of the configuration file if the configuration file
-         *          is not present it creates that file.
+         * @apiNote if the configuration file is not present it creates that file. and
+         *          if file is present but missing some of the properties then it will
+         *          repair the file using variables from the running instance of app
          * @throws IOException if configuration file can't be read/write may be due to
          *                     security reasons
          **/
@@ -113,4 +115,41 @@ public class my_literals {
         // * Come here when we do not need to write or read from json file
         return json_object;
     }
+
+    private static <T> T get_associated_value_from_json(String name_of_default_value, T default_value) {
+        /*
+         * @apiNote this function will get the value from config file and if the config
+         * file not have that value then the it will return the default value
+         * 
+         * @warning it only supports the below given data types
+         * - Integer
+         * - Double
+         * - String
+         * - Boolean
+         * - Short
+         */
+        try {
+            logger.addLog(new String("trying to read " + name_of_default_value + " from config"));
+
+            if (default_value instanceof String) {
+                return (T) jsonObject.getString(name_of_default_value);
+            } else if (default_value instanceof Integer) {
+                return (T) Integer.valueOf(jsonObject.getString(name_of_default_value));
+            } else if (default_value instanceof Double) {
+                return (T) Double.valueOf(jsonObject.getString(name_of_default_value));
+            } else if (default_value instanceof Boolean) {
+                return (T) Boolean.valueOf(jsonObject.getString(name_of_default_value));
+            } else if (default_value instanceof Short) {
+                return (T) Short.valueOf(jsonObject.getString(name_of_default_value));
+            } else {
+                logger.addLog("Unknown type-> " + default_value.getClass().getName(), logger.log_level.SEVERE);
+                return default_value;
+            }
+        } catch (Exception e) {
+            logger.addLog(new String("Can't read " + name_of_default_value + " from config"));
+            logger.addLog(e.toString(), logger.log_level.WARNING);
+            return default_value;
+        }
+    }
+
 }
