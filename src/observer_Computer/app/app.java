@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 import src.scenes.Scene_home_panel;
 import src.scenes.Scene_log_panel;
@@ -82,6 +83,27 @@ public class app extends JFrame implements Runnable {
         menu_actions.add(menu_item_new_window);
         menu_item_new_window
                 .addActionListener(e -> logger.addLog("New Window Button Pressed", Level.WARNING));
+        JMenuItem menu_item_reset_config = new JMenuItem("Reset Config File");
+        menu_actions.add(menu_item_reset_config);
+        menu_item_reset_config.addActionListener(e -> {
+            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(null,
+                    "If the configuration file is not present this action will create that file.\r\n"
+                            + "If file is present but lacking with some of the properties then it will\r\n"
+                            + "repair the file using variables from the running instance of app",
+                    "Warning!",
+                    JOptionPane.OK_CANCEL_OPTION)) {
+                try {
+                    my_literals.reset_config();
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    logger.addLog(e1.toString(), Level.WARNING);
+                    e1.printStackTrace();
+                }
+            } else {
+                // * Do not create any configuration file
+                logger.addLog("Not creating any type of configuration file it is been cancelled by the user!");
+            }
+        });
 
         JMenu menu_navigate = new JMenu("Navigate");
         JMenuItem menu_item_for_home_screen_panel = new JMenuItem("Home");
