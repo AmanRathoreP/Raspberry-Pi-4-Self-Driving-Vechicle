@@ -14,19 +14,18 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.FontMetrics;
 import java.awt.GridLayout;
-import java.awt.Cursor;
 import java.awt.Graphics2D;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
-import javax.swing.JSlider;
 import javax.swing.JTextArea;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
@@ -42,13 +41,9 @@ public class Scene_stream_via_establishing_socket extends JPanel {
     private static final int DEFAULT_PORT = 8080;
     private static final short MAX_SECONDS_IN_SLIDER = 60;
     private static final short MIN_SECONDS_IN_SLIDER = 10;
-    private static final short MAJOR_SECONDS_IN_SLIDER = 10;
-    private static final short MINOR_SECONDS_IN_SLIDER = 5;
     private static final short DEFAULT_SECONDS_IN_SLIDER = 20;
     private static final short MIN_MINUTES_IN_SLIDER = 1;
     private static final short MAX_MINUTES_IN_SLIDER = 13;
-    private static final short MAJOR_MINUTES_IN_SLIDER = 4;
-    private static final short MINOR_MINUTES_IN_SLIDER = 2;
     private static final short DEFAULT_MINUTES_IN_SLIDER = 2;
     /* some constants ended */
 
@@ -57,9 +52,7 @@ public class Scene_stream_via_establishing_socket extends JPanel {
     private JButton button_start_server;
     private JButton button_schedule_server_start;
     private JProgressBar progress_bar_seconds_left;
-    private JSlider slider_seconds_left;
     private JProgressBar progress_bar_minutes_right;
-    private JSlider slider_minutes_right;
 
     public Scene_stream_via_establishing_socket() {
         // TODO: use different styles of cursors for different stuff
@@ -103,41 +96,31 @@ public class Scene_stream_via_establishing_socket extends JPanel {
         panel_center.add(panel_center_mid);
         panel_center.add(panel_center_bottom);
 
-        panel_left.setBorder(new EmptyBorder(15, 15, 15, 0));
-        panel_right.setBorder(new EmptyBorder(15, 0, 15, 15));
+        panel_left.setBorder(new EmptyBorder(15, 15, 15, 20));
+        panel_right.setBorder(new EmptyBorder(15, 20, 15, 15));
         add(panel_left);
         add(panel_center);
         add(panel_right);
 
-        panel_left.setLayout(new GridLayout(0, 2));
-        progress_bar_seconds_left = new JProgressBar(JProgressBar.VERTICAL);
-        progress_bar_seconds_left.setValue(50);
+        panel_left.setLayout(new GridLayout(0, 1));
+        progress_bar_seconds_left = new dynamic_progress_bar();
+        progress_bar_seconds_left.setValue(DEFAULT_SECONDS_IN_SLIDER);
+        progress_bar_seconds_left.setMinimum(MIN_SECONDS_IN_SLIDER);
+        progress_bar_seconds_left.setMaximum(MAX_SECONDS_IN_SLIDER);
         progress_bar_seconds_left.setStringPainted(true);
-        slider_seconds_left = new JSlider(JSlider.VERTICAL, MIN_SECONDS_IN_SLIDER, MAX_SECONDS_IN_SLIDER,
-                DEFAULT_SECONDS_IN_SLIDER);
-        slider_seconds_left.setMinorTickSpacing(MINOR_SECONDS_IN_SLIDER);
-        slider_seconds_left.setMajorTickSpacing(MAJOR_SECONDS_IN_SLIDER);
-        slider_seconds_left.setPaintTicks(true);
-        slider_seconds_left.setPaintLabels(true);
-        slider_seconds_left.setPreferredSize(new Dimension(70, 10));
         panel_left.add(progress_bar_seconds_left);
-        panel_left.add(slider_seconds_left);
 
-        panel_right.setLayout(new GridLayout(0, 2));
-        progress_bar_minutes_right = new JProgressBar(JProgressBar.VERTICAL);
-        progress_bar_minutes_right.setValue(50);
+        panel_right.setLayout(new GridLayout(0, 1));
+        progress_bar_minutes_right = new dynamic_progress_bar();
+        progress_bar_minutes_right.setValue(DEFAULT_MINUTES_IN_SLIDER);
+        progress_bar_minutes_right.setMinimum(MIN_MINUTES_IN_SLIDER);
+        progress_bar_minutes_right.setMaximum(MAX_MINUTES_IN_SLIDER);
         progress_bar_minutes_right.setStringPainted(true);
-        slider_minutes_right = new JSlider(JSlider.VERTICAL, MIN_MINUTES_IN_SLIDER, MAX_MINUTES_IN_SLIDER,
-                DEFAULT_MINUTES_IN_SLIDER);
-        slider_minutes_right.setMinorTickSpacing(MINOR_MINUTES_IN_SLIDER);
-        slider_minutes_right.setMajorTickSpacing(MAJOR_MINUTES_IN_SLIDER);
-        slider_minutes_right.setPaintTicks(true);
-        slider_minutes_right.setPaintLabels(true);
-        panel_right.add(slider_minutes_right);
         panel_right.add(progress_bar_minutes_right);
 
         button_schedule_server_start.addActionListener(e -> panel_center_top.startIn(9000));
     }
+
 }
 
 class panel_connecting_animation extends JPanel implements ActionListener {
@@ -261,5 +244,30 @@ class panel_counter extends JPanel implements ActionListener {
                                 % 60))
                         + ":" +
                         formatter.format((int) ((elapsed_time / 1000) % 60)));
+    }
+}
+
+class dynamic_progress_bar extends JProgressBar {
+    public dynamic_progress_bar() {
+        super(JProgressBar.VERTICAL);
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                setValue(calculate_value(e.getY()));
+            }
+        });
+
+        addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                setValue(calculate_value(e.getY()));
+            }
+        });
+    }
+
+    private int calculate_value(int mouse_Y_axis_from_top) {
+        return (((int) ((getMaximum() - getMinimum())
+                * ((float) (getHeight() - mouse_Y_axis_from_top) / getHeight()))) + getMinimum());
     }
 }
