@@ -57,7 +57,7 @@ public class Scene_stream_via_establishing_socket extends JPanel {
     public Scene_stream_via_establishing_socket() {
         // TODO: use different styles of cursors for different stuff
         setLayout(new GridLayout(0, 3));
-        setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        // setCursor(new Cursor(Cursor.WAIT_CURSOR));
         JPanel panel_left = new JPanel();
         JPanel panel_center = new JPanel();
         JPanel panel_right = new JPanel();
@@ -118,7 +118,11 @@ public class Scene_stream_via_establishing_socket extends JPanel {
         progress_bar_minutes_right.setStringPainted(true);
         panel_right.add(progress_bar_minutes_right);
 
-        button_schedule_server_start.addActionListener(e -> panel_center_top.startIn(9000));
+        button_schedule_server_start.addActionListener(e -> {
+            panel_center_top.startIn(9000);
+            panel_center_bottom.stop_connecting_animation();
+        });
+        button_start_server.addActionListener(e -> panel_center_bottom.start_connecting_animation());
     }
 
 }
@@ -129,10 +133,24 @@ class panel_connecting_animation extends JPanel implements ActionListener {
     private String[] connecting_symbols = { ".", "/", "-", "\\" };
     private static short symbol_index = 0;
     private static short dot_count = 0;
+    private boolean isConnecting = false;
+    private boolean isWaiting = true;
 
     public panel_connecting_animation() {
+    }
+
+    public void start_connecting_animation() {
+        isConnecting = true;
+        isWaiting = false;
         timer = new Timer(250, this);
         timer.start();
+    }
+
+    public void stop_connecting_animation() {
+        isConnecting = false;
+        isWaiting = false;
+        timer.stop();
+        repaint();
     }
 
     @Override
@@ -146,10 +164,18 @@ class panel_connecting_animation extends JPanel implements ActionListener {
 
         FontMetrics fm = g2d.getFontMetrics();
 
-        String connecting_text = "Connecting " + connecting_symbols[symbol_index];
+        String connecting_text = "";
 
-        for (int i = 0; i < dot_count; i++) {
-            connecting_text += ".";
+        if (isConnecting) {
+            connecting_text += "Connecting " + connecting_symbols[symbol_index];
+
+            for (int i = 0; i < dot_count; i++) {
+                connecting_text += ".";
+            }
+        } else if (isWaiting) {
+            connecting_text += "Waiting";
+        } else {
+            connecting_text += "Connected";
         }
 
         int text_width = fm.stringWidth(connecting_text);
