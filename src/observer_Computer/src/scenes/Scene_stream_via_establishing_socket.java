@@ -212,9 +212,9 @@ class panel_counter extends JPanel implements ActionListener {
         label.setForeground(new Color(158, 0, 71));
     }
 
-    public void startIn(long delay_in_millie_seconds) {
+    public void startIn(long delay_in_milliseconds) {
         Timer countdown_timer = new Timer(1000, new ActionListener() {
-            long remaining_time = delay_in_millie_seconds;
+            long remaining_time = delay_in_milliseconds;
 
             @Override
             public void actionPerformed(ActionEvent e) {
