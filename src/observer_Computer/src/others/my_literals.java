@@ -132,15 +132,15 @@ public class my_literals {
             logger.addLog(new String("trying to read " + name_of_default_value + " from config"));
 
             if (default_value instanceof String) {
-                return (T) jsonObject.getString(name_of_default_value);
+                return (T) (String) jsonObject.get(name_of_default_value);
             } else if (default_value instanceof Integer) {
-                return (T) Integer.valueOf(jsonObject.getString(name_of_default_value));
+                return (T) Integer.valueOf((String) jsonObject.get(name_of_default_value));
             } else if (default_value instanceof Double) {
-                return (T) Double.valueOf(jsonObject.getString(name_of_default_value));
+                return (T) Double.valueOf((String) jsonObject.get(name_of_default_value));
             } else if (default_value instanceof Boolean) {
-                return (T) Boolean.valueOf(jsonObject.getString(name_of_default_value));
+                return (T) Boolean.valueOf((String) jsonObject.get(name_of_default_value));
             } else if (default_value instanceof Short) {
-                return (T) Short.valueOf(jsonObject.getString(name_of_default_value));
+                return (T) Short.valueOf((String) jsonObject.get(name_of_default_value));
             } else {
                 logger.addLog("Unknown type-> " + default_value.getClass().getName(), logger.log_level.SEVERE);
                 return default_value;

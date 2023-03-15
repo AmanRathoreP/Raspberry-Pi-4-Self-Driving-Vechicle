@@ -1,7 +1,7 @@
+
 /**
  * @author Aman Rathore
  */
-package app;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;

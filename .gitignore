@@ -82,7 +82,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+# build/
 develop-eggs/
 dist/
 downloads/
@@ -287,3 +287,5 @@ src/observer_Computer/.classpath
 src/observer_Computer/.project
 src/observer_Computer/.settings/*
 .VSCodeCounter/
+!README.md
+*.jar*
