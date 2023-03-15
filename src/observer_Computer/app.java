@@ -45,7 +45,7 @@ public class app extends JFrame implements Runnable {
 
     public static void main(String[] args) throws InterruptedException {
         try {
-            System.out.println(my_literals.update_literals(false));
+            System.out.println(my_literals.update_literals(true));
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             logger.addLog(e.toString(), logger.log_level.WARNING);
@@ -73,7 +73,8 @@ public class app extends JFrame implements Runnable {
     public app() {
         super("My App");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(my_literals.WINDOW_SIZE_WIDTH, my_literals.WINDOW_SIZE_HEIGHT);
+        setSize((int) my_literals.CONSTANTS.get("WINDOW_SIZE_WIDTH"),
+                (int) my_literals.CONSTANTS.get("WINDOW_SIZE_HEIGHT"));
         setLocationRelativeTo(null);
 
         // Create reusable menu bar
@@ -147,9 +148,9 @@ public class app extends JFrame implements Runnable {
         getContentPane().add(contentPanel, BorderLayout.CENTER);
 
         scene_log_panel = new Scene_log_panel();
-        scene_home_panel = new Scene_home_panel(my_literals.WINDOW_SIZE_WIDTH, my_literals.WINDOW_SIZE_HEIGHT, 100, 10,
-                5,
-                "This is a home screen");
+        scene_home_panel = new Scene_home_panel((int) my_literals.CONSTANTS.get("WINDOW_SIZE_WIDTH"),
+                (int) my_literals.CONSTANTS.get("WINDOW_SIZE_HEIGHT"),
+                100, 10, 5, "This is a home screen");
         new Thread(scene_home_panel).start();
         scene_stream_via_establishing_socket = new Scene_stream_via_establishing_socket();
         Thread thread_for_scene_stream_via_establishing_socket = new Thread(scene_stream_via_establishing_socket);
