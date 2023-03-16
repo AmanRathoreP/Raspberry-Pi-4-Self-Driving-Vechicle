@@ -290,3 +290,4 @@ src/observer_Computer/.settings/*
 !README.md
 *.jar*
 config.json
+streaming_data.txt
