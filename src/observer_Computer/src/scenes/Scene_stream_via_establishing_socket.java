@@ -20,6 +20,7 @@ import java.awt.GridLayout;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,6 +34,7 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
 import src.others.my_literals;
+import src.others.basic_utilities;
 
 public class Scene_stream_via_establishing_socket extends JPanel implements Runnable {
     /**
@@ -46,8 +48,10 @@ public class Scene_stream_via_establishing_socket extends JPanel implements Runn
     private JButton button_schedule_server_start;
     private JProgressBar progress_bar_seconds_left;
     private JProgressBar progress_bar_minutes_right;
+    private basic_utilities my_socket = new basic_utilities();
 
     private panel_counter panel_center_top;
+
 
     public Scene_stream_via_establishing_socket() {
         // TODO: use different styles of cursors for different stuff
@@ -153,7 +157,17 @@ public class Scene_stream_via_establishing_socket extends JPanel implements Runn
                     if (remaining_time <= 0) {
                         ((Timer) e.getSource()).stop();
                         progress_bar_seconds_left.setValue(0);
-                        panel_center_bottom.start_connecting_animation();
+                        Thread thread = new Thread(() -> {
+                            try {
+                                panel_center_bottom.start_connecting_animation();
+                                my_socket.start_server(text_area_port.getText());
+                                panel_center_bottom.stop_connecting_animation();
+                            } catch (IOException e1) {
+                                // TODO Auto-generated catch block
+                                e1.printStackTrace();
+                            }
+                        });
+                        thread.start();
                     } else {
                         progress_bar_seconds_left.setValue((int) ((remaining_time / 1000) % 60));
                         progress_bar_minutes_right.setValue((int) ((remaining_time / (1000 * 60)) % 60));
@@ -174,6 +188,16 @@ public class Scene_stream_via_establishing_socket extends JPanel implements Runn
             progress_bar_minutes_right.setValue(0);
             ((dynamic_progress_bar) progress_bar_minutes_right).freeze_mouse_actions(true);
             ((dynamic_progress_bar) progress_bar_seconds_left).freeze_mouse_actions(true);
+            Thread thread = new Thread(() -> {
+                try {
+                    my_socket.start_server(text_area_port.getText());
+                    panel_center_bottom.stop_connecting_animation();
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            });
+            thread.start();
         });
 
     }
@@ -194,6 +218,8 @@ public class Scene_stream_via_establishing_socket extends JPanel implements Runn
                                 (progress_bar_seconds_left.getValue())));
                 // System.out.print
             }
+            if (my_socket.socket_connected)
+                System.out.println(my_socket.received_data);
         }
     }
 

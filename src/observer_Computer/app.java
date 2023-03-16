@@ -25,7 +25,6 @@ import src.scenes.Scene_home_panel;
 import src.scenes.Scene_log_panel;
 import src.scenes.Scene_stream_via_establishing_socket;
 import src.scenes.Scene_stream_via_local_file;
-import src.others.basic_utilities;
 import src.others.my_logger;
 import src.others.my_literals;
 
@@ -56,17 +55,11 @@ public class app extends JFrame implements Runnable {
             // e.printStackTrace();
         }
 
-        basic_utilities obj = new basic_utilities();
-        new Thread(obj).start();
         logger = new my_logger("logs\\logs.log");
 
         app main = new app();
         SwingUtilities.invokeLater(() -> main.setVisible(true));
         new Thread(main).start();
-        while (true) {
-            logger.addLog(obj.received_data);
-            Thread.sleep(100);
-        }
 
     }
 
