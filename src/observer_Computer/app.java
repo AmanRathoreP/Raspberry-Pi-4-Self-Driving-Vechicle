@@ -94,7 +94,8 @@ public class app extends JFrame implements Runnable {
             if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(null,
                     "If the configuration file is not present this action will create that file.\r\n"
                             + "If file is present but lacking with some of the properties then it will\r\n"
-                            + "repair the file using variables from the running instance of app",
+                            + "repair the file using variables from the running instance of app\r\n"
+                            + "If you really want to reset the config file totally then first delete it then run the app and then create it form this option",
                     "Warning!",
                     JOptionPane.OK_CANCEL_OPTION)) {
                 try {
