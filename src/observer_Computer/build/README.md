@@ -23,7 +23,7 @@ cd build\classes
 ```
 4. Use the below command to get the runnable `.jar` for our app
 ```
-jar cfve ..\app.jar app app.class @classes_info.txt
+jar cfve ..\app.jar app @classes_info.txt
 ```
 > `classes_info.txt` is the file containing all the names of the classes used in our build. See [directory's README](classes/README.md) for more info.
 5. Finally run our app's jar file using the below command
