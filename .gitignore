@@ -289,3 +289,4 @@ src/observer_Computer/.settings/*
 .VSCodeCounter/
 !README.md
 *.jar*
+config.json
