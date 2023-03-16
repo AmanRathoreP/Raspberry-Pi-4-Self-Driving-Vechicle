@@ -73,8 +73,8 @@ public class app extends JFrame implements Runnable {
     public app() {
         super("My App");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize((int) my_literals.CONSTANTS.get("WINDOW_SIZE_WIDTH"),
-                (int) my_literals.CONSTANTS.get("WINDOW_SIZE_HEIGHT"));
+        setSize((Integer) my_literals.CONSTANTS.get("MAIN WINDOW WIDTH"),
+                (Integer) my_literals.CONSTANTS.get("MAIN WINDOW HEIGHT"));
         setLocationRelativeTo(null);
 
         // Create reusable menu bar
@@ -149,8 +149,8 @@ public class app extends JFrame implements Runnable {
         getContentPane().add(contentPanel, BorderLayout.CENTER);
 
         scene_log_panel = new Scene_log_panel();
-        scene_home_panel = new Scene_home_panel((int) my_literals.CONSTANTS.get("WINDOW_SIZE_WIDTH"),
-                (int) my_literals.CONSTANTS.get("WINDOW_SIZE_HEIGHT"),
+        scene_home_panel = new Scene_home_panel((Integer) my_literals.CONSTANTS.get("MAIN WINDOW WIDTH"),
+                (Integer) my_literals.CONSTANTS.get("MAIN WINDOW HEIGHT"),
                 100, 10, 5, "This is a home screen");
         new Thread(scene_home_panel).start();
         scene_stream_via_establishing_socket = new Scene_stream_via_establishing_socket();

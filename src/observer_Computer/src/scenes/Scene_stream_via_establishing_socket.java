@@ -32,24 +32,13 @@ import javax.swing.JTextArea;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
+import src.others.my_literals;
+
 public class Scene_stream_via_establishing_socket extends JPanel implements Runnable {
     /**
      * @author Aman Rathore
      *
      */
-
-    /* some constants started */
-    private static final String DEFAULT_IP_ADDRESS = "127.0.0.1";
-    private static final int DEFAULT_PORT = 8080;
-    private static final short MAX_SECONDS_IN_SLIDER = 59;
-    private static final short MIN_SECONDS_IN_SLIDER = 0;
-    private static final short DEFAULT_SECONDS_IN_SLIDER = 20;
-    private static final short MIN_MINUTES_IN_SLIDER = 0;
-    private static final short MAX_MINUTES_IN_SLIDER = 13;
-    private static final short DEFAULT_MINUTES_IN_SLIDER = 2;
-    private static final String COLOR_OF_PROGRESS_BARS_IN_NON_ACTIVE_STATE = "#E02652";
-    private static final String COLOR_OF_PROGRESS_BARS_IN_ACTIVE_STATE = "#A3B8CC";
-    /* some constants ended */
 
     private JTextArea text_area_ip_address;
     private JTextArea text_area_port;
@@ -81,8 +70,10 @@ public class Scene_stream_via_establishing_socket extends JPanel implements Runn
 
         panel_center_mid_top.setLayout(new GridLayout(2, 0, 10, 10));
 
-        text_area_ip_address = new JTextArea(DEFAULT_IP_ADDRESS);
-        text_area_port = new JTextArea(String.valueOf(DEFAULT_PORT));
+        text_area_ip_address = new JTextArea(
+                ((String) my_literals.CONSTANTS.get("DEFAULT IP ADDRESS OF SOCKET CONNECTION WINDOW")));
+        text_area_port = new JTextArea(
+                String.valueOf(((int) my_literals.CONSTANTS.get("DEFAULT PORT OF SOCKET CONNECTION WINDOW"))));
         button_start_server = new JButton("Start Server");
         button_schedule_server_start = new JButton("Schedule Server Start");
 
@@ -109,20 +100,36 @@ public class Scene_stream_via_establishing_socket extends JPanel implements Runn
         add(panel_right);
 
         panel_left.setLayout(new GridLayout(0, 1));
-        progress_bar_seconds_left = new dynamic_progress_bar("Seconds: ", COLOR_OF_PROGRESS_BARS_IN_ACTIVE_STATE,
-                COLOR_OF_PROGRESS_BARS_IN_NON_ACTIVE_STATE);
-        progress_bar_seconds_left.setValue(DEFAULT_SECONDS_IN_SLIDER);
-        progress_bar_seconds_left.setMinimum(MIN_SECONDS_IN_SLIDER);
-        progress_bar_seconds_left.setMaximum(MAX_SECONDS_IN_SLIDER);
+        progress_bar_seconds_left = new dynamic_progress_bar("Seconds: ",
+                ((String) my_literals.CONSTANTS
+                        .get("COLOR OF PROGRESS BARS IN ACTIVE STATE OF SOCKET CONNECTION WINDOW")),
+                ((String) my_literals.CONSTANTS
+                        .get("COLOR OF PROGRESS BARS IN NON ACTIVE STATE OF SOCKET CONNECTION WINDOW")));
+        progress_bar_seconds_left
+                .setValue(
+                        ((Integer) my_literals.CONSTANTS.get("DEFAULT SECONDS IN SLIDER OF SOCKET CONNECTION WINDOW")));
+        progress_bar_seconds_left.setMinimum(
+                ((Integer) my_literals.CONSTANTS.get("MINIMUM SECONDS IN SLIDER OF SOCKET CONNECTION WINDOW")));
+        progress_bar_seconds_left.setMaximum(
+                ((Integer) my_literals.CONSTANTS.get("MAXIMUM SECONDS IN SLIDER OF SOCKET CONNECTION WINDOW")));
         progress_bar_seconds_left.setStringPainted(true);
         panel_left.add(progress_bar_seconds_left);
 
         panel_right.setLayout(new GridLayout(0, 1));
-        progress_bar_minutes_right = new dynamic_progress_bar("Minutes: ", COLOR_OF_PROGRESS_BARS_IN_ACTIVE_STATE,
-                COLOR_OF_PROGRESS_BARS_IN_NON_ACTIVE_STATE);
-        progress_bar_minutes_right.setValue(DEFAULT_MINUTES_IN_SLIDER);
-        progress_bar_minutes_right.setMinimum(MIN_MINUTES_IN_SLIDER);
-        progress_bar_minutes_right.setMaximum(MAX_MINUTES_IN_SLIDER);
+        progress_bar_minutes_right = new dynamic_progress_bar("Minutes: ",
+                ((String) my_literals.CONSTANTS
+                        .get("COLOR OF PROGRESS BARS IN ACTIVE STATE OF SOCKET CONNECTION WINDOW")),
+                ((String) my_literals.CONSTANTS
+                        .get("COLOR OF PROGRESS BARS IN NON ACTIVE STATE OF SOCKET CONNECTION WINDOW")));
+        progress_bar_minutes_right
+                .setValue(
+                        ((Integer) my_literals.CONSTANTS.get("DEFAULT MINUTES IN SLIDER OF SOCKET CONNECTION WINDOW")));
+        progress_bar_minutes_right
+                .setMinimum(
+                        ((Integer) my_literals.CONSTANTS.get("MINIMUM MINUTES IN SLIDER OF SOCKET CONNECTION WINDOW")));
+        progress_bar_minutes_right
+                .setMaximum(
+                        ((Integer) my_literals.CONSTANTS.get("MAXIMUM MINUTES IN SLIDER OF SOCKET CONNECTION WINDOW")));
         progress_bar_minutes_right.setStringPainted(true);
         panel_right.add(progress_bar_minutes_right);
 

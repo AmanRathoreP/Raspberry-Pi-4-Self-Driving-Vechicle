@@ -10,10 +10,11 @@ import javax.swing.JTextArea;
 import javax.swing.border.Border;
 import javax.swing.text.BadLocationException;
 
+import src.others.my_literals;
+
 public class Scene_log_panel extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    static final private int maxLogs = 100;
     private JTextArea logTextArea;
 
     public Scene_log_panel() {
@@ -51,9 +52,10 @@ public class Scene_log_panel extends JPanel {
         logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
         // Remove oldest logs if maximum number of lines is exceeded
         int numLines = logTextArea.getLineCount();
-        if (numLines > maxLogs) {
+        if (numLines > ((int) my_literals.CONSTANTS.get("MAXIMUM NUMBER OF LOGS IN LOG WINDOW"))) {
             logTextArea.replaceRange("", logTextArea.getLineStartOffset(0),
-                    logTextArea.getLineEndOffset(numLines - maxLogs));
+                    logTextArea.getLineEndOffset(
+                            numLines - ((int) my_literals.CONSTANTS.get("MAXIMUM NUMBER OF LOGS IN LOG WINDOW"))));
         }
     }
 

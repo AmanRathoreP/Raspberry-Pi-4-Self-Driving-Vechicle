@@ -32,8 +32,19 @@ public class my_literals {
     /* constants started */
     public static Map<String, Object> CONSTANTS = new HashMap<String, Object>() {
         {
-            put("WINDOW_SIZE_WIDTH", 16 * 75);
-            put("WINDOW_SIZE_HEIGHT", 9 * 75);
+            put("MAIN WINDOW WIDTH", 16 * 75);
+            put("MAIN WINDOW HEIGHT", 9 * 75);
+            put("MAXIMUM NUMBER OF LOGS IN LOG WINDOW", 100);
+            put("DEFAULT IP ADDRESS OF SOCKET CONNECTION WINDOW", "127.0.0.1");
+            put("DEFAULT PORT OF SOCKET CONNECTION WINDOW", 8080);
+            put("MAXIMUM SECONDS IN SLIDER OF SOCKET CONNECTION WINDOW", 59);
+            put("MINIMUM SECONDS IN SLIDER OF SOCKET CONNECTION WINDOW", 0);
+            put("DEFAULT SECONDS IN SLIDER OF SOCKET CONNECTION WINDOW", 20);
+            put("MINIMUM MINUTES IN SLIDER OF SOCKET CONNECTION WINDOW", 0);
+            put("MAXIMUM MINUTES IN SLIDER OF SOCKET CONNECTION WINDOW", 13);
+            put("DEFAULT MINUTES IN SLIDER OF SOCKET CONNECTION WINDOW", 2);
+            put("COLOR OF PROGRESS BARS IN NON ACTIVE STATE OF SOCKET CONNECTION WINDOW", "#E02652");
+            put("COLOR OF PROGRESS BARS IN ACTIVE STATE OF SOCKET CONNECTION WINDOW", "#A3B8CC");
         }
     };
     /* constants finished */
