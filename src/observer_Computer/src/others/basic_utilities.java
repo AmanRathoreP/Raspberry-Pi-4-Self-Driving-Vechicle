@@ -60,7 +60,7 @@ public class basic_utilities implements Runnable {
             FileWriter fileWriter = new FileWriter("streaming_data.txt", true);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter
-                    .write(DateTimeFormatter.ofPattern("hh:mm:ss a").format(LocalTime.now())
+                    .write(DateTimeFormatter.ofPattern("hh:mm:ss.SSS a").format(LocalTime.now())
                             + " --> "
                             + string_to_append
                             + "\n");
