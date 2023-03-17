@@ -48,6 +48,8 @@ public class Scene_log_panel extends JPanel {
         // TODO: Also add a keyboard shortcut to stop the logging process while
         // scrolling
         // TODO: Add option of selecting multiple logs and then copy them at once
+        // TODO: add tooltip on every msg so that when any log is appeded to the log
+        // panel and when hover it shows that when that msg was added
         logTextArea.append(message + "\n");
         logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
         // Remove oldest logs if maximum number of lines is exceeded

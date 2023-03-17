@@ -7,8 +7,6 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 
 import javax.swing.JPanel;
@@ -27,6 +25,7 @@ import src.scenes.Scene_stream_via_establishing_socket;
 import src.scenes.Scene_stream_via_local_file;
 import src.others.my_logger;
 import src.others.my_literals;
+import src.others.basic_utilities;
 
 public class app extends JFrame implements Runnable {
     /**
@@ -39,6 +38,7 @@ public class app extends JFrame implements Runnable {
     private Scene_home_panel scene_home_panel;
     private Scene_stream_via_establishing_socket scene_stream_via_establishing_socket;
     private Scene_stream_via_local_file scene_stream_via_local_file;
+    private basic_utilities file_reader = new basic_utilities(false);
 
     private static my_logger logger;
 
@@ -168,8 +168,7 @@ public class app extends JFrame implements Runnable {
     public void run() {
         while (true) {
             try {
-                scene_log_panel.appendLog("Logged at: " +
-                        DateTimeFormatter.ofPattern("hh:mm:ss a").format(LocalTime.now()));
+                scene_log_panel.appendLog(file_reader.get_received_data());
             } catch (BadLocationException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
