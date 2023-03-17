@@ -59,14 +59,20 @@ public class basic_utilities implements Runnable {
     }
 
     private static void append_data_to_file(String string_to_append) {
+        append_string_data_only(DateTimeFormatter.ofPattern("hh:mm:ss.SSS a").format(LocalTime.now())
+                + " --> "
+                + string_to_append
+                + "\n");
+    }
+
+    private static void append_string_data_only(String string_to_append) {
+        /*
+         * @apiNote this function will append that data to file as it is.
+         */
         try {
             FileWriter fileWriter = new FileWriter("streaming_data.txt", true);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter
-                    .write(DateTimeFormatter.ofPattern("hh:mm:ss.SSS a").format(LocalTime.now())
-                            + " --> "
-                            + string_to_append
-                            + "\n");
+            bufferedWriter.write(string_to_append);
             bufferedWriter.close();
         } catch (IOException e) {
             System.out.println("An error occurred while appending the data to the file.");
@@ -112,7 +118,10 @@ public class basic_utilities implements Runnable {
             if (prevTimestamp != null)
                 Thread.sleep(time_stamp_of_data_string.getTime() - prevTimestamp.getTime());
 
-            append_data_to_file(data_string);
+            append_string_data_only(parts[0]
+                    + " --> "
+                    + data_string
+                    + "\n");
             prevTimestamp = time_stamp_of_data_string;
         }
     }
