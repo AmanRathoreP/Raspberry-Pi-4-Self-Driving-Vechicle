@@ -1,3 +1,6 @@
+/*
+ * This is the main app file which combines all the classes to provide the best performance
+ */
 
 /**
  * @author Aman Rathore

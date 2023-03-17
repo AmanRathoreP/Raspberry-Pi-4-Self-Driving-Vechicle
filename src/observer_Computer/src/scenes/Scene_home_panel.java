@@ -1,5 +1,12 @@
+/**
+ * 
+ */
 package src.scenes;
 
+/**
+ * @author Aman Rathore
+ *
+ */
 
 import java.awt.Color;
 import java.awt.Dimension;

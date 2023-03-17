@@ -1,7 +1,11 @@
+/*
+ * 
+ */
+package src.others;
+
 /**
  * @author Aman Rathore
  */
-package src.others;
 
 import java.nio.file.Paths;
 import java.io.File;

@@ -1,4 +1,12 @@
+/**
+ * 
+ */
 package src.others;
+
+/**
+ * @author Aman Rathore
+ *
+ */
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
