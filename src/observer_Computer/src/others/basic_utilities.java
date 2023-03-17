@@ -12,8 +12,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class basic_utilities implements Runnable {
     public String received_data = "No data";
@@ -92,5 +95,25 @@ public class basic_utilities implements Runnable {
          * gets data from the master via file saved by the socket using stuff
          */
         return read_data_from_file("streaming_data.txt");
+    }
+
+    public static void append_data_string_to_file_according_to_data_string_time_stamp(String long_full_string_of_data)
+            throws ParseException, InterruptedException {
+
+        String[] lines = long_full_string_of_data.split("\\r?\\n");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss.SSS a");
+        Date prevTimestamp = null;
+
+        for (String line : lines) {
+            String[] parts = line.split(" --> ");
+            Date time_stamp_of_data_string = dateFormat.parse(parts[0]);
+            String data_string = parts[1];
+
+            if (prevTimestamp != null)
+                Thread.sleep(time_stamp_of_data_string.getTime() - prevTimestamp.getTime());
+
+            append_data_to_file(data_string);
+            prevTimestamp = time_stamp_of_data_string;
+        }
     }
 }

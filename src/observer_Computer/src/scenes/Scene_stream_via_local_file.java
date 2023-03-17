@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
 
 import javax.swing.border.Border;
 import javax.swing.BorderFactory;
@@ -123,14 +124,26 @@ public class Scene_stream_via_local_file extends JPanel {
         button_submit_file = new JButton("Submit");
         button_submit_file.addActionListener(e -> {
             if (file_selected != null) {
+                StringBuilder string_builder = new StringBuilder();
                 // Do something with the selected file
                 try (BufferedReader reader = new BufferedReader(new FileReader(file_selected))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
-                        // TODO: Do something with the line
+                        string_builder.append(line);
+                        string_builder.append(System.lineSeparator());
                     }
                 } catch (IOException ex) {
                     show_error_message("Error reading file: " + ex.getMessage());
+                }
+                try {
+                    src.others.basic_utilities
+                            .append_data_string_to_file_according_to_data_string_time_stamp(string_builder.toString());
+                } catch (InterruptedException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                } catch (ParseException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
                 }
             } else {
                 show_error_message("Please select a file.");
