@@ -135,16 +135,20 @@ public class Scene_stream_via_local_file extends JPanel {
                 } catch (IOException ex) {
                     show_error_message("Error reading file: " + ex.getMessage());
                 }
-                try {
-                    src.others.basic_utilities
-                            .append_data_string_to_file_according_to_data_string_time_stamp(string_builder.toString());
-                } catch (InterruptedException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                } catch (ParseException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
+                Thread thread_for_adding_data_to_file = new Thread(() -> {
+                    try {
+                        src.others.basic_utilities
+                                .append_data_string_to_file_according_to_data_string_time_stamp(
+                                        string_builder.toString());
+                    } catch (InterruptedException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    } catch (ParseException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                });
+                thread_for_adding_data_to_file.start();
             } else {
                 show_error_message("Please select a file.");
             }
