@@ -45,6 +45,7 @@ public class my_literals {
             put("DEFAULT MINUTES IN SLIDER OF SOCKET CONNECTION WINDOW", 2);
             put("COLOR OF PROGRESS BARS IN NON ACTIVE STATE OF SOCKET CONNECTION WINDOW", "#E02652");
             put("COLOR OF PROGRESS BARS IN ACTIVE STATE OF SOCKET CONNECTION WINDOW", "#A3B8CC");
+            put("USE JAVA SWING IN-BUILD FILE EXPLORER", true);
         }
     };
     /* constants finished */
