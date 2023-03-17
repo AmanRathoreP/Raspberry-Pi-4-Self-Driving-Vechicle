@@ -10,11 +10,13 @@ package src.scenes;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JButton;
 import javax.swing.border.Border;
 import javax.swing.text.BadLocationException;
 
@@ -24,9 +26,25 @@ public class Scene_log_panel extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private JTextArea logTextArea;
+    private JButton button_pause_resume_logging;
+    public boolean log_stuff = true;
+    private String log_buffer = "";
 
     public Scene_log_panel() {
         super(new BorderLayout());
+
+        button_pause_resume_logging = new JButton("Pause/Resume Logging");
+        button_pause_resume_logging.addActionListener(e -> {
+            if (log_stuff)
+                log_stuff = false;
+            else
+                log_stuff = true;
+        });
+
+        JPanel panel_for_buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panel_for_buttons.add(button_pause_resume_logging);
+
+        add(panel_for_buttons, BorderLayout.SOUTH);
 
         // Create a border with a title for the panel
         Border border = BorderFactory.createLineBorder(new Color(0, 0, 0, 50), 1);
@@ -58,15 +76,21 @@ public class Scene_log_panel extends JPanel {
         // TODO: Add option of selecting multiple logs and then copy them at once
         // TODO: add tooltip on every msg so that when any log is appeded to the log
         // panel and when hover it shows that when that msg was added
-        logTextArea.append(message + "\n");
-        logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
-        // Remove oldest logs if maximum number of lines is exceeded
-        int numLines = logTextArea.getLineCount();
-        if (numLines > ((int) my_literals.CONSTANTS.get("MAXIMUM NUMBER OF LOGS IN LOG WINDOW"))) {
-            logTextArea.replaceRange("", logTextArea.getLineStartOffset(0),
-                    logTextArea.getLineEndOffset(
-                            numLines - ((int) my_literals.CONSTANTS.get("MAXIMUM NUMBER OF LOGS IN LOG WINDOW"))));
-        }
+        if (log_stuff) {
+            logTextArea.append(log_buffer + message + "\n");
+            logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
+            // Remove oldest logs if maximum number of lines is exceeded
+            int numLines = logTextArea.getLineCount();
+            if (numLines > ((int) my_literals.CONSTANTS.get("MAXIMUM NUMBER OF LOGS IN LOG WINDOW")))
+                logTextArea.replaceRange("", logTextArea.getLineStartOffset(0),
+                        logTextArea.getLineEndOffset(
+                                numLines - ((int) my_literals.CONSTANTS.get("MAXIMUM NUMBER OF LOGS IN LOG WINDOW"))));
+
+            log_buffer = "";
+        } else
+            log_buffer = log_buffer + message + "\n";
+
     }
+
 
 }
