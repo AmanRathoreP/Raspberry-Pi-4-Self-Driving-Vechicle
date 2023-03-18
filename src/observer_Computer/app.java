@@ -26,6 +26,8 @@ import src.scenes.Scene_home_panel;
 import src.scenes.Scene_log_panel;
 import src.scenes.Scene_stream_via_establishing_socket;
 import src.scenes.Scene_stream_via_local_file;
+import src.scenes.Scene_about_panel;
+import src.scenes.Scene_usage_panel;
 import src.others.my_logger;
 import src.others.my_literals;
 import src.others.basic_utilities;
@@ -41,6 +43,8 @@ public class app extends JFrame implements Runnable {
     private Scene_home_panel scene_home_panel;
     private Scene_stream_via_establishing_socket scene_stream_via_establishing_socket;
     private Scene_stream_via_local_file scene_stream_via_local_file;
+    private Scene_about_panel scene_about_panel;
+    private Scene_usage_panel scene_usage_panel;
     private basic_utilities file_reader = new basic_utilities(false);
 
     private static my_logger logger;
@@ -129,11 +133,11 @@ public class app extends JFrame implements Runnable {
         JMenuItem menu_item_for_scene_usage_panel = new JMenuItem("Usage");
         menu_help.add(menu_item_for_scene_usage_panel);
         menu_item_for_scene_usage_panel
-                .addActionListener(e -> logger.addLog("Usage Button Pressed", Level.WARNING));
+                .addActionListener(e -> show_scene("Usage Info Scene"));
         JMenuItem menu_item_for_scene_about_panel = new JMenuItem("About");
         menu_help.add(menu_item_for_scene_about_panel);
         menu_item_for_scene_about_panel
-                .addActionListener(e -> logger.addLog("About Button Pressed", Level.WARNING));
+                .addActionListener(e -> show_scene("About Info Scene"));
 
         menuBar.add(menu_actions);
         menuBar.add(menu_navigate);
@@ -153,11 +157,15 @@ public class app extends JFrame implements Runnable {
         Thread thread_for_scene_stream_via_establishing_socket = new Thread(scene_stream_via_establishing_socket);
         thread_for_scene_stream_via_establishing_socket.start();
         scene_stream_via_local_file = new Scene_stream_via_local_file();
+        scene_about_panel = new Scene_about_panel();
+        scene_usage_panel = new Scene_usage_panel();
 
         contentPanel.add(scene_home_panel, "Home Scene");
         contentPanel.add(scene_log_panel, "Log Scene");
         contentPanel.add(scene_stream_via_establishing_socket, "Socket Server Streaming Scene");
         contentPanel.add(scene_stream_via_local_file, "Local File Streaming Scene");
+        contentPanel.add(scene_about_panel, "About Info Scene");
+        contentPanel.add(scene_usage_panel, "Usage Info Scene");
 
         // * Show initial scene
         show_scene("Log Scene");
