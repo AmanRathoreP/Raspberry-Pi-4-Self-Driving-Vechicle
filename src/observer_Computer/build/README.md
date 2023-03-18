@@ -8,7 +8,8 @@
 - `generator.py` file helps to generate all the `.class` or `.java` file name in one go
 
 ## Creating build
-Follow the below given steps in order to create your own build for the app
+### Manual build
+Follow the below given steps in order to create your own _manual build_ for the app
 
 1. Navigate to the __root directory of the app__ i.e. where you can see `app.java` file.
 
@@ -16,21 +17,29 @@ Follow the below given steps in order to create your own build for the app
 ```bash
 javac -d build\classes -cp build\resources\*.jar @files_info.txt
 ```
-> `files_info.txt` is the file containing all the names of the file which are used in the build. See [directory's README](..\README.md) for more info.
-3. Now head on the the classes directory in the build directory.
+> `files_info.txt` is the file containing all the names of the file which are used in the build. See [directory's README](../README.md) for more info.
+1. Now head on the the classes directory in the build directory.
 ```bash
 cd build\classes
 ```
-4. Use the below command to get the runnable `.jar` for our app
+1. Use the below command to get the runnable `.jar` for our app
 ```
 jar cfve ..\app.jar app @classes_info.txt
 ```
 > `classes_info.txt` is the file containing all the names of the classes used in our build. See [directory's README](classes/README.md) for more info.
-5. Finally run our app's jar file using the below command
+1. Finally run our app's jar file using the below command
 ```
 java -jar ..\app.jar
 ```
-6. You can also run the app without creating the jar file using the below command
+1. You can also run the app without creating the jar file using the below command
 ```
 java app @classes_info.txt
+```
+### Automated build (only for Windows)
+
+1. Navigate to the __root directory of the app__ i.e. where you can see `app.java` file.
+
+2. Run the `build.bat` file using the below command
+```bash
+build.bat
 ```
