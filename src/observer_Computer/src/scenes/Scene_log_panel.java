@@ -10,10 +10,15 @@ package src.scenes;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -24,6 +29,8 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -172,17 +179,56 @@ public class Scene_log_panel extends JPanel {
     }
 
     public void save_buffer_logs_to_file() {
-        System.out.println("save_buffer_logs_to_file");
+        save_logs_to_file(log_buffer);
     }
 
     public void save_on_screen_logs_to_file() {
-        System.out.println("save_on_screen_logs_to_file");
+        save_logs_to_file(logTextArea.getText());
     }
 
     public void save_all_logs_to_file() {
-        System.out.println("save_all_logs_to_file");
+        save_logs_to_file(logTextArea.getText() + log_buffer);
     }
 
+    private void save_logs_to_file(String string_to_save) {
+        JFileChooser fileChooser = new JFileChooser();
+        int result = fileChooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selected_file = fileChooser.getSelectedFile();
+            try {
+                FileWriter fileWriter = new FileWriter(selected_file);
+                fileWriter.write(string_to_save);
+                fileWriter.close();
+                String absolute_file_path = selected_file.getAbsolutePath();
+
+                Object[] options = { "Ok", "Open File", "Copy File Path" };
+                int choice = JOptionPane.showOptionDialog(null,
+                        "<html><body><a href=\"\">"
+                                + absolute_file_path
+                                + "</a></body></html>",
+                        "Open file",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+                if (choice == 1) {
+                    try {
+                        Desktop.getDesktop().open(new File(absolute_file_path));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(null,
+                                "Error:\n" + e.toString(), "Can't open file!",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                } else if (choice == 2)
+                    copy_to_clipboard(absolute_file_path);
+            } catch (IOException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null,
+                        "Error:\n" + e.toString(), "Can't save to file!",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
 }
 
 class dynamic_combo_box_sort_of_list extends JComboBox<String> {
