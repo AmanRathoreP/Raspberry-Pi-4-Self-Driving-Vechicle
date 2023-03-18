@@ -18,10 +18,15 @@ import java.awt.datatransfer.StringSelection;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.text.BadLocationException;
 
 import java.util.Map;
@@ -37,6 +42,9 @@ public class Scene_log_panel extends JPanel {
     dynamic_combo_box_sort_of_list combo_box_for_clearing_logs;
     dynamic_combo_box_sort_of_list combo_box_for_copying_logs;
     dynamic_combo_box_sort_of_list combo_box_for_saving_logs;
+    SpinnerModel spinner_model_for_log_capacity;
+    JSpinner spinner_for_log_capacity;
+    private int number_of_logs_on_log_screen = (int) my_literals.CONSTANTS.get("DEFAULT NUMBER OF LOGS IN LOG WINDOW");
     public boolean log_stuff = true;
     private String log_buffer = "";
 
@@ -67,7 +75,21 @@ public class Scene_log_panel extends JPanel {
         save_logs_options.put("Save Screen Logs", () -> save_on_screen_logs_to_file());
         combo_box_for_saving_logs = new dynamic_combo_box_sort_of_list(save_logs_options);
 
+        spinner_model_for_log_capacity = new SpinnerNumberModel(
+                (int) my_literals.CONSTANTS.get("DEFAULT NUMBER OF LOGS IN LOG WINDOW"),
+                (int) my_literals.CONSTANTS.get("MINIMUM NUMBER OF LOGS IN LOG WINDOW"),
+                (int) my_literals.CONSTANTS.get("MAXIMUM NUMBER OF LOGS IN LOG WINDOW"),
+                (int) my_literals.CONSTANTS.get("STEPS TO TAKE WHILE INCREMENTING THE NUMBER OF LOGS IN LOG WINDOW"));
+        spinner_for_log_capacity = new JSpinner(spinner_model_for_log_capacity);
+
+        spinner_for_log_capacity.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                number_of_logs_on_log_screen = (int) spinner_for_log_capacity.getValue();
+            }
+        });
+
         JPanel panel_for_buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panel_for_buttons.add(spinner_for_log_capacity);
         panel_for_buttons.add(combo_box_for_clearing_logs);
         panel_for_buttons.add(combo_box_for_copying_logs);
         panel_for_buttons.add(combo_box_for_saving_logs);
@@ -108,10 +130,10 @@ public class Scene_log_panel extends JPanel {
             logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
             // Remove oldest logs if maximum number of lines is exceeded
             int numLines = logTextArea.getLineCount();
-            if (numLines > ((int) my_literals.CONSTANTS.get("MAXIMUM NUMBER OF LOGS IN LOG WINDOW")))
+            if (numLines > number_of_logs_on_log_screen)
                 logTextArea.replaceRange("", logTextArea.getLineStartOffset(0),
                         logTextArea.getLineEndOffset(
-                                numLines - ((int) my_literals.CONSTANTS.get("MAXIMUM NUMBER OF LOGS IN LOG WINDOW"))));
+                                numLines - number_of_logs_on_log_screen));
 
             log_buffer = "";
         } else

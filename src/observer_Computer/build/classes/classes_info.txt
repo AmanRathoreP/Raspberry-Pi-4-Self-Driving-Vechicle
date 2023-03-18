@@ -15,6 +15,7 @@
 .\src\scenes\panel_counter.class
 .\src\scenes\Scene_home_panel$Ball.class
 .\src\scenes\Scene_home_panel.class
+.\src\scenes\Scene_log_panel$1.class
 .\src\scenes\Scene_log_panel.class
 .\src\scenes\Scene_stream_via_establishing_socket$1.class
 .\src\scenes\Scene_stream_via_establishing_socket.class
