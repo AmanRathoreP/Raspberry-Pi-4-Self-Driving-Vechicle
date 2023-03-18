@@ -68,6 +68,18 @@ public class my_logger {
         }
     }
 
+    public my_logger() {
+        /*
+         * It by default sets the log file name to "logs\logs.log"
+         * This constructor initializes the logger with the specified log file name.
+         * If the file does not exist, it will set `log_data` to false
+         * If some of the `SecurityException` occurs then it will set `log_data` to
+         * false
+         * If `log_data` is set to false then no logging will occurs
+         */
+        this("logs\\logs.log");
+    }
+
     public void addLog(String message, Level log_level) {
         /*
          * This method logs the specified message with logging specified levels

@@ -47,9 +47,15 @@ public class app extends JFrame implements Runnable {
     private Scene_usage_panel scene_usage_panel;
     private basic_utilities file_reader = new basic_utilities(false);
 
-    private static my_logger logger;
+    private my_logger logger;
 
     public static void main(String[] args) throws InterruptedException {
+
+        new app();
+    }
+
+    public app() {
+        super("My App");
         try {
             System.out.println(my_literals.update_literals(true));
         } catch (FileNotFoundException e) {
@@ -61,18 +67,8 @@ public class app extends JFrame implements Runnable {
             logger.addLog(e.toString(), logger.log_level.WARNING);
             // e.printStackTrace();
         }
-
-        logger = new my_logger("logs\\logs.log");
-
-        app main = new app();
-        SwingUtilities.invokeLater(() -> main.setVisible(true));
-        new Thread(main).start();
-
-    }
-
-    public app() {
-        super("My App");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.logger = new my_logger();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize((Integer) my_literals.CONSTANTS.get("MAIN WINDOW WIDTH"),
                 (Integer) my_literals.CONSTANTS.get("MAIN WINDOW HEIGHT"));
         setLocationRelativeTo(null);
@@ -81,13 +77,13 @@ public class app extends JFrame implements Runnable {
         JMenuBar menuBar = new JMenuBar();
 
         JMenu menu_actions = new JMenu("Actions");
-        JMenuItem menu_item_exit = new JMenuItem("Exit");
+        JMenuItem menu_item_exit = new JMenuItem("Exit from all instances of app");
         menu_item_exit.addActionListener(e -> System.exit(0));
         menu_actions.add(menu_item_exit);
         JMenuItem menu_item_new_window = new JMenuItem("New Window");
         menu_actions.add(menu_item_new_window);
         menu_item_new_window
-                .addActionListener(e -> logger.addLog("New Window Button Pressed", Level.WARNING));
+                .addActionListener(e -> new app());
         JMenuItem menu_item_reset_config = new JMenuItem("Reset Config File");
         menu_actions.add(menu_item_reset_config);
         menu_item_reset_config.addActionListener(e -> {
@@ -168,7 +164,10 @@ public class app extends JFrame implements Runnable {
         contentPanel.add(scene_usage_panel, "Usage Info Scene");
 
         // * Show initial scene
-        show_scene("Log Scene");
+        show_scene("Socket Server Streaming Scene");
+        // * setting the visibility to true
+        SwingUtilities.invokeLater(() -> this.setVisible(true));
+        new Thread(this).start();
     }
 
     private void show_scene(String scene_name) {
