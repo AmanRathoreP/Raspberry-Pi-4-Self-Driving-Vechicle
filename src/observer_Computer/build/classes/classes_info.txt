@@ -5,6 +5,7 @@
 .\src\others\my_literals.class
 .\src\others\my_logger$1.class
 .\src\others\my_logger.class
+.\src\scenes\dynamic_combo_box_sort_of_list.class
 .\src\scenes\dynamic_progress_bar$1.class
 .\src\scenes\dynamic_progress_bar$2.class
 .\src\scenes\dynamic_progress_bar$3.class

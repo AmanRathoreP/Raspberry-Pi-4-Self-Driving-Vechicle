@@ -12,13 +12,20 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.border.Border;
 import javax.swing.text.BadLocationException;
+
+import java.util.Map;
+import java.util.HashMap;
 
 import src.others.my_literals;
 
@@ -27,6 +34,9 @@ public class Scene_log_panel extends JPanel {
     private static final long serialVersionUID = 1L;
     private JTextArea logTextArea;
     private JButton button_pause_resume_logging;
+    dynamic_combo_box_sort_of_list combo_box_for_clearing_logs;
+    dynamic_combo_box_sort_of_list combo_box_for_copying_logs;
+    dynamic_combo_box_sort_of_list combo_box_for_saving_logs;
     public boolean log_stuff = true;
     private String log_buffer = "";
 
@@ -41,7 +51,26 @@ public class Scene_log_panel extends JPanel {
                 log_stuff = true;
         });
 
+        Map<String, Runnable> clear_logs_options = new HashMap<>();
+        clear_logs_options.put("Clear all Logs", () -> clear_all_logs());
+        clear_logs_options.put("Clear Buffer Logs", () -> clear_buffer_logs());
+        clear_logs_options.put("Clear Screen Logs", () -> clear_on_screen_logs());
+        combo_box_for_clearing_logs = new dynamic_combo_box_sort_of_list(clear_logs_options);
+        Map<String, Runnable> copy_logs_options = new HashMap<>();
+        copy_logs_options.put("Copy all Logs", () -> copy_all_logs_to_clipboard());
+        copy_logs_options.put("Copy Buffer Logs", () -> copy_buffer_logs_to_clipboard());
+        copy_logs_options.put("Copy Screen Logs", () -> copy_on_screen_logs_to_clipboard());
+        combo_box_for_copying_logs = new dynamic_combo_box_sort_of_list(copy_logs_options);
+        Map<String, Runnable> save_logs_options = new HashMap<>();
+        save_logs_options.put("Save all Logs", () -> save_all_logs_to_file());
+        save_logs_options.put("Save Buffer Logs", () -> save_buffer_logs_to_file());
+        save_logs_options.put("Save Screen Logs", () -> save_on_screen_logs_to_file());
+        combo_box_for_saving_logs = new dynamic_combo_box_sort_of_list(save_logs_options);
+
         JPanel panel_for_buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panel_for_buttons.add(combo_box_for_clearing_logs);
+        panel_for_buttons.add(combo_box_for_copying_logs);
+        panel_for_buttons.add(combo_box_for_saving_logs);
         panel_for_buttons.add(button_pause_resume_logging);
 
         add(panel_for_buttons, BorderLayout.SOUTH);
@@ -70,10 +99,8 @@ public class Scene_log_panel extends JPanel {
          * Appends a log message to the text area.
          */
         // TODO: Stop the logging process when user is scrolling the logs
-        // TODO: Add a button for the user to stop the logging
         // TODO: Also add a keyboard shortcut to stop the logging process while
         // scrolling
-        // TODO: Add option of selecting multiple logs and then copy them at once
         // TODO: add tooltip on every msg so that when any log is appeded to the log
         // panel and when hover it shows that when that msg was added
         if (log_stuff) {
@@ -92,5 +119,67 @@ public class Scene_log_panel extends JPanel {
 
     }
 
+    public void clear_buffer_logs() {
+        log_buffer = "";
+    }
 
+    public void clear_on_screen_logs() {
+        logTextArea.setText("");
+    }
+
+    public void clear_all_logs() {
+        clear_buffer_logs();
+        clear_on_screen_logs();
+    }
+
+    private void copy_to_clipboard(String text_to_copy) {
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(text_to_copy), null);
+
+    }
+
+    public void copy_buffer_logs_to_clipboard() {
+        copy_to_clipboard(log_buffer);
+    }
+
+    public void copy_on_screen_logs_to_clipboard() {
+        copy_to_clipboard(logTextArea.getText());
+    }
+
+    public void copy_all_logs_to_clipboard() {
+        copy_to_clipboard(logTextArea.getText() + log_buffer);
+    }
+
+    public void save_buffer_logs_to_file() {
+        System.out.println("save_buffer_logs_to_file");
+    }
+
+    public void save_on_screen_logs_to_file() {
+        System.out.println("save_on_screen_logs_to_file");
+    }
+
+    public void save_all_logs_to_file() {
+        System.out.println("save_all_logs_to_file");
+    }
+
+}
+
+class dynamic_combo_box_sort_of_list extends JComboBox<String> {
+
+    private Map<String, Runnable> string_with_associated_function;
+
+    public dynamic_combo_box_sort_of_list(Map<String, Runnable> string_with_associated_function) {
+        super(string_with_associated_function.keySet().toArray(new String[0]));
+        this.string_with_associated_function = string_with_associated_function;
+    }
+
+    @Override
+    public void setSelectedItem(Object item_object) {
+        super.setSelectedItem(item_object);
+        String selected_item = item_object.toString();
+
+        Runnable function = string_with_associated_function.get(selected_item);
+        if (function != null) {
+            function.run();
+        }
+    }
 }
