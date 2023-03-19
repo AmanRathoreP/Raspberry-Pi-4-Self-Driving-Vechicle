@@ -68,7 +68,7 @@ public class app extends JFrame implements Runnable {
             // e.printStackTrace();
         }
         this.logger = new my_logger();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize((Integer) my_literals.CONSTANTS.get("MAIN WINDOW WIDTH"),
                 (Integer) my_literals.CONSTANTS.get("MAIN WINDOW HEIGHT"));
         setLocationRelativeTo(null);
@@ -77,9 +77,12 @@ public class app extends JFrame implements Runnable {
         JMenuBar menuBar = new JMenuBar();
 
         JMenu menu_actions = new JMenu("Actions");
-        JMenuItem menu_item_exit = new JMenuItem("Exit from all instances of app");
-        menu_item_exit.addActionListener(e -> System.exit(0));
-        menu_actions.add(menu_item_exit);
+        JMenuItem menu_item_exit_all = new JMenuItem("Exit from all instances of app");
+        menu_item_exit_all.addActionListener(e -> System.exit(0));
+        JMenuItem menu_item_exit_current = new JMenuItem("Close current window of the app");
+        menu_item_exit_current.addActionListener(e -> dispose());
+        menu_actions.add(menu_item_exit_all);
+        menu_actions.add(menu_item_exit_current);
         JMenuItem menu_item_new_window = new JMenuItem("New Window");
         menu_actions.add(menu_item_new_window);
         menu_item_new_window
