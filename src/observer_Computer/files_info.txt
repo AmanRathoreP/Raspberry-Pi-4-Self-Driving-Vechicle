@@ -1,4 +1,6 @@
 .\app.java
+.\src\analytical_tools_panels\Scene_speed_panel.java
+.\src\charts_panels\gauge_chart_panel.java
 .\src\others\basic_utilities.java
 .\src\others\my_json_reader_writer.java
 .\src\others\my_literals.java

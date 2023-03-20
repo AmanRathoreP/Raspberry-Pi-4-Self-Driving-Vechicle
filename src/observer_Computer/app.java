@@ -28,6 +28,7 @@ import src.scenes.Scene_stream_via_establishing_socket;
 import src.scenes.Scene_stream_via_local_file;
 import src.scenes.Scene_about_panel;
 import src.scenes.Scene_usage_panel;
+import src.analytical_tools_panels.Scene_speed_panel;
 import src.others.my_logger;
 import src.others.my_literals;
 import src.others.basic_utilities;
@@ -45,6 +46,7 @@ public class app extends JFrame implements Runnable {
     private Scene_stream_via_local_file scene_stream_via_local_file;
     private Scene_about_panel scene_about_panel;
     private Scene_usage_panel scene_usage_panel;
+    private Scene_speed_panel scene_speed_panel;
     private basic_utilities file_reader = new basic_utilities(false);
 
     private my_logger logger;
@@ -139,8 +141,14 @@ public class app extends JFrame implements Runnable {
         menu_item_for_scene_about_panel
                 .addActionListener(e -> show_scene("About Info Scene"));
 
+        JMenu menu_analytical_tools = new JMenu("Analytical Tools");
+        JMenuItem menu_item_for_scene_speed = new JMenuItem("Speed");
+        menu_analytical_tools.add(menu_item_for_scene_speed);
+        menu_item_for_scene_speed.addActionListener(e -> show_scene("Speed Scene"));
+
         menuBar.add(menu_actions);
         menuBar.add(menu_navigate);
+        menuBar.add(menu_analytical_tools);
         menuBar.add(menu_help);
         setJMenuBar(menuBar);
 
@@ -159,6 +167,7 @@ public class app extends JFrame implements Runnable {
         scene_stream_via_local_file = new Scene_stream_via_local_file();
         scene_about_panel = new Scene_about_panel();
         scene_usage_panel = new Scene_usage_panel();
+        scene_speed_panel = new Scene_speed_panel();
 
         contentPanel.add(scene_home_panel, "Home Scene");
         contentPanel.add(scene_log_panel, "Log Scene");
@@ -166,6 +175,7 @@ public class app extends JFrame implements Runnable {
         contentPanel.add(scene_stream_via_local_file, "Local File Streaming Scene");
         contentPanel.add(scene_about_panel, "About Info Scene");
         contentPanel.add(scene_usage_panel, "Usage Info Scene");
+        contentPanel.add(scene_speed_panel, "Speed Scene");
 
         // * Show initial scene
         show_scene("Socket Server Streaming Scene");
