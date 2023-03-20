@@ -75,14 +75,15 @@ public class app extends JFrame implements Runnable {
 
         // Create reusable menu bar
         JMenuBar menuBar = new JMenuBar();
-
         JMenu menu_actions = new JMenu("Actions");
+        JMenu menu_item_exit_options = new JMenu("Exit Options");
         JMenuItem menu_item_exit_all = new JMenuItem("Exit from all instances of app");
         menu_item_exit_all.addActionListener(e -> System.exit(0));
         JMenuItem menu_item_exit_current = new JMenuItem("Close current window of the app");
         menu_item_exit_current.addActionListener(e -> dispose());
-        menu_actions.add(menu_item_exit_all);
-        menu_actions.add(menu_item_exit_current);
+        menu_item_exit_options.add(menu_item_exit_all);
+        menu_item_exit_options.add(menu_item_exit_current);
+        menu_actions.add(menu_item_exit_options);
         JMenuItem menu_item_new_window = new JMenuItem("New Window");
         menu_actions.add(menu_item_new_window);
         menu_item_new_window
