@@ -18,7 +18,6 @@ import java.util.logging.Level;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.text.BadLocationException;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -35,9 +34,8 @@ import observer_java_GUI.src.scenes.Scene_usage_panel;
 import observer_java_GUI.src.analytical_tools_panels.Scene_speed_panel;
 import observer_java_GUI.src.others.my_logger;
 import observer_java_GUI.src.others.my_literals;
-import observer_java_GUI.src.others.basic_utilities;
 
-public class app extends JFrame implements Runnable {
+public class app extends JFrame {
     /**
      * @author Aman Rathore
      */
@@ -45,7 +43,6 @@ public class app extends JFrame implements Runnable {
 
     private JPanel contentPanel;
     public static Map<String, JPanel> scenes_map = new HashMap<String, JPanel>();
-    private basic_utilities file_reader = new basic_utilities(false);
 
     private my_logger logger;
     private static String current_opened_scene = "Home Scene";
@@ -176,7 +173,6 @@ public class app extends JFrame implements Runnable {
         show_scene(current_opened_scene);
         // * setting the visibility to true
         SwingUtilities.invokeLater(() -> this.setVisible(true));
-        new Thread(this).start();
     }
 
     private void show_scene(String scene_name) {
@@ -185,21 +181,4 @@ public class app extends JFrame implements Runnable {
         current_opened_scene = scene_name;
     }
 
-    @Override
-    public void run() {
-        while (true) {
-            try {
-                ((Scene_log_panel) scenes_map.get("Log Scene")).appendLog(file_reader.get_received_data());
-            } catch (BadLocationException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-    }
 }

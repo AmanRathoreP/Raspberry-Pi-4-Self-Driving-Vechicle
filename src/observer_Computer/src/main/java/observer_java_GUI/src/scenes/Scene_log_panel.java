@@ -42,7 +42,7 @@ import java.util.HashMap;
 
 import observer_java_GUI.src.others.my_literals;
 
-public class Scene_log_panel extends JPanel {
+public class Scene_log_panel extends JPanel implements Runnable {
 
     private static final long serialVersionUID = 1L;
     private JTextArea logTextArea;
@@ -122,6 +122,7 @@ public class Scene_log_panel extends JPanel {
         // Add a scroll pane to the text area for scrolling
         JScrollPane scrollPane = new JScrollPane(logTextArea);
         add(scrollPane, BorderLayout.CENTER);
+        new Thread(this).start();
     }
 
     public void appendLog(String message) throws BadLocationException {
@@ -234,6 +235,24 @@ public class Scene_log_panel extends JPanel {
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(693, 1040);
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                this.appendLog(observer_java_GUI.src.others.basic_utilities.get_received_data());
+            } catch (BadLocationException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
     }
 }
 
