@@ -37,6 +37,9 @@ import javax.swing.JLabel;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
+
+import observer_java_GUI.src.others.my_literals;
+
 import javax.swing.JPanel;
 
 public class Scene_stream_via_local_file extends JPanel {
@@ -107,7 +110,7 @@ public class Scene_stream_via_local_file extends JPanel {
         });
         button_select_file.addActionListener(e -> {
             if (Desktop.isDesktopSupported()
-                    && (!((Boolean) (observer_java_GUI.src.others.my_literals.CONSTANTS
+                    && (!((Boolean) (my_literals.CONSTANTS
                             .get("USE JAVA SWING IN-BUILD FILE EXPLORER"))))) {
                 FileDialog file_dialog = new FileDialog((new javax.swing.JFrame()), "Select File", FileDialog.LOAD);
                 file_dialog.setVisible(true);
@@ -236,5 +239,10 @@ public class Scene_stream_via_local_file extends JPanel {
     private void show_error_message(String message) {
         text_field_for_file_name.setForeground(Color.RED);
         text_field_for_file_name.setText(message);
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(618, 262);
     }
 }

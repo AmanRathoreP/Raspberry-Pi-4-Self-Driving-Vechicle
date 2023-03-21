@@ -11,6 +11,7 @@ package observer_java_GUI.src.scenes;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -228,6 +229,11 @@ public class Scene_log_panel extends JPanel {
                         JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(693, 1040);
     }
 }
 

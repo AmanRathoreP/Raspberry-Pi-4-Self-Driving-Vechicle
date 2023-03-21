@@ -44,6 +44,7 @@ public class Scene_home_panel extends JPanel implements Runnable {
 
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         setBackground(Color.WHITE);
+        new Thread(this).start();
     }
 
     @Override

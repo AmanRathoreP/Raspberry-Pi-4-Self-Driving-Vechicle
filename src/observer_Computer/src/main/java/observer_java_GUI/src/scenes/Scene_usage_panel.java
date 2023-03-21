@@ -1,6 +1,7 @@
 package observer_java_GUI.src.scenes;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
@@ -26,4 +27,8 @@ public class Scene_usage_panel extends JPanel {
         add(scroll_pane, BorderLayout.CENTER);
     }
 
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(974, 547);
+    }
 }

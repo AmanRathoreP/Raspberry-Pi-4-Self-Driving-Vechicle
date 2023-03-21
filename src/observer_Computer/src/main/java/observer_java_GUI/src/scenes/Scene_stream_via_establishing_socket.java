@@ -199,6 +199,7 @@ public class Scene_stream_via_establishing_socket extends JPanel implements Runn
             thread.start();
         });
 
+        new Thread(this).start();
     }
 
     @Override

@@ -12,6 +12,8 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 import javax.swing.JPanel;
@@ -42,13 +44,7 @@ public class app extends JFrame implements Runnable {
     private static final long serialVersionUID = 1L;
 
     private JPanel contentPanel;
-    private Scene_log_panel scene_log_panel;
-    private Scene_home_panel scene_home_panel;
-    private Scene_stream_via_establishing_socket scene_stream_via_establishing_socket;
-    private Scene_stream_via_local_file scene_stream_via_local_file;
-    private Scene_about_panel scene_about_panel;
-    private Scene_usage_panel scene_usage_panel;
-    private Scene_speed_panel scene_speed_panel;
+    public static Map<String, JPanel> scenes_map = new HashMap<String, JPanel>();
     private basic_utilities file_reader = new basic_utilities(false);
 
     private my_logger logger;
@@ -158,26 +154,22 @@ public class app extends JFrame implements Runnable {
         contentPanel = new JPanel(new CardLayout());
         getContentPane().add(contentPanel, BorderLayout.CENTER);
 
-        scene_log_panel = new Scene_log_panel();
-        scene_home_panel = new Scene_home_panel((Integer) my_literals.CONSTANTS.get("MAIN WINDOW WIDTH"),
-                (Integer) my_literals.CONSTANTS.get("MAIN WINDOW HEIGHT"),
-                100, 10, 5, "This is a home screen");
-        new Thread(scene_home_panel).start();
-        scene_stream_via_establishing_socket = new Scene_stream_via_establishing_socket();
-        Thread thread_for_scene_stream_via_establishing_socket = new Thread(scene_stream_via_establishing_socket);
-        thread_for_scene_stream_via_establishing_socket.start();
-        scene_stream_via_local_file = new Scene_stream_via_local_file();
-        scene_about_panel = new Scene_about_panel();
-        scene_usage_panel = new Scene_usage_panel();
-        scene_speed_panel = new Scene_speed_panel();
+        scenes_map.put("Log Scene", new Scene_log_panel());
+        scenes_map.put("Home Scene", new Scene_home_panel((Integer) my_literals.CONSTANTS.get("MAIN WINDOW WIDTH"),
+                (Integer) my_literals.CONSTANTS.get("MAIN WINDOW HEIGHT"), 100, 10, 5, "This is a home screen"));
+        scenes_map.put("Socket Server Streaming Scene", new Scene_stream_via_establishing_socket());
+        scenes_map.put("Local File Streaming Scene", new Scene_stream_via_local_file());
+        scenes_map.put("About Info Scene", new Scene_about_panel());
+        scenes_map.put("Usage Info Scene", new Scene_usage_panel());
+        scenes_map.put("Speed Scene", new Scene_speed_panel());
 
-        contentPanel.add(scene_home_panel, "Home Scene");
-        contentPanel.add(scene_log_panel, "Log Scene");
-        contentPanel.add(scene_stream_via_establishing_socket, "Socket Server Streaming Scene");
-        contentPanel.add(scene_stream_via_local_file, "Local File Streaming Scene");
-        contentPanel.add(scene_about_panel, "About Info Scene");
-        contentPanel.add(scene_usage_panel, "Usage Info Scene");
-        contentPanel.add(scene_speed_panel, "Speed Scene");
+        contentPanel.add(scenes_map.get("Home Scene"), "Home Scene");
+        contentPanel.add(scenes_map.get("Log Scene"), "Log Scene");
+        contentPanel.add(scenes_map.get("Socket Server Streaming Scene"), "Socket Server Streaming Scene");
+        contentPanel.add(scenes_map.get("Local File Streaming Scene"), "Local File Streaming Scene");
+        contentPanel.add(scenes_map.get("About Info Scene"), "About Info Scene");
+        contentPanel.add(scenes_map.get("Usage Info Scene"), "Usage Info Scene");
+        contentPanel.add(scenes_map.get("Speed Scene"), "Speed Scene");
 
         // * Show initial scene
         show_scene("Socket Server Streaming Scene");
@@ -188,13 +180,14 @@ public class app extends JFrame implements Runnable {
 
     private void show_scene(String scene_name) {
         ((CardLayout) (contentPanel.getLayout())).show(contentPanel, scene_name);
+        setSize(scenes_map.get(scene_name).getPreferredSize());
     }
 
     @Override
     public void run() {
         while (true) {
             try {
-                scene_log_panel.appendLog(file_reader.get_received_data());
+                ((Scene_log_panel) scenes_map.get("Log Scene")).appendLog(file_reader.get_received_data());
             } catch (BadLocationException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -206,5 +199,12 @@ public class app extends JFrame implements Runnable {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void dispose() {
+        // TODO Auto-generated method stub
+        super.dispose();
+        System.out.println(getSize());
     }
 }
