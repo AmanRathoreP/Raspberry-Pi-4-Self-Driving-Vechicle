@@ -240,11 +240,13 @@ public class Scene_log_panel extends JPanel implements Runnable {
     @Override
     public void run() {
         while (true) {
-            try {
-                this.appendLog(observer_java_GUI.src.others.basic_utilities.get_received_data());
-            } catch (BadLocationException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            if (isVisible()) {
+                try {
+                    this.appendLog(observer_java_GUI.src.others.basic_utilities.get_received_data());
+                } catch (BadLocationException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
             try {
                 Thread.sleep(100);

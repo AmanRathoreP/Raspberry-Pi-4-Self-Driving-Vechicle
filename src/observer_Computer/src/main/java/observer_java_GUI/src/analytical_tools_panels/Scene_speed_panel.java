@@ -58,37 +58,45 @@ public class Scene_speed_panel extends JPanel implements Runnable {
     @Override
     public void run() {
         while (true) {
-            for (float i = 0; i <= 100; i = i + 0.2f) {
-                speed_left_total.set_value((i / 100) * (65536));
-                speed_mid_total.set_value((i / 100) * (65536));
-                speed_right_total.set_value((i / 100) * (65536));
-                speed_left_percentage.set_value(100 - i);
-                speed_mid_percentage.set_value(100 - i);
-                speed_right_percentage.set_value(100 - i);
+            if (isVisible()) {
+                for (float i = 0; i <= 100; i = i + 0.2f) {
+                    speed_left_total.set_value((i / 100) * (65536));
+                    speed_mid_total.set_value((i / 100) * (65536));
+                    speed_right_total.set_value((i / 100) * (65536));
+                    speed_left_percentage.set_value(100 - i);
+                    speed_mid_percentage.set_value(100 - i);
+                    speed_right_percentage.set_value(100 - i);
 
-                try {
-                    Thread.sleep(5);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    try {
+                        Thread.sleep(5);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 }
-            }
-            for (float i = 100; i > 0; i = i - 0.2f) {
-                speed_left_total.set_value((i / 100) * (65536));
-                speed_mid_total.set_value((i / 100) * (65536));
-                speed_right_total.set_value((i / 100) * (65536));
-                speed_left_percentage.set_value(100 - i);
-                speed_mid_percentage.set_value(100 - i);
-                speed_right_percentage.set_value(100 - i);
+                for (float i = 100; i > 0; i = i - 0.2f) {
+                    speed_left_total.set_value((i / 100) * (65536));
+                    speed_mid_total.set_value((i / 100) * (65536));
+                    speed_right_total.set_value((i / 100) * (65536));
+                    speed_left_percentage.set_value(100 - i);
+                    speed_mid_percentage.set_value(100 - i);
+                    speed_right_percentage.set_value(100 - i);
 
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 }
-            }
 
+            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
     }
 

@@ -50,6 +50,7 @@ public class Scene_home_panel extends JPanel implements Runnable {
     @Override
     public void run() {
         while (true) {
+            if (isVisible()) {
             if (balls.size() < MAX_BALLS) {
                 balls.add(new Ball());
             }
@@ -64,6 +65,7 @@ public class Scene_home_panel extends JPanel implements Runnable {
                 }
             }
             repaint();
+        }
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
