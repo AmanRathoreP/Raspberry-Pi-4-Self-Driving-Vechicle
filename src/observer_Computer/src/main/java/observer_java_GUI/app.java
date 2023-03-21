@@ -48,13 +48,14 @@ public class app extends JFrame implements Runnable {
     private basic_utilities file_reader = new basic_utilities(false);
 
     private my_logger logger;
+    private static String current_opened_scene = "Home Scene";
 
     public static void main(String[] args) throws InterruptedException {
 
-        new app();
+        new app(current_opened_scene);
     }
 
-    public app() {
+    public app(String scene_to_open) {
         super("My App");
         try {
             System.out.println(my_literals.update_literals(true));
@@ -87,7 +88,7 @@ public class app extends JFrame implements Runnable {
         JMenuItem menu_item_new_window = new JMenuItem("New Window");
         menu_actions.add(menu_item_new_window);
         menu_item_new_window
-                .addActionListener(e -> new app());
+                .addActionListener(e -> new app(scene_to_open));
         JMenuItem menu_item_reset_config = new JMenuItem("Reset Config File");
         menu_actions.add(menu_item_reset_config);
         menu_item_reset_config.addActionListener(e -> {
@@ -172,7 +173,7 @@ public class app extends JFrame implements Runnable {
         contentPanel.add(scenes_map.get("Speed Scene"), "Speed Scene");
 
         // * Show initial scene
-        show_scene("Socket Server Streaming Scene");
+        show_scene(current_opened_scene);
         // * setting the visibility to true
         SwingUtilities.invokeLater(() -> this.setVisible(true));
         new Thread(this).start();
@@ -181,6 +182,7 @@ public class app extends JFrame implements Runnable {
     private void show_scene(String scene_name) {
         ((CardLayout) (contentPanel.getLayout())).show(contentPanel, scene_name);
         setSize(scenes_map.get(scene_name).getPreferredSize());
+        current_opened_scene = scene_name;
     }
 
     @Override
@@ -199,12 +201,5 @@ public class app extends JFrame implements Runnable {
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public void dispose() {
-        // TODO Auto-generated method stub
-        super.dispose();
-        System.out.println(getSize());
     }
 }
