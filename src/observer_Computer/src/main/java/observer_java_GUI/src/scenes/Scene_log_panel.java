@@ -1,7 +1,7 @@
 /**
  * 
  */
-package src.scenes;
+package observer_java_GUI.src.scenes;
 
 /**
  * @author Aman Rathore
@@ -39,7 +39,7 @@ import javax.swing.text.BadLocationException;
 import java.util.Map;
 import java.util.HashMap;
 
-import src.others.my_literals;
+import observer_java_GUI.src.others.my_literals;
 
 public class Scene_log_panel extends JPanel {
 

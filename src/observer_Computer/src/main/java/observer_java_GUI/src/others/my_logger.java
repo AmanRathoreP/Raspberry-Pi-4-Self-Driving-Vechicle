@@ -1,7 +1,7 @@
 /**
  * 
  */
-package src.others;
+package observer_java_GUI.src.others;
 
 /**
  * @author Aman Rathore

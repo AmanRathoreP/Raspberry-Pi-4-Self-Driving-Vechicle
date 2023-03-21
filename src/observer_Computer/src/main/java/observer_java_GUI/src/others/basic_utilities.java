@@ -1,7 +1,7 @@
 /**
  * This file contains an important class named basic utilities which implements the threading class of java and helps in jobs like getting data from the master device
  */
-package src.others;
+package observer_java_GUI.src.others;
 
 /**
  * @author Aman Rathore

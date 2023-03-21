@@ -1,7 +1,7 @@
 /**
  * 
  */
-package src.scenes;
+package observer_java_GUI.src.scenes;
 
 /**
  * @author Aman Rathore
@@ -33,8 +33,8 @@ import javax.swing.JTextArea;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
-import src.others.my_literals;
-import src.others.basic_utilities;
+import observer_java_GUI.src.others.my_literals;
+import observer_java_GUI.src.others.basic_utilities;
 
 public class Scene_stream_via_establishing_socket extends JPanel implements Runnable {
     /**
@@ -51,7 +51,6 @@ public class Scene_stream_via_establishing_socket extends JPanel implements Runn
     private basic_utilities my_socket = new basic_utilities();
 
     private panel_counter panel_center_top;
-
 
     public Scene_stream_via_establishing_socket() {
         // TODO: use different styles of cursors for different stuff

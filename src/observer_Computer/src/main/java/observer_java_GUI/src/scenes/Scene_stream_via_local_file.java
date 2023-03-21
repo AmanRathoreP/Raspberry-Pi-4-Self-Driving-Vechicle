@@ -1,7 +1,7 @@
 /**
  * 
  */
-package src.scenes;
+package observer_java_GUI.src.scenes;
 
 /**
  * @author Aman Rathore
@@ -107,7 +107,8 @@ public class Scene_stream_via_local_file extends JPanel {
         });
         button_select_file.addActionListener(e -> {
             if (Desktop.isDesktopSupported()
-                    && (!((Boolean) (src.others.my_literals.CONSTANTS.get("USE JAVA SWING IN-BUILD FILE EXPLORER"))))) {
+                    && (!((Boolean) (observer_java_GUI.src.others.my_literals.CONSTANTS
+                            .get("USE JAVA SWING IN-BUILD FILE EXPLORER"))))) {
                 FileDialog file_dialog = new FileDialog((new javax.swing.JFrame()), "Select File", FileDialog.LOAD);
                 file_dialog.setVisible(true);
                 if (file_dialog.getFile() != null) {
@@ -156,7 +157,7 @@ public class Scene_stream_via_local_file extends JPanel {
                 }
                 Thread thread_for_adding_data_to_file = new Thread(() -> {
                     try {
-                        src.others.basic_utilities
+                        observer_java_GUI.src.others.basic_utilities
                                 .append_data_string_to_file_according_to_data_string_time_stamp(
                                         string_builder.toString());
                     } catch (InterruptedException e1) {

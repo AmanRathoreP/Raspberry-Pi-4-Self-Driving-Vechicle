@@ -1,7 +1,7 @@
 /*
  * 
  */
-package src.others;
+package observer_java_GUI.src.others;
 
 /**
  * @author Aman Rathore
@@ -76,7 +76,7 @@ public class my_literals {
         USE_CONFIG_FILE = use_of_config_file;
         if (USE_CONFIG_FILE) {
             try {
-                Map<String, Object> temp_constants_for_comparison = src.others.my_json_reader_writer
+                Map<String, Object> temp_constants_for_comparison = observer_java_GUI.src.others.my_json_reader_writer
                         .read_json_from_file(CONFIG_FILE_PATH);
                 if (CONSTANTS.keySet().equals(temp_constants_for_comparison.keySet())) {
                     CONSTANTS = temp_constants_for_comparison;
@@ -114,6 +114,6 @@ public class my_literals {
             new FileReader(CONFIG_FILE_PATH);
             logger.addLog("new configuration file created");
         }
-        src.others.my_json_reader_writer.write_json_to_file(CONFIG_FILE_PATH, CONSTANTS);
+        observer_java_GUI.src.others.my_json_reader_writer.write_json_to_file(CONFIG_FILE_PATH, CONSTANTS);
     }
 }

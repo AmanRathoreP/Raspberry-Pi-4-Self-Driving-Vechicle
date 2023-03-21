@@ -1,4 +1,4 @@
-package src.scenes;
+package observer_java_GUI.src.scenes;
 
 import java.awt.BorderLayout;
 

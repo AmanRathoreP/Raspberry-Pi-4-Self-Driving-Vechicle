@@ -1,6 +1,8 @@
+
 /*
- * This is the main app file which combines all the classes to provide the best performance
- */
+* This is the main app file which combines all the classes to provide the best performance
+*/
+package observer_java_GUI;
 
 /**
  * @author Aman Rathore
@@ -22,16 +24,16 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import src.scenes.Scene_home_panel;
-import src.scenes.Scene_log_panel;
-import src.scenes.Scene_stream_via_establishing_socket;
-import src.scenes.Scene_stream_via_local_file;
-import src.scenes.Scene_about_panel;
-import src.scenes.Scene_usage_panel;
-import src.analytical_tools_panels.Scene_speed_panel;
-import src.others.my_logger;
-import src.others.my_literals;
-import src.others.basic_utilities;
+import observer_java_GUI.src.scenes.Scene_home_panel;
+import observer_java_GUI.src.scenes.Scene_log_panel;
+import observer_java_GUI.src.scenes.Scene_stream_via_establishing_socket;
+import observer_java_GUI.src.scenes.Scene_stream_via_local_file;
+import observer_java_GUI.src.scenes.Scene_about_panel;
+import observer_java_GUI.src.scenes.Scene_usage_panel;
+import observer_java_GUI.src.analytical_tools_panels.Scene_speed_panel;
+import observer_java_GUI.src.others.my_logger;
+import observer_java_GUI.src.others.my_literals;
+import observer_java_GUI.src.others.basic_utilities;
 
 public class app extends JFrame implements Runnable {
     /**

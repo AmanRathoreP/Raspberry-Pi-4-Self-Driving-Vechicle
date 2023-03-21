@@ -1,7 +1,7 @@
 /*
  * 
  */
-package src.analytical_tools_panels;
+package observer_java_GUI.src.analytical_tools_panels;
 /*
 * @author Aman Rathore
 */
@@ -13,7 +13,7 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import src.charts_panels.gauge_chart_panel;
+import observer_java_GUI.src.charts_panels.gauge_chart_panel;
 
 public class Scene_speed_panel extends JPanel implements Runnable {
     private gauge_chart_panel speed_left_total;

@@ -1,7 +1,7 @@
 /*
  * 
  */
-package src.charts_panels;
+package observer_java_GUI.src.charts_panels;
 /*
  * @author Aman Rathore
  */

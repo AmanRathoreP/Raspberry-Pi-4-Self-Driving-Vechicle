@@ -1,7 +1,7 @@
 /**
  * 
  */
-package src.scenes;
+package observer_java_GUI.src.scenes;
 
 /**
  * @author Aman Rathore
@@ -21,8 +21,8 @@ import java.util.Random;
 import javax.swing.JPanel;
 
 public class Scene_home_panel extends JPanel implements Runnable {
-	
-	 private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 1L;
     private int PANEL_WIDTH = 500;
     private int PANEL_HEIGHT = 500;
     private int BALL_DIAMETER = 50;
@@ -32,7 +32,6 @@ public class Scene_home_panel extends JPanel implements Runnable {
     private static final Font BACKGROUND_TEXT_FONT = new Font("Arial", Font.ITALIC, 100);
 
     private List<Ball> balls = new ArrayList<>();
-
 
     public Scene_home_panel(int PANEL_WIDTH, int PANEL_HEIGHT, int BALL_DIAMETER, int BALL_MAX_VELOCITY, int MAX_BALLS,
             String BACKGROUND_TEXT) {
