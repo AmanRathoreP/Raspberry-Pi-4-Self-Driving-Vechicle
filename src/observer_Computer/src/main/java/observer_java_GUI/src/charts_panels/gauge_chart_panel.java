@@ -16,6 +16,9 @@ import org.jfree.data.Range;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetChangeListener;
 import org.jfree.data.general.DefaultValueDataset;
+
+import observer_java_GUI.src.others.my_literals;
+
 import org.jfree.chart.ui.RectangleEdge;
 
 import java.awt.BasicStroke;
@@ -29,15 +32,6 @@ public class gauge_chart_panel extends ChartPanel {
     private DefaultValueDataset dataset;
     private JFreeChart chart;
     private MeterPlot plot;
-    private static final String LOW_COLOR = "#40c040";
-    private static final String MEDIUM_COLOR = "#ffd740";
-    private static final String HIGH_COLOR = "#dc143c";
-    private static final String NEEDLE_COLOR = "#ffffff";
-    private static final String TICK_LABEL_COLOR = "#000000";
-    private static final String TICK_PAINT_COLOR = "#808080";
-    private static final String VALUE_COLOR = "#000000";
-    private static final String BACKGROUND_COLOR = "#000000";
-    private static final short ALPHA_FOR_ANIMATION_DURING_TRANSITION = 150;
 
     public gauge_chart_panel(String title, double min, double max, String unit, float lower_separation,
             float medium_separation) {
@@ -49,19 +43,20 @@ public class gauge_chart_panel extends ChartPanel {
         plot.setMeterAngle(180);
         plot.setRange(new Range(min, max));
         plot.addInterval(new MeterInterval("Low", new Range(min, (max - min) * lower_separation), Color.decode(
-                LOW_COLOR),
-                new BasicStroke(2.0f), Color.decode(LOW_COLOR)));
+                (String) my_literals.CONSTANTS.get("LOW COLOR")),
+                new BasicStroke(2.0f), Color.decode((String) my_literals.CONSTANTS.get("LOW COLOR"))));
         plot.addInterval(
                 new MeterInterval("Medium", new Range((max - min) * lower_separation, (max - min) * medium_separation),
-                        Color.decode(MEDIUM_COLOR),
-                        new BasicStroke(2.0f), Color.decode(MEDIUM_COLOR)));
+                        Color.decode((String) my_literals.CONSTANTS
+                                .get("MEDIUM COLOR")),
+                        new BasicStroke(2.0f), Color.decode((String) my_literals.CONSTANTS.get("MEDIUM COLOR"))));
         plot.addInterval(new MeterInterval("High", new Range((max - min) * medium_separation, max), Color
-                .decode(HIGH_COLOR), new BasicStroke(2.0f),
-                Color.decode(HIGH_COLOR)));
-        plot.setNeedlePaint(Color.decode(NEEDLE_COLOR));
-        plot.setTickLabelPaint(Color.decode(TICK_LABEL_COLOR));
-        plot.setTickPaint(Color.decode(TICK_PAINT_COLOR));
-        plot.setValuePaint(Color.decode(VALUE_COLOR));
+                .decode((String) my_literals.CONSTANTS.get("HIGH COLOR")), new BasicStroke(2.0f),
+                Color.decode((String) my_literals.CONSTANTS.get("HIGH COLOR"))));
+        plot.setNeedlePaint(Color.decode((String) my_literals.CONSTANTS.get("NEEDLE COLOR")));
+        plot.setTickLabelPaint(Color.decode((String) my_literals.CONSTANTS.get("TICK LABEL COLOR")));
+        plot.setTickPaint(Color.decode((String) my_literals.CONSTANTS.get("TICK PAINT COLOR")));
+        plot.setValuePaint(Color.decode((String) my_literals.CONSTANTS.get("VALUE COLOR")));
 
         plot.setTickLabelFont(new Font("Dialog", Font.BOLD, 14));
         plot.setTickLabelsVisible(true);
@@ -71,7 +66,7 @@ public class gauge_chart_panel extends ChartPanel {
         plot.setTickLabelFormat(new DecimalFormat("#0"));
         chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT, plot, true);
         this.setChart(chart);
-        chart.setBackgroundPaint(Color.decode(BACKGROUND_COLOR));
+        chart.setBackgroundPaint(Color.decode((String) my_literals.CONSTANTS.get("BACKGROUND COLOR")));
         TextTitle subtitle = new TextTitle(title, new Font("SansSerif", Font.BOLD, 18));
         subtitle.setPosition(RectangleEdge.BOTTOM);
         chart.addSubtitle(subtitle);
@@ -80,9 +75,9 @@ public class gauge_chart_panel extends ChartPanel {
             @Override
             public void datasetChanged(DatasetChangeEvent event) {
                 chart.setBackgroundPaint(color_gradient_sampler.get_color_from_gradient(
-                        Color.decode(LOW_COLOR),
-                        Color.decode(MEDIUM_COLOR),
-                        Color.decode(HIGH_COLOR),
+                        Color.decode((String) my_literals.CONSTANTS.get("LOW COLOR")),
+                        Color.decode((String) my_literals.CONSTANTS.get("MEDIUM COLOR")),
+                        Color.decode((String) my_literals.CONSTANTS.get("HIGH COLOR")),
                         (float) (dataset.getValue().doubleValue() / max)));
             }
 

@@ -53,6 +53,17 @@ public class my_literals {
             put("COLOR OF PROGRESS BARS IN NON ACTIVE STATE OF SOCKET CONNECTION WINDOW", "#E02652");
             put("COLOR OF PROGRESS BARS IN ACTIVE STATE OF SOCKET CONNECTION WINDOW", "#A3B8CC");
             put("USE JAVA SWING IN-BUILD FILE EXPLORER", true);
+            put("LOW COLOR", "#40c040");
+            put("MEDIUM COLOR", "#ffd740");
+            put("HIGH COLOR", "#dc143c");
+            put("NEEDLE COLOR", "#ffffff");
+            put("TICK LABEL COLOR", "#000000");
+            put("TICK PAINT COLOR", "#808080");
+            put("VALUE COLOR", "#000000");
+            put("BACKGROUND COLOR", "#000000");
+            put("PLOT BACKGROUND COLOR", "#d7a98c");
+            put("GRIDLINE COLOR", "#000000");
+            put("SERIES COLOR", "#0e9ca5");
         }
     };
     /* constants finished */
