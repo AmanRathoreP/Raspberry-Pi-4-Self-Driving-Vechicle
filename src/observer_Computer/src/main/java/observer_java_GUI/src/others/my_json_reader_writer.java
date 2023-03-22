@@ -26,46 +26,7 @@ public class my_json_reader_writer {
     public static void write_json_to_file(String json_file_name, Map<String, Object> jsonData) throws IOException {
         FileWriter file_writer = new FileWriter(json_file_name);
         BufferedWriter buffered_writer = new BufferedWriter(file_writer);
-
-        buffered_writer.write("{");
-        buffered_writer.newLine();
-
-        int count = 0;
-        for (Map.Entry<String, Object> entry : jsonData.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-
-            buffered_writer.write("  \"" + key + "\": ");
-
-            if (value instanceof String) {
-                buffered_writer.write("\"" + value + "\"");
-            } else if (value instanceof List) {
-                List<Object> list = (List<Object>) value;
-                buffered_writer.write("[");
-                for (int i = 0; i < list.size(); i++) {
-                    Object element = list.get(i);
-                    if (element instanceof String) {
-                        buffered_writer.write("\"" + element + "\"");
-                    } else {
-                        buffered_writer.write(element.toString());
-                    }
-                    if (i < list.size() - 1) {
-                        buffered_writer.write(", ");
-                    }
-                }
-                buffered_writer.write("]");
-            } else {
-                buffered_writer.write(value.toString());
-            }
-
-            count++;
-            if (count < jsonData.size()) {
-                buffered_writer.write(",");
-            }
-            buffered_writer.newLine();
-        }
-
-        buffered_writer.write("}");
+        buffered_writer.write(get_string_to_write(jsonData));
         buffered_writer.close();
         file_writer.close();
     }
@@ -107,5 +68,48 @@ public class my_json_reader_writer {
         }
         reader.close();
         return json_data_map;
+    }
+
+    public static String get_string_to_write(Map<String, Object> jsonData) {
+
+        StringBuilder final_json_string = new StringBuilder("{\n");
+
+        int count = 0;
+        for (Map.Entry<String, Object> entry : jsonData.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+
+            final_json_string.append("  \"" + key + "\": ");
+
+            if (value instanceof String) {
+                final_json_string.append("\"" + value + "\"");
+            } else if (value instanceof List) {
+                List<Object> list = (List<Object>) value;
+                final_json_string.append("[");
+                for (int i = 0; i < list.size(); i++) {
+                    Object element = list.get(i);
+                    if (element instanceof String) {
+                        final_json_string.append("\"" + element + "\"");
+                    } else {
+                        final_json_string.append(element.toString());
+                    }
+                    if (i < list.size() - 1) {
+                        final_json_string.append(", ");
+                    }
+                }
+                final_json_string.append("]");
+            } else {
+                final_json_string.append(value.toString());
+            }
+
+            count++;
+            if (count < jsonData.size()) {
+                final_json_string.append(",");
+            }
+            final_json_string.append("\n");
+        }
+
+        final_json_string.append("}");
+        return final_json_string.toString();
     }
 }

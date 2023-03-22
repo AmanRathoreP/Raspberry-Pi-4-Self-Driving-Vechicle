@@ -31,6 +31,7 @@ import observer_java_GUI.src.scenes.Scene_stream_via_establishing_socket;
 import observer_java_GUI.src.scenes.Scene_stream_via_local_file;
 import observer_java_GUI.src.scenes.Scene_about_panel;
 import observer_java_GUI.src.scenes.Scene_usage_panel;
+import observer_java_GUI.src.scenes.Scene_configuration_panel;
 import observer_java_GUI.src.analytical_tools_panels.Scene_speed_panel;
 import observer_java_GUI.src.analytical_tools_panels.Scene_modes_panel;
 import observer_java_GUI.src.others.my_logger;
@@ -46,7 +47,7 @@ public class app extends JFrame {
     public static Map<String, JPanel> scenes_map = new HashMap<String, JPanel>();
 
     private my_logger logger;
-    private static String current_opened_scene = "Modes Scene";
+    private static String current_opened_scene = "Configuration Scene";
 
     public static void main(String[] args) throws InterruptedException {
 
@@ -128,6 +129,10 @@ public class app extends JFrame {
         menu_item_for_scene_stream_via_local_file.addActionListener(e -> show_scene("Local File Streaming Scene"));
         menu_item_for_streaming.add(menu_item_for_scene_stream_via_local_file);
 
+        JMenuItem menu_item_for_scene_configuration_panel = new JMenuItem("Configurations");
+        menu_item_for_scene_configuration_panel.addActionListener(e -> show_scene("Configuration Scene"));
+        menu_navigate.add(menu_item_for_scene_configuration_panel);
+
         JMenu menu_help = new JMenu("Help");
         JMenuItem menu_item_for_scene_usage_panel = new JMenuItem("Usage");
         menu_help.add(menu_item_for_scene_usage_panel);
@@ -165,6 +170,7 @@ public class app extends JFrame {
         scenes_map.put("Usage Info Scene", new Scene_usage_panel());
         scenes_map.put("Speed Scene", new Scene_speed_panel());
         scenes_map.put("Modes Scene", new Scene_modes_panel());
+        scenes_map.put("Configuration Scene", new Scene_configuration_panel());
 
         contentPanel.add(scenes_map.get("Home Scene"), "Home Scene");
         contentPanel.add(scenes_map.get("Log Scene"), "Log Scene");
@@ -174,6 +180,7 @@ public class app extends JFrame {
         contentPanel.add(scenes_map.get("Usage Info Scene"), "Usage Info Scene");
         contentPanel.add(scenes_map.get("Speed Scene"), "Speed Scene");
         contentPanel.add(scenes_map.get("Modes Scene"), "Modes Scene");
+        contentPanel.add(scenes_map.get("Configuration Scene"), "Configuration Scene");
 
         // * Show initial scene
         show_scene(current_opened_scene);
