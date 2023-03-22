@@ -32,6 +32,7 @@ import observer_java_GUI.src.scenes.Scene_stream_via_local_file;
 import observer_java_GUI.src.scenes.Scene_about_panel;
 import observer_java_GUI.src.scenes.Scene_usage_panel;
 import observer_java_GUI.src.analytical_tools_panels.Scene_speed_panel;
+import observer_java_GUI.src.analytical_tools_panels.Scene_modes_panel;
 import observer_java_GUI.src.others.my_logger;
 import observer_java_GUI.src.others.my_literals;
 
@@ -45,7 +46,7 @@ public class app extends JFrame {
     public static Map<String, JPanel> scenes_map = new HashMap<String, JPanel>();
 
     private my_logger logger;
-    private static String current_opened_scene = "Home Scene";
+    private static String current_opened_scene = "Modes Scene";
 
     public static void main(String[] args) throws InterruptedException {
 
@@ -141,6 +142,9 @@ public class app extends JFrame {
         JMenuItem menu_item_for_scene_speed = new JMenuItem("Speed");
         menu_analytical_tools.add(menu_item_for_scene_speed);
         menu_item_for_scene_speed.addActionListener(e -> show_scene("Speed Scene"));
+        JMenuItem menu_item_for_scene_modes = new JMenuItem("Modes");
+        menu_analytical_tools.add(menu_item_for_scene_modes);
+        menu_item_for_scene_modes.addActionListener(e -> show_scene("Modes Scene"));
 
         menuBar.add(menu_actions);
         menuBar.add(menu_navigate);
@@ -160,6 +164,7 @@ public class app extends JFrame {
         scenes_map.put("About Info Scene", new Scene_about_panel());
         scenes_map.put("Usage Info Scene", new Scene_usage_panel());
         scenes_map.put("Speed Scene", new Scene_speed_panel());
+        scenes_map.put("Modes Scene", new Scene_modes_panel());
 
         contentPanel.add(scenes_map.get("Home Scene"), "Home Scene");
         contentPanel.add(scenes_map.get("Log Scene"), "Log Scene");
@@ -168,6 +173,7 @@ public class app extends JFrame {
         contentPanel.add(scenes_map.get("About Info Scene"), "About Info Scene");
         contentPanel.add(scenes_map.get("Usage Info Scene"), "Usage Info Scene");
         contentPanel.add(scenes_map.get("Speed Scene"), "Speed Scene");
+        contentPanel.add(scenes_map.get("Modes Scene"), "Modes Scene");
 
         // * Show initial scene
         show_scene(current_opened_scene);

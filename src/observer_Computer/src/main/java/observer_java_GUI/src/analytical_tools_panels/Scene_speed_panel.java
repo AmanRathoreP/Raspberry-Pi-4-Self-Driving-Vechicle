@@ -52,7 +52,7 @@ public class Scene_speed_panel extends JPanel implements Runnable {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(974, 486);
+        return new Dimension(976, 486);
     }
 
     @Override
