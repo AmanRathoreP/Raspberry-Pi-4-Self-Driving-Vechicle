@@ -79,26 +79,11 @@ public class gauge_chart_panel extends ChartPanel {
         dataset.addChangeListener(new DatasetChangeListener() {
             @Override
             public void datasetChanged(DatasetChangeEvent event) {
-                double current_value = dataset.getValue().doubleValue();
-                if (current_value >= (max - min) * medium_separation) {
-                    chart.setBackgroundPaint(new Color(
-                            Color.decode(HIGH_COLOR).getRed(),
-                            Color.decode(HIGH_COLOR).getGreen(),
-                            Color.decode(HIGH_COLOR).getBlue(),
-                            ALPHA_FOR_ANIMATION_DURING_TRANSITION));
-                } else if (current_value >= (max - min) * lower_separation) {
-                    chart.setBackgroundPaint(new Color(
-                            Color.decode(MEDIUM_COLOR).getRed(),
-                            Color.decode(MEDIUM_COLOR).getGreen(),
-                            Color.decode(MEDIUM_COLOR).getBlue(),
-                            ALPHA_FOR_ANIMATION_DURING_TRANSITION));
-                } else {
-                    chart.setBackgroundPaint(new Color(
-                            Color.decode(LOW_COLOR).getRed(),
-                            Color.decode(LOW_COLOR).getGreen(),
-                            Color.decode(LOW_COLOR).getBlue(),
-                            ALPHA_FOR_ANIMATION_DURING_TRANSITION));
-                }
+                chart.setBackgroundPaint(color_gradient_sampler.get_color_from_gradient(
+                        Color.decode(LOW_COLOR),
+                        Color.decode(MEDIUM_COLOR),
+                        Color.decode(HIGH_COLOR),
+                        (float) (dataset.getValue().doubleValue() / max)));
             }
 
         });
@@ -106,5 +91,24 @@ public class gauge_chart_panel extends ChartPanel {
 
     public void set_value(double value) {
         dataset.setValue(value);
+    }
+}
+
+class color_gradient_sampler {
+    public static Color get_color_from_gradient(Color startColor, Color middleColor, Color endColor, float value) {
+        float middleValue = 0.5f; // Value at which the middle color is used
+        Color color;
+        if (value <= middleValue) {
+            float ratio = value / middleValue;
+            color = new Color((int) (startColor.getRed() + (middleColor.getRed() - startColor.getRed()) * ratio),
+                    (int) (startColor.getGreen() + (middleColor.getGreen() - startColor.getGreen()) * ratio),
+                    (int) (startColor.getBlue() + (middleColor.getBlue() - startColor.getBlue()) * ratio));
+        } else {
+            float ratio = (value - middleValue) / (1.0f - middleValue);
+            color = new Color((int) (middleColor.getRed() + (endColor.getRed() - middleColor.getRed()) * ratio),
+                    (int) (middleColor.getGreen() + (endColor.getGreen() - middleColor.getGreen()) * ratio),
+                    (int) (middleColor.getBlue() + (endColor.getBlue() - middleColor.getBlue()) * ratio));
+        }
+        return color;
     }
 }
