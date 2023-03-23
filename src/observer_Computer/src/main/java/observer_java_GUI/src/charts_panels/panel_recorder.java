@@ -38,7 +38,8 @@ public class panel_recorder extends JPanel {
     private Thread recorder_thread;
     private JPanel panel_to_record;
     private final JSpinner spinner_fps;
-    private final static String[] symbols_to_exclude = { "\\", "/", ":", "*", "?", "\"", "<", ">", "|" };
+    private final static String[] symbols_to_exclude_form_file_path = { "*", "?", "\"", "<", ">", "|" };
+    private final static String[] symbols_to_exclude_form_file_name = { "\\", "/", ":", "*", "?", "\"", "<", ">", "|" };
 
     public panel_recorder(JPanel panel_to_record) {
         super(new FlowLayout());
@@ -95,10 +96,20 @@ public class panel_recorder extends JPanel {
     private void deal_with_recording() {
         // TODO: Deal with the flickering of the Panel while recording
         String file_name = text_field_file_name.getText();
-        for (String symbol : symbols_to_exclude) {
-            if (file_name.contains(symbol)) {
+        String[] path_and_name = split_string_from_occurrence_of_last_dirty_symbol(file_name);
+        for (String symbol : symbols_to_exclude_form_file_path) {
+            if (path_and_name[0].contains(symbol)) {
                 JOptionPane.showMessageDialog(null,
-                        "Error: Invalid input, You can't use Symbols like\n" + Arrays.toString(symbols_to_exclude));
+                        "Error: Invalid input, You can't use Symbols like\n" + Arrays.toString(
+                                symbols_to_exclude_form_file_path) + " in file path");
+                return;
+            }
+        }
+        for (String symbol : symbols_to_exclude_form_file_name) {
+            if (path_and_name[1].contains(symbol)) {
+                JOptionPane.showMessageDialog(null,
+                        "Error: Invalid input, You can't use Symbols like\n" + Arrays.toString(
+                                symbols_to_exclude_form_file_name) + " in file name");
                 return;
             }
         }
@@ -138,10 +149,20 @@ public class panel_recorder extends JPanel {
 
     private void deal_with_screenshot() {
         String file_name = text_field_file_name.getText();
-        for (String symbol : symbols_to_exclude) {
-            if (file_name.contains(symbol)) {
+        String[] path_and_name = split_string_from_occurrence_of_last_dirty_symbol(file_name);
+        for (String symbol : symbols_to_exclude_form_file_path) {
+            if (path_and_name[0].contains(symbol)) {
                 JOptionPane.showMessageDialog(null,
-                        "Error: Invalid input, You can't use Symbols like\n" + Arrays.toString(symbols_to_exclude));
+                        "Error: Invalid input, You can't use Symbols like\n" + Arrays.toString(
+                                symbols_to_exclude_form_file_path) + " in file path");
+                return;
+            }
+        }
+        for (String symbol : symbols_to_exclude_form_file_name) {
+            if (path_and_name[1].contains(symbol)) {
+                JOptionPane.showMessageDialog(null,
+                        "Error: Invalid input, You can't use Symbols like\n" + Arrays.toString(
+                                symbols_to_exclude_form_file_name) + " in file name");
                 return;
             }
         }
@@ -162,11 +183,18 @@ public class panel_recorder extends JPanel {
             ImageIO.write(image, "png", new File(format_string_with_time(file_name) + ".png"));
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null,
-                    e.toString());
+                    e.toString() + "\nPlease check you path and try again");
         }
 
     }
 
+    private static String[] split_string_from_occurrence_of_last_dirty_symbol(String str) {
+        int splitIndex = Math.max(str.lastIndexOf('/'), str.lastIndexOf('\\'));
+        String[] result = new String[2];
+        result[0] = str.substring(0, splitIndex);
+        result[1] = str.substring(splitIndex + 1);
+        return result;
+    }
     private static String format_string_with_time(String string_with_time_specifiers) {
         String output = "";
         int startIndex = 0;
