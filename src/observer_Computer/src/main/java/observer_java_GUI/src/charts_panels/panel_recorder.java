@@ -31,6 +31,7 @@ public class panel_recorder extends JPanel {
     private static final long serialVersionUID = 1L;
     private final JButton button_start_recording;
     private final JButton button_stop_recording;
+    private final JButton button_take_chart_image;
     private final JLabel label_file_name;
     private final JTextField text_field_file_name;
     private boolean is_recording = false;
@@ -44,6 +45,7 @@ public class panel_recorder extends JPanel {
         this.panel_to_record = panel_to_record;
         button_start_recording = new JButton("Start Recording!");
         button_stop_recording = new JButton("Stop Recording!");
+        button_take_chart_image = new JButton("Take screenshot of chart!");
         label_file_name = new JLabel("File Name > ");
         text_field_file_name = new JTextField(30);
         spinner_fps = new JSpinner(new SpinnerNumberModel(10, 1, 30, 3));
@@ -76,10 +78,14 @@ public class panel_recorder extends JPanel {
             text_field_file_name.setEditable(true);
             ;
         });
+        button_take_chart_image.addActionListener(e -> {
+            deal_with_screenshot();
+        });
         text_field_file_name.setText(
                 "Frame from ${yyyy-MM-dd}; ${MMMM}, ${EEEE} at time ${HH-mm-ss.SSS}");
         add(label_file_name);
         add(text_field_file_name);
+        add(button_take_chart_image);
         add(button_start_recording);
         add(button_stop_recording);
         add(new JLabel("Fps = "));
@@ -126,6 +132,37 @@ public class panel_recorder extends JPanel {
             recorder_thread.interrupt();
         });
         recorder_thread.start();
+
+    }
+
+    private void deal_with_screenshot() {
+        String file_name = text_field_file_name.getText();
+        for (String symbol : symbols_to_exclude) {
+            if (file_name.contains(symbol)) {
+                JOptionPane.showMessageDialog(null,
+                        "Error: Invalid input, You can't use Symbols like\n" + Arrays.toString(symbols_to_exclude));
+                return;
+            }
+        }
+        try {
+            format_string_with_time(file_name);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Create a new image with the same size as the panel
+        BufferedImage image = new BufferedImage(panel_to_record.getWidth(), panel_to_record.getHeight(),
+                BufferedImage.TYPE_INT_RGB);
+
+        Graphics g = image.getGraphics();
+        panel_to_record.paint(g);
+        try {
+            ImageIO.write(image, "png", new File(format_string_with_time(file_name) + ".png"));
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null,
+                    e.toString());
+        }
 
     }
 
