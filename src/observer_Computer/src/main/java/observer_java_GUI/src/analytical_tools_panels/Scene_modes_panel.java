@@ -20,6 +20,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import observer_java_GUI.src.charts_panels.pie_chart_panel;
 import observer_java_GUI.src.charts_panels.bar_chart_panel;
 import observer_java_GUI.src.charts_panels.chart_layout_panel;
+import observer_java_GUI.src.charts_panels.panel_recorder;
 
 public class Scene_modes_panel extends chart_layout_panel implements Runnable {
     private pie_chart_panel pie_chart_of_total_time;
@@ -43,7 +44,9 @@ public class Scene_modes_panel extends chart_layout_panel implements Runnable {
 
         panel_for_charts.add(live_bar_chart);
         n_input_panel = new Time_input_panel();
+        top_input_panel.setLayout(new GridLayout(2, 1));
         top_input_panel.add(n_input_panel);
+        top_input_panel.add(new panel_recorder(panel_for_charts));
         add_chart_panel(panel_for_charts);
 
         live_bar_chart.set_value(5, "Average Speed", "Left");
