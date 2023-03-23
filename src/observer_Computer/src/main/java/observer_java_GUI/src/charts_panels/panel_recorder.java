@@ -8,6 +8,7 @@ package observer_java_GUI.src.charts_panels;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -20,11 +21,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 
 public class panel_recorder extends JPanel {
 
+    private static final long serialVersionUID = 1L;
     private final JButton button_start_recording;
     private final JButton button_stop_recording;
     private final JLabel label_file_name;
@@ -33,6 +37,7 @@ public class panel_recorder extends JPanel {
     private Thread recorder_thread;
     private JPanel panel_to_record;
     private final JSpinner spinner_fps;
+    private final static String[] symbols_to_exclude = { "\\", "/", ":", "*", "?", "\"", "<", ">", "|" };
 
     public panel_recorder(JPanel panel_to_record) {
         super(new FlowLayout());
@@ -41,8 +46,17 @@ public class panel_recorder extends JPanel {
         button_stop_recording = new JButton("Stop Recording!");
         label_file_name = new JLabel("File Name > ");
         text_field_file_name = new JTextField(30);
-        spinner_fps = new JSpinner(new SpinnerNumberModel(10, 1, 30, 1));
+        spinner_fps = new JSpinner(new SpinnerNumberModel(10, 1, 30, 3));
         spinner_fps.setToolTipText("FPS for recording");
+        spinner_fps.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                int value = (int) spinner_fps.getValue();
+                int max = (int) ((SpinnerNumberModel) spinner_fps.getModel()).getMaximum();
+                if (value > max) {
+                    spinner_fps.setValue(max);
+                }
+            }
+        });
 
         button_start_recording.addActionListener(e -> {
             deal_with_recording();
@@ -75,6 +89,13 @@ public class panel_recorder extends JPanel {
     private void deal_with_recording() {
         // TODO: Deal with the flickering of the Panel while recording
         String file_name = text_field_file_name.getText();
+        for (String symbol : symbols_to_exclude) {
+            if (file_name.contains(symbol)) {
+                JOptionPane.showMessageDialog(null,
+                        "Error: Invalid input, You can't use Symbols like\n" + Arrays.toString(symbols_to_exclude));
+                return;
+            }
+        }
         try {
             format_string_with_time(file_name);
         } catch (Exception e) {
