@@ -8,8 +8,6 @@ package observer_java_GUI.src.analytical_tools_panels;
  */
 import java.awt.FlowLayout;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
@@ -21,8 +19,9 @@ import org.jfree.chart.plot.PlotOrientation;
 
 import observer_java_GUI.src.charts_panels.pie_chart_panel;
 import observer_java_GUI.src.charts_panels.bar_chart_panel;
+import observer_java_GUI.src.charts_panels.chart_layout_panel;
 
-public class Scene_modes_panel extends JPanel implements Runnable {
+public class Scene_modes_panel extends chart_layout_panel implements Runnable {
     private pie_chart_panel pie_chart_of_total_time;
     private pie_chart_panel pie_chart_of_n_time;
     private bar_chart_panel live_bar_chart = new bar_chart_panel("Speed in different wheels in \'n\' time",
@@ -32,36 +31,20 @@ public class Scene_modes_panel extends JPanel implements Runnable {
     private Time_input_panel n_input_panel;
 
     public Scene_modes_panel() {
-        setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
+        super();
 
-        // Add spinner at the top
-        c.gridx = 0;
-        c.gridy = 0;
-        c.weightx = 1.0;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        n_input_panel = new Time_input_panel();
-        add(n_input_panel, c);
-
-        // * Add pie charts and bar chart
-        c.gridx = 0;
-        c.gridy = 1;
-        c.weightx = 1.0;
-        c.weighty = 1.0;
-        c.fill = GridBagConstraints.BOTH;
+        JPanel panel_for_charts = new JPanel(new GridLayout(2, 0));
         JPanel pie_chart_panel = new JPanel(new GridLayout(1, 2));
         pie_chart_of_total_time = new pie_chart_panel("In Total time");
         pie_chart_of_n_time = new pie_chart_panel("In \'n\' time");
         pie_chart_panel.add(pie_chart_of_total_time);
         pie_chart_panel.add(pie_chart_of_n_time);
-        add(pie_chart_panel, c);
+        panel_for_charts.add(pie_chart_panel);
 
-        c.gridx = 0;
-        c.gridy = 2;
-        c.weightx = 1.0;
-        c.weighty = 1.0;
-        c.fill = GridBagConstraints.BOTH;
-        add(live_bar_chart, c);
+        panel_for_charts.add(live_bar_chart);
+        n_input_panel = new Time_input_panel();
+        top_input_panel.add(n_input_panel);
+        add_chart_panel(panel_for_charts);
 
         live_bar_chart.set_value(5, "Average Speed", "Left");
         live_bar_chart.set_value(5, "Top Speed", "Left");
