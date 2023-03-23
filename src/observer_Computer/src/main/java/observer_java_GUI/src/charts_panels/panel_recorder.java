@@ -117,6 +117,7 @@ public class panel_recorder extends JPanel {
             while (is_recording) {
                 Graphics g = image.getGraphics();
                 panel_to_record.paint(g);
+                g.dispose();
                 try {
                     ImageIO.write(image, "png", new File(format_string_with_time(file_name) + ".png"));
                 } catch (IOException e) {
