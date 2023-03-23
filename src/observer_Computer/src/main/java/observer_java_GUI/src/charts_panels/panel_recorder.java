@@ -130,7 +130,11 @@ public class panel_recorder extends JPanel {
                 panel_to_record.paint(g);
                 g.dispose();
                 try {
-                    ImageIO.write(image, "png", new File(format_string_with_time(file_name) + ".png"));
+                    File file = new File(path_and_name[0]);
+                    if (!file.exists())
+                        file.mkdirs();
+                    ImageIO.write(image, "png",
+                            new File(path_and_name[0] + "\\" + format_string_with_time(path_and_name[1]) + ".png"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -179,8 +183,14 @@ public class panel_recorder extends JPanel {
 
         Graphics g = image.getGraphics();
         panel_to_record.paint(g);
+        path_and_name[0] = format_string_with_time(path_and_name[0]);
+        path_and_name[1] = format_string_with_time(path_and_name[1]);
         try {
-            ImageIO.write(image, "png", new File(format_string_with_time(file_name) + ".png"));
+            File file = new File(path_and_name[0]);
+            if (!file.exists())
+                file.mkdirs();
+            ImageIO.write(image, "png",
+                    new File(path_and_name[0] + "\\" + path_and_name[1] + ".png"));
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null,
                     e.toString() + "\nPlease check you path and try again");
