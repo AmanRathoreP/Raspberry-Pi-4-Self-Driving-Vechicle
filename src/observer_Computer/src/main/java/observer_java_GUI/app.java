@@ -57,11 +57,6 @@ public class app extends JFrame {
     public app(String scene_to_open) {
         super("My App");
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            // TODO: Handle exception
-        }
-        try {
             System.out.println(my_literals.update_literals(true));
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
@@ -71,6 +66,13 @@ public class app extends JFrame {
             // TODO Auto-generated catch block
             logger.addLog(e.toString(), logger.log_level.WARNING);
             // e.printStackTrace();
+        }
+        try {
+            if ((boolean) my_literals.CONSTANTS.get("USE SYSTEM'S UI MANAGER"))
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            // TODO: Handle exception
+            e.printStackTrace();
         }
         this.logger = new my_logger();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
