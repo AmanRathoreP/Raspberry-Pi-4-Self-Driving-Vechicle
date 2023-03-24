@@ -62,10 +62,14 @@ public class my_literals {
             put("TICK LABEL COLOR", "#000000");
             put("TICK PAINT COLOR", "#808080");
             put("VALUE COLOR", "#000000");
-            put("BACKGROUND COLOR", "#000000");
-            put("PLOT BACKGROUND COLOR", "#d7a98c");
+            put("BACKGROUND COLOR", "#33ccff");
+            put("PLOT BACKGROUND COLOR", "#009999");
             put("GRIDLINE COLOR", "#000000");
             put("SERIES COLOR", "#0e9ca5");
+            put("FONT COLOR FOR CHART'S CAPTION", "#000000");
+            put("FONT'S OUTLINE COLOR FOR CHART'S CAPTION", "#ffffff");
+            put("FONT SIZE FOR CHART'S CAPTION", 21);
+            put("OUTLINE STROKE", 2.284);
         }
     };
     /* constants finished */

@@ -10,11 +10,21 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.Stroke;
+import java.awt.font.GlyphVector;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -24,8 +34,10 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+
+import observer_java_GUI.src.others.my_literals;
 
 public class panel_recorder extends JPanel {
 
@@ -33,6 +45,7 @@ public class panel_recorder extends JPanel {
     private final JButton button_start_recording;
     private final JButton button_stop_recording;
     private final JButton button_take_chart_image;
+    private final JCheckBox checkbox_add_caption;
     private final JLabel label_file_name;
     private final JTextField text_field_file_name;
     private boolean is_recording = false;
@@ -50,6 +63,7 @@ public class panel_recorder extends JPanel {
         button_take_chart_image = new JButton("Take screenshot of chart!");
         label_file_name = new JLabel("File Name > ");
         text_field_file_name = new JTextField(30);
+        checkbox_add_caption = new JCheckBox("Caption");
         spinner_fps = new JSpinner(new SpinnerNumberModel(10, 1, 30, 3));
         spinner_fps.setToolTipText("FPS for recording");
         spinner_fps.addChangeListener(new ChangeListener() {
@@ -85,6 +99,8 @@ public class panel_recorder extends JPanel {
         });
         text_field_file_name.setText(
                 "Frame from ${yyyy-MM-dd}; ${MMMM}, ${EEEE} at time ${HH-mm-ss.SSS}");
+        checkbox_add_caption.setToolTipText(
+                "<html><body>Add caption to the frame?<br>Caption is just the <i>file name</i> itself!</body></html>");
         add(label_file_name);
         add(text_field_file_name);
         add(button_take_chart_image);
@@ -92,6 +108,7 @@ public class panel_recorder extends JPanel {
         add(button_stop_recording);
         add(new JLabel("Fps = "));
         add(spinner_fps);
+        add(checkbox_add_caption);
     }
 
     private void deal_with_recording() {
@@ -160,9 +177,6 @@ public class panel_recorder extends JPanel {
         panel_to_record.paint(g);
         path_and_name[0] = format_string_with_time(path_and_name[0]);
         path_and_name[1] = format_string_with_time(path_and_name[1]);
-        System.out.println(path_and_name[0]);
-        System.out.println(path_and_name[1]);
-        System.out.println("path_and_name[1]");
         String file_path = "";
         File file = new File(path_and_name[0]);
         if (path_and_name[0] == "")
@@ -170,10 +184,17 @@ public class panel_recorder extends JPanel {
         else
             file_path = path_and_name[0] + "/" + path_and_name[1] + ".png";
         try {
-            System.out.println(file_path);
-            if (!file.exists()) {
+            if (!file.exists())
                 file.mkdirs();
-            }
+            if (checkbox_add_caption.isSelected())
+                image = add_text_to_image(image,
+                        path_and_name[1],
+                        Color.decode((String) my_literals.CONSTANTS.get("FONT COLOR FOR CHART'S CAPTION")),
+                        Color.decode((String) my_literals.CONSTANTS.get("FONT'S OUTLINE COLOR FOR CHART'S CAPTION")),
+                        new Font("Arial",
+                                Font.PLAIN,
+                                (int) my_literals.CONSTANTS.get("FONT SIZE FOR CHART'S CAPTION")),
+                        new BasicStroke(((Double) my_literals.CONSTANTS.get("OUTLINE STROKE")).floatValue()));
             ImageIO.write(image, "png",
                     new File(file_path));
         } catch (IOException e) {
@@ -218,6 +239,49 @@ public class panel_recorder extends JPanel {
 
         formattedString.append(string_with_time_specifiers.substring(endIndex));
         return formattedString.toString();
+    }
+
+    private BufferedImage add_text_to_image(BufferedImage image, String text_to_add_on_image,
+            Color color_of_text,
+            Color outline_color_of_text, Font font_of_text, BasicStroke outline_stroke) {
+        int x_position_of_image = 5, y_position_of_image = font_of_text.getSize();
+        // Create a new BufferedImage object with the same size as the original image
+        BufferedImage watermarkedImage = new BufferedImage(image.getWidth(),
+                image.getHeight(),
+                BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics = watermarkedImage.createGraphics();
+        graphics.drawImage(image, 0, 0, null);
+        graphics.setFont(font_of_text);
+
+        Stroke originalStroke = graphics.getStroke();
+        RenderingHints originalHints = graphics.getRenderingHints();
+
+        // create a glyph vector from your text
+        GlyphVector glyphVector = getFont().createGlyphVector(graphics.getFontRenderContext(), text_to_add_on_image);
+        // get the shape object
+        Shape textShape = glyphVector.getOutline();
+        graphics.translate(x_position_of_image, y_position_of_image);
+
+        // activate anti aliasing for text rendering (if you want it to look nice)
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        graphics.setRenderingHint(RenderingHints.KEY_RENDERING,
+                RenderingHints.VALUE_RENDER_QUALITY);
+
+        graphics.setColor(outline_color_of_text);
+        graphics.setStroke(outline_stroke);
+        graphics.draw(textShape); // draw outline
+
+        graphics.setColor(color_of_text);
+        graphics.fill(textShape); // fill the shape
+
+        // reset to original settings after painting
+        graphics.setColor(color_of_text);
+        graphics.setStroke(originalStroke);
+        graphics.setRenderingHints(originalHints);
+
+        graphics.dispose();
+        return watermarkedImage;
     }
 
 }

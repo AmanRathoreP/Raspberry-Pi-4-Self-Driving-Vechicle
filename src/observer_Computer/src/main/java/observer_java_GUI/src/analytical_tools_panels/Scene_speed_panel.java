@@ -57,7 +57,7 @@ public class Scene_speed_panel extends chart_layout_panel implements Runnable {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(976, 486);
+        return new Dimension(1031, 494);
     }
 
     @Override
