@@ -161,6 +161,7 @@ public class Scene_configuration_panel extends JPanel {
                 } else {
                     // TODO: do something
                 }
+                option_panel.setToolTipText((String) my_literals.CONSTANTS_TOOLTIP.get(key));
                 options_panel.add(option_panel);
             }
         }

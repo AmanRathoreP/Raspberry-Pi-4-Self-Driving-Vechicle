@@ -73,6 +73,60 @@ public class my_literals {
         }
     };
     /* constants finished */
+    /* constants' tooltip started */
+    public static Map<String, String> CONSTANTS_TOOLTIP = new HashMap<String, String>() {
+        {
+            put("MAIN WINDOW WIDTH",
+                    "<html><body>Default Width of any panel if preferred size is not provided!<br>Default value is <b>16 * 75</b></body></html>");
+            put("MAIN WINDOW HEIGHT",
+                    "<html><body>Default Height of any panel if preferred size is not provided!<br>Default value is <b>9 * 75</b></body></html>");
+            put("MAXIMUM NUMBER OF LOGS IN LOG WINDOW", "<html><body>Default value is <b>1000</b></body></html>");
+            put("MINIMUM NUMBER OF LOGS IN LOG WINDOW", "<html><body>Default value is <b>2</b></body></html>");
+            put("DEFAULT NUMBER OF LOGS IN LOG WINDOW", "<html><body>Default value is <b>250</b></body></html>");
+            put("STEPS TO TAKE WHILE INCREMENTING THE NUMBER OF LOGS IN LOG WINDOW",
+                    "<html><body>Default value is <b>15</b></body></html>");
+            put("DEFAULT IP ADDRESS OF SOCKET CONNECTION WINDOW",
+                    "<html><body>Default value is <b>127.0.0.1</b></body></html>");
+            put("DEFAULT PORT OF SOCKET CONNECTION WINDOW", "<html><body>Default value is <b>8080</b></body></html>");
+            put("MAXIMUM SECONDS IN SLIDER OF SOCKET CONNECTION WINDOW",
+                    "<html><body>Default value is <b>59</b></body></html>");
+            put("MINIMUM SECONDS IN SLIDER OF SOCKET CONNECTION WINDOW",
+                    "<html><body>Default value is <b>0</b></body></html>");
+            put("DEFAULT SECONDS IN SLIDER OF SOCKET CONNECTION WINDOW",
+                    "<html><body>Default value is <b>20</b></body></html>");
+            put("MINIMUM MINUTES IN SLIDER OF SOCKET CONNECTION WINDOW",
+                    "<html><body>Default value is <b>0</b></body></html>");
+            put("MAXIMUM MINUTES IN SLIDER OF SOCKET CONNECTION WINDOW",
+                    "<html><body>Default value is <b>13</b></body></html>");
+            put("DEFAULT MINUTES IN SLIDER OF SOCKET CONNECTION WINDOW",
+                    "<html><body>Default value is <b>2</b></body></html>");
+            put("COLOR OF PROGRESS BARS IN NON ACTIVE STATE OF SOCKET CONNECTION WINDOW",
+                    "<html><body>Default value is <b>#E02652</b></body></html>");
+            put("COLOR OF PROGRESS BARS IN ACTIVE STATE OF SOCKET CONNECTION WINDOW",
+                    "<html><body>Default value is <b>#A3B8CC</b></body></html>");
+            put("USE SYSTEM\'S UI MANAGER", "<html><body>Default value is <b>false</b></body></html>");
+            put("LOW COLOR", "<html><body>Default value is <b>#40c040</b></body></html>");
+            put("MEDIUM COLOR", "<html><body>Default value is <b>#ffd740</b></body></html>");
+            put("HIGH COLOR", "<html><body>Default value is <b>#dc143c</b></body></html>");
+            put("NEEDLE COLOR",
+                    "<html><body>Color of the needle which is used in the gauge chart etc.<br>Default value is <b>#ffffff</b></body></html>");
+            put("TICK LABEL COLOR", "<html><body>Default value is <b>#000000</b></body></html>");
+            put("TICK PAINT COLOR", "<html><body>Default value is <b>#808080</b></body></html>");
+            put("VALUE COLOR", "<html><body>Default value is <b>#000000</b></body></html>");
+            put("BACKGROUND COLOR", "<html><body>Default value is <b>#33ccff</b></body></html>");
+            put("PLOT BACKGROUND COLOR", "<html><body>Default value is <b>#009999</b></body></html>");
+            put("GRIDLINE COLOR",
+                    "<html><body>This is the color of the grids which are visible in the charts<br>Default value is <b>#000000</b></body></html>");
+            put("SERIES COLOR", "<html><body>Default value is <b>#0e9ca5</b></body></html>");
+            put("FONT COLOR FOR CHART'S CAPTION", "<html><body>Default value is <b>#000000</b></body></html>");
+            put("FONT'S OUTLINE COLOR FOR CHART'S CAPTION",
+                    "<html><body>Default value is <b>#ffffff</b></body></html>");
+            put("FONT SIZE FOR CHART'S CAPTION", "<html><body>Default value is <b>21</b></body></html>");
+            put("OUTLINE STROKE",
+                    "<html><body>This is the width of the outline of the test which will be rendered on the image if you want caption<br>Default value is <b>2.284</b></body></html>");
+        }
+    };
+    /* constants' tooltip finished */
 
     public static boolean update_literals(boolean use_of_config_file)
             throws FileNotFoundException, IOException {
