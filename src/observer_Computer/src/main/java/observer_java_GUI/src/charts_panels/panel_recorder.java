@@ -96,6 +96,17 @@ public class panel_recorder extends JPanel {
 
     private void deal_with_recording() {
         // TODO: Deal with the flickering of the Panel while recording
+
+        int result = JOptionPane.showConfirmDialog(this,
+                "This won't encode frames to video\n" +
+                        "it will just loop the screenshot taking procedure\n" +
+                        "<html><body><i>IT IS ALSO GLITCHY</i></body></html>",
+                "WARNING!",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+
+        if (result != JOptionPane.OK_OPTION)
+            return;
+
         int fps_of_video = (int) spinner_fps.getValue();
 
         // Create a new image with the same size as the panel
