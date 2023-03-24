@@ -8,6 +8,7 @@ package observer_java_GUI.src.charts_panels;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -95,51 +96,14 @@ public class panel_recorder extends JPanel {
 
     private void deal_with_recording() {
         // TODO: Deal with the flickering of the Panel while recording
-        String file_name = text_field_file_name.getText();
-        String[] path_and_name = split_string_from_occurrence_of_last_dirty_symbol(file_name);
-        for (String symbol : symbols_to_exclude_form_file_path) {
-            if (path_and_name[0].contains(symbol)) {
-                JOptionPane.showMessageDialog(null,
-                        "Error: Invalid input, You can't use Symbols like\n" + Arrays.toString(
-                                symbols_to_exclude_form_file_path) + " in file path");
-                return;
-            }
-        }
-        for (String symbol : symbols_to_exclude_form_file_name) {
-            if (path_and_name[1].contains(symbol)) {
-                JOptionPane.showMessageDialog(null,
-                        "Error: Invalid input, You can't use Symbols like\n" + Arrays.toString(
-                                symbols_to_exclude_form_file_name) + " in file name");
-                return;
-            }
-        }
-        try {
-            format_string_with_time(file_name);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        int width = panel_to_record.getWidth();
-        int height = panel_to_record.getHeight();
+        int fps_of_video = (int) spinner_fps.getValue();
 
         // Create a new image with the same size as the panel
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         recorder_thread = new Thread(() -> {
             while (is_recording) {
-                Graphics g = image.getGraphics();
-                panel_to_record.paint(g);
-                g.dispose();
+                this.deal_with_screenshot();
                 try {
-                    File file = new File(path_and_name[0]);
-                    if (!file.exists())
-                        file.mkdirs();
-                    ImageIO.write(image, "png",
-                            new File(path_and_name[0] + "\\" + format_string_with_time(path_and_name[1]) + ".png"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    Thread.sleep((int) (1000 / (int) spinner_fps.getValue()));
+                    Thread.sleep((int) (1000 / fps_of_video));
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -166,7 +130,7 @@ public class panel_recorder extends JPanel {
             if (path_and_name[1].contains(symbol)) {
                 JOptionPane.showMessageDialog(null,
                         "Error: Invalid input, You can't use Symbols like\n" + Arrays.toString(
-                                symbols_to_exclude_form_file_name) + " in file name");
+                                symbols_to_exclude_form_file_name) + " in file name" + "\n" + path_and_name[1]);
                 return;
             }
         }
@@ -185,40 +149,64 @@ public class panel_recorder extends JPanel {
         panel_to_record.paint(g);
         path_and_name[0] = format_string_with_time(path_and_name[0]);
         path_and_name[1] = format_string_with_time(path_and_name[1]);
+        System.out.println(path_and_name[0]);
+        System.out.println(path_and_name[1]);
+        System.out.println("path_and_name[1]");
+        String file_path = "";
+        File file = new File(path_and_name[0]);
+        if (path_and_name[0] == "")
+            file_path = path_and_name[1] + ".png";
+        else
+            file_path = path_and_name[0] + "/" + path_and_name[1] + ".png";
         try {
-            File file = new File(path_and_name[0]);
-            if (!file.exists())
+            System.out.println(file_path);
+            if (!file.exists()) {
                 file.mkdirs();
+            }
             ImageIO.write(image, "png",
-                    new File(path_and_name[0] + "\\" + path_and_name[1] + ".png"));
+                    new File(file_path));
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null,
-                    e.toString() + "\nPlease check you path and try again");
+                    e.toString() + "\nPlease check you path and try again"
+                            + "\nYour Path is \"" + path_and_name[0] + path_and_name[1] + "\"");
+        } finally {
+            g.dispose();
         }
 
     }
 
     private static String[] split_string_from_occurrence_of_last_dirty_symbol(String str) {
-        int splitIndex = Math.max(str.lastIndexOf('/'), str.lastIndexOf('\\'));
-        String[] result = new String[2];
-        result[0] = str.substring(0, splitIndex);
-        result[1] = str.substring(splitIndex + 1);
-        return result;
+        if (Arrays.stream(new String[] { "/", "\\" }).anyMatch(str::contains)) {
+            int splitIndex = Math.max(str.lastIndexOf('/'), str.lastIndexOf('\\'));
+            return new String[] { str.substring(0, splitIndex), str.substring(splitIndex + 1) };
+        }
+        return new String[] { "", str };
     }
+
     private static String format_string_with_time(String string_with_time_specifiers) {
-        String output = "";
+        if (string_with_time_specifiers == null) {
+            throw new IllegalArgumentException("Input cannot be null");
+        }
+
+        StringBuilder formattedString = new StringBuilder();
         int startIndex = 0;
         int endIndex = 0;
-        while (startIndex < string_with_time_specifiers.length()
-                && (startIndex = string_with_time_specifiers.indexOf("${", endIndex)) != -1) {
-            output += string_with_time_specifiers.substring(endIndex, startIndex);
-            endIndex = string_with_time_specifiers.indexOf("}", startIndex);
-            String value = string_with_time_specifiers.substring(startIndex + 2, endIndex);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(value);
-            output += LocalDateTime.now().format(formatter);
-            endIndex++;
+        try {
+            while (startIndex < string_with_time_specifiers.length()
+                    && (startIndex = string_with_time_specifiers.indexOf("${", endIndex)) != -1) {
+                formattedString.append(string_with_time_specifiers.substring(endIndex, startIndex));
+                endIndex = string_with_time_specifiers.indexOf("}", startIndex);
+                String value = string_with_time_specifiers.substring(startIndex + 2, endIndex);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(value);
+                formattedString.append(LocalDateTime.now().format(formatter));
+                endIndex++;
+            }
+        } catch (DateTimeParseException e) {
+            return "Invalid time format specified";
         }
-        return output;
+
+        formattedString.append(string_with_time_specifiers.substring(endIndex));
+        return formattedString.toString();
     }
 
 }
