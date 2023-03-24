@@ -18,7 +18,7 @@ import java.util.logging.Level;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
+import javax.swing.UIManager;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -56,6 +56,11 @@ public class app extends JFrame {
 
     public app(String scene_to_open) {
         super("My App");
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            // TODO: Handle exception
+        }
         try {
             System.out.println(my_literals.update_literals(true));
         } catch (FileNotFoundException e) {

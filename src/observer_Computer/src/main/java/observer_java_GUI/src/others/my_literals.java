@@ -52,7 +52,9 @@ public class my_literals {
             put("DEFAULT MINUTES IN SLIDER OF SOCKET CONNECTION WINDOW", 2);
             put("COLOR OF PROGRESS BARS IN NON ACTIVE STATE OF SOCKET CONNECTION WINDOW", "#E02652");
             put("COLOR OF PROGRESS BARS IN ACTIVE STATE OF SOCKET CONNECTION WINDOW", "#A3B8CC");
-            put("USE JAVA SWING IN-BUILD FILE EXPLORER", true);
+            // TODO put("APP UI MANAGER", "javax.swing.plaf.metal.MetalLookAndFeel");
+            // This includes file explorer too
+            put("USE SYSTEM\'S UI MANAGER", false);
             put("LOW COLOR", "#40c040");
             put("MEDIUM COLOR", "#ffd740");
             put("HIGH COLOR", "#dc143c");
