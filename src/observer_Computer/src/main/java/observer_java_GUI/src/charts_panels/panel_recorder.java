@@ -69,9 +69,8 @@ public class panel_recorder extends JPanel {
         spinner_fps.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 int value = (int) spinner_fps.getValue();
-                int max = (int) ((SpinnerNumberModel) spinner_fps.getModel()).getMaximum();
-                if (value > max) {
-                    spinner_fps.setValue(max);
+                if (value > 30) {
+                    spinner_fps.setValue(30);
                 }
             }
         });
