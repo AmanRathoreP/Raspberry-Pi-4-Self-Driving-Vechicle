@@ -1,17 +1,6 @@
 /*
-create me a Scene_configuration_panel in java swing which will display all configurations options from a map 
-
-
-below are some requirements it should have a search panel which should avoid accent
- it should be responsive 
-  search bar at the top
-   add all the options below the search bar and options must be in alphabetic order 
-   for the integer it should have those up down arrows for the bool it should have that drop down for hex colors it should have a color picker and for string a text area
-    it must have a scroll bar to if options are too much 
-    do not forget that search option
-    also add a function which will return a map when called publicly containing all the content shown in the option pane with their values
-    and do not write name searchPanel or SearchPanel but use names like search_panel 
-    */
+ * This file contains the the settings panel for the app
+ */
 package observer_java_GUI.src.scenes;
 /*
  * @author Aman Rathore
@@ -126,8 +115,8 @@ public class Scene_configuration_panel extends JPanel {
                     option_panel.add(Box.createVerticalStrut(25));
                 } else if (value instanceof Integer) {
                     JSpinner spinner = new JSpinner(
-                            new SpinnerNumberModel((int) value, Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
-                    spinner.addChangeListener(new Integer_Spinner_Listener(key));
+                            new SpinnerNumberModel((int) value, 0, Integer.MAX_VALUE, 1));
+                    spinner.addChangeListener(new Number_Spinner_Listener<Integer>(key));
                     option_panel.add(spinner);
                     option_panel.add(Box.createVerticalStrut(25));
                 } else if (value instanceof String && ((String) value).startsWith("#")) {
@@ -158,6 +147,12 @@ public class Scene_configuration_panel extends JPanel {
                     text_area_for_string.setAlignmentX(Component.LEFT_ALIGNMENT);
                     option_panel.add(text_area_for_string, BorderLayout.CENTER);
                     option_panel.add(Box.createVerticalStrut(25));
+                } else if (value instanceof Double) {
+                    JSpinner spinner = new JSpinner(
+                            new SpinnerNumberModel((double) value, 0, Float.MAX_VALUE, 0.1691f));
+                    spinner.addChangeListener(new Number_Spinner_Listener<Double>(key));
+                    option_panel.add(spinner);
+                    option_panel.add(Box.createVerticalStrut(25));
                 } else {
                     // TODO: do something
                 }
@@ -187,6 +182,7 @@ public class Scene_configuration_panel extends JPanel {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private class Bool_Combo_Listener implements ActionListener {
         private String key;
 
@@ -202,17 +198,18 @@ public class Scene_configuration_panel extends JPanel {
         }
     }
 
-    private class Integer_Spinner_Listener implements ChangeListener {
+    @SuppressWarnings("unchecked")
+    private class Number_Spinner_Listener<T extends Number> implements ChangeListener {
         private String key;
 
-        public Integer_Spinner_Listener(String key) {
+        public Number_Spinner_Listener(String key) {
             this.key = key;
         }
 
         @Override
         public void stateChanged(ChangeEvent e) {
             JSpinner spinner = (JSpinner) e.getSource();
-            int value = (int) spinner.getValue();
+            T value = (T) spinner.getValue();
             config_map.put(key, value);
         }
     }
