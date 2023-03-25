@@ -58,7 +58,7 @@ public class my_literals {
             put("LOW COLOR", "#40c040");
             put("MEDIUM COLOR", "#ffd740");
             put("HIGH COLOR", "#dc143c");
-            put("NEEDLE COLOR", "#ffffff");
+                    put("NEEDLE COLOR FOR GAUGE CHART", "#ffffff");
             put("TICK LABEL COLOR", "#000000");
             put("TICK PAINT COLOR", "#808080");
             put("VALUE COLOR", "#000000");
@@ -70,6 +70,12 @@ public class my_literals {
             put("FONT'S OUTLINE COLOR FOR CHART'S CAPTION", "#ffffff");
             put("FONT SIZE FOR CHART'S CAPTION", 21);
             put("OUTLINE STROKE", 2.284);
+                    put("WIND NEEDLE COLOR FOR COMPASS CHART", "#ff8bd3");
+                    put("DIRECTION NEEDLE COLOR FOR COMPASS CHART", "#ccffff");
+                    put("OUTLINE COLOR", "#000033");
+                    put("EXPECTED DIRECTION NEEDLE TYPE FOR COMPASS CHART", 7);
+                    put("DIRECTION NEEDLE TYPE FOR COMPASS CHART", 5);
+                    put("HIGHLIGHT COLOR", "#7e98e4");
         }
     };
     /* constants finished */
@@ -108,7 +114,7 @@ public class my_literals {
             put("LOW COLOR", "<html><body>Default value is <b>#40c040</b></body></html>");
             put("MEDIUM COLOR", "<html><body>Default value is <b>#ffd740</b></body></html>");
             put("HIGH COLOR", "<html><body>Default value is <b>#dc143c</b></body></html>");
-            put("NEEDLE COLOR",
+                    put("NEEDLE COLOR FOR GAUGE CHART",
                     "<html><body>Color of the needle which is used in the gauge chart etc.<br>Default value is <b>#ffffff</b></body></html>");
             put("TICK LABEL COLOR", "<html><body>Default value is <b>#000000</b></body></html>");
             put("TICK PAINT COLOR", "<html><body>Default value is <b>#808080</b></body></html>");
@@ -124,6 +130,17 @@ public class my_literals {
             put("FONT SIZE FOR CHART'S CAPTION", "<html><body>Default value is <b>21</b></body></html>");
             put("OUTLINE STROKE",
                     "<html><body>This is the width of the outline of the test which will be rendered on the image if you want caption<br>Default value is <b>2.284</b></body></html>");
+                    put("WIND NEEDLE COLOR FOR COMPASS CHART",
+                                    "<html><body>data here<br>Default value is <b>#ff8bd3</b></body></html>");
+                    put("DIRECTION NEEDLE COLOR FOR COMPASS CHART",
+                                    "<html><body>data here<br>Default value is <b>#ccffff</b></body></html>");
+                    put("OUTLINE COLOR", "<html><body>data here<br>Default value is <b>#000033</b></body></html>");
+                    put("EXPECTED DIRECTION NEEDLE TYPE FOR COMPASS CHART",
+                                    "<html><body>Defines the type of arrow used in the needle to show the wanted direction to move in compass chart<br>0 for <i>Arrow</i><br>1 for <i>Line</i><br>2 for <i>Long</i><br>3 for <i>Pin</i><br>4 for <i>Plum</i><br>5 for <i>Pointer</i><br>6 for <i>Ship</i><br>7 for <i>Wind</i><br>Default value is <b>7</b></body></html>");
+                    put("DIRECTION NEEDLE TYPE FOR COMPASS CHART",
+                                    "<html><body>Defines the type of arrow used in direction needle of compass chart<br>0 for <i>Arrow</i><br>1 for <i>Line</i><br>2 for <i>Long</i><br>3 for <i>Pin</i><br>4 for <i>Plum</i><br>5 for <i>Pointer</i><br>6 for <i>Ship</i><br>7 for <i>Wind</i><br>Default value is <b>5</b></body></html>");
+                    put("HIGHLIGHT COLOR",
+                                    "<html><body>For example it is the color used to fill the outer circle of the compass chart<br>Default value is <b>#7e98e4</b></body></html>");
         }
     };
     /* constants' tooltip finished */

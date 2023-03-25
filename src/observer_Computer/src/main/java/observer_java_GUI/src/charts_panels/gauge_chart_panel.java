@@ -53,7 +53,7 @@ public class gauge_chart_panel extends ChartPanel {
         plot.addInterval(new MeterInterval("High", new Range((max - min) * medium_separation, max), Color
                 .decode((String) my_literals.CONSTANTS.get("HIGH COLOR")), new BasicStroke(2.0f),
                 Color.decode((String) my_literals.CONSTANTS.get("HIGH COLOR"))));
-        plot.setNeedlePaint(Color.decode((String) my_literals.CONSTANTS.get("NEEDLE COLOR")));
+        plot.setNeedlePaint(Color.decode((String) my_literals.CONSTANTS.get("NEEDLE COLOR FOR GAUGE CHART")));
         plot.setTickLabelPaint(Color.decode((String) my_literals.CONSTANTS.get("TICK LABEL COLOR")));
         plot.setTickPaint(Color.decode((String) my_literals.CONSTANTS.get("TICK PAINT COLOR")));
         plot.setValuePaint(Color.decode((String) my_literals.CONSTANTS.get("VALUE COLOR")));
