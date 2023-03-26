@@ -1,13 +1,16 @@
-/*
- * 
- */
+/**
+A bar chart panel that displays a bar chart using the JFreeChart library.
+@see ChartPanel
+@see CategoryPlot
+@see my_literals
+@author Aman Rathore
+@version 1.0
+*/
 package observer_java_GUI.src.charts_panels;
 
-/*
- * @author Aman Rathore
- */
 import java.awt.Color;
 import java.awt.Font;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -21,15 +24,22 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import observer_java_GUI.src.others.my_literals;
 
 public class bar_chart_panel extends ChartPanel {
-
     private static final long serialVersionUID = 1L;
 
     private DefaultCategoryDataset dataset;
     private CategoryPlot plot;
 
-    public bar_chart_panel(String title,
-            String category_axis_label,
-            String value_axis_label,
+    /**
+     * Creates a new instance of the bar chart panel with the specified title,
+     * category axis label,
+     * value axis label, and orientation.
+     *
+     * @param title               the chart title
+     * @param category_axis_label the label for the category axis
+     * @param value_axis_label    the label for the value axis
+     * @param orientation         the orientation of the chart
+     */
+    public bar_chart_panel(String title, String category_axis_label, String value_axis_label,
             PlotOrientation orientation) {
         super(null);
         dataset = new DefaultCategoryDataset();
@@ -63,6 +73,13 @@ public class bar_chart_panel extends ChartPanel {
 
     }
 
+    /**
+     * Sets the value of a data item in the chart's dataset.
+     *
+     * @param value     the value to be set
+     * @param rowKey    the row key of the data item
+     * @param columnKey the column key of the data item
+     */
     public void set_value(double value, String rowKey, String columnKey) {
         dataset.setValue(value, rowKey, columnKey);
     }

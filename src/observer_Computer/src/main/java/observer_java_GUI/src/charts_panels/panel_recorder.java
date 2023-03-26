@@ -1,6 +1,27 @@
-/*
- * This file contains a class to record any panel specifically chart panel
- */
+/**
+
+A panel to record any JPanel, specifically for chart panels. Provides
+options to start and stop recording, take a screenshot of the chart, add a
+caption, and save the recording as a video file. The video file will be
+saved in the user's home directory with a specified file name and FPS.
+<p>
+This panel currently do not use any type of video encoding library to create the video file. Before using
+note that when user tries to record it then it will jus take image of the panel and save it to file according to the FPS provided.
+<p>
+Example usage:
+<pre>{@code
+JPanel chart_panel = new JPanel();
+// add chart to chart_panel
+panel_recorder recorder_panel = new panel_recorder(chart_panel);
+// add recorder_panel to GUI
+}</pre>
+@see JPanel
+@see MeterPlot
+@see GlyphVector
+@see BufferedImage
+@author Aman Rathore
+@version 1.0
+*/
 package observer_java_GUI.src.charts_panels;
 /*
  * @author Aman Rathore
@@ -55,6 +76,11 @@ public class panel_recorder extends JPanel {
     private final static String[] symbols_to_exclude_form_file_path = { "*", "?", "\"", "<", ">", "|" };
     private final static String[] symbols_to_exclude_form_file_name = { "\\", "/", ":", "*", "?", "\"", "<", ">", "|" };
 
+    /**
+     * Creates a new instance of panel_recorder with the specified JPanel to record.
+     * 
+     * @param panel_to_record the JPanel to record
+     */
     public panel_recorder(JPanel panel_to_record) {
         super(new FlowLayout());
         this.panel_to_record = panel_to_record;
@@ -206,6 +232,30 @@ public class panel_recorder extends JPanel {
 
     }
 
+    /**
+     * 
+     * Splits the input string at the occurrence of the last forward slash ("/") or
+     * back slash ("\") character.
+     * 
+     * @param str The input string to be split
+     * @return An array of two strings, where the first element is the string before
+     *         the last occurrence of the dirty symbol
+     *         and the second element is the string after the last occurrence of the
+     *         dirty symbol. If the input string does not
+     *         contain the dirty symbol, an array with an empty string as the first
+     *         element and the input string as the second element is returned.
+     * @throws NullPointerException if the input string is null
+     * @since 1.0.0
+     *        <p>
+     *        Example Usage:
+     * 
+     *        <pre>{@code
+     *  String[] result =
+     *          split_string_from_occurrence_of_last_dirty_symbol("path/to/file.txt");
+     *          // result[0] contains "path/to" and result[1] contains "file.txt"
+     * }</pre>
+     *        </p>
+     */
     private static String[] split_string_from_occurrence_of_last_dirty_symbol(String str) {
         if (Arrays.stream(new String[] { "/", "\\" }).anyMatch(str::contains)) {
             int splitIndex = Math.max(str.lastIndexOf('/'), str.lastIndexOf('\\'));
@@ -214,6 +264,30 @@ public class panel_recorder extends JPanel {
         return new String[] { "", str };
     }
 
+    /**
+     * 
+     * Formats the input string by replacing occurrences of "${timeFormat}" with the
+     * current time formatted according to the specified time format.
+     * 
+     * @param string_with_time_specifiers The input string containing
+     *                                    "${timeFormat}" specifiers
+     * 
+     * @return The formatted string with the "${timeFormat}" specifiers replaced
+     *         with the current time formatted according to the specified time
+     *         format
+     * 
+     * @throws IllegalArgumentException if the input string is null
+     * @since 1.0.0
+     * 
+     *        <p>
+     * 
+     *        <pre>{@code
+     *        String formattedString = format_string_with_time("Hello ${yyyy-MM-dd HH:mm:ss}");
+     *        // formattedString will contain something like "Hello 2023-03-26
+     *        // 12:00:00"
+     * }</pre>
+     *        </p>
+     */
     private static String format_string_with_time(String string_with_time_specifiers) {
         if (string_with_time_specifiers == null) {
             throw new IllegalArgumentException("Input cannot be null");
@@ -240,6 +314,23 @@ public class panel_recorder extends JPanel {
         return formattedString.toString();
     }
 
+    /**
+     * 
+     * Adds text to an image with an optional outline.
+     * 
+     * @param image              the input image
+     * @param textToAddOnImage   the text to add on the image
+     * @param colorOfText        the color of the text
+     * @param outlineColorOfText the color of the text outline, or {@code null} if
+     *                           no outline is desired
+     * @param fontOfText         the font of the text
+     * @param outlineStroke      the stroke of the text outline, or {@code null} if
+     *                           no outline is desired
+     * @return a new BufferedImage object with the input image and the added text
+     * @throws NullPointerException if {@code image}, {@code textToAddOnImage}, or
+     *                              {@code fontOfText} is {@code null}.
+     * @since 1.0.0
+     */
     private BufferedImage add_text_to_image(BufferedImage image, String text_to_add_on_image,
             Color color_of_text,
             Color outline_color_of_text, Font font_of_text, BasicStroke outline_stroke) {

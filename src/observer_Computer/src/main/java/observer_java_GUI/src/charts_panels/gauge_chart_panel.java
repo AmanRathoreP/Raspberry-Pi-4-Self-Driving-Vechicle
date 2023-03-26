@@ -1,10 +1,12 @@
-/*
- * 
- */
+/**
+A gauge chart panel that displays a single value in a dial or meter shape.
+@see ChartPanel
+@see MeterPlot
+@see my_literals
+@author Aman Rathore
+@version 1.0
+*/
 package observer_java_GUI.src.charts_panels;
-/*
- * @author Aman Rathore
- */
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -27,6 +29,17 @@ import java.awt.Font;
 
 import java.text.DecimalFormat;
 
+/**
+ * Creates a gauge chart panel with the specified title, range, unit, and
+ * intervals.
+ * 
+ * @param title             the chart title
+ * @param min               the minimum value of the range
+ * @param max               the maximum value of the range
+ * @param unit              the unit of the gauge chart
+ * @param lower_separation  the value at which the "Low" interval begins
+ * @param medium_separation the value at which the "Medium" interval begins
+ */
 public class gauge_chart_panel extends ChartPanel {
 
     private DefaultValueDataset dataset;
@@ -89,7 +102,33 @@ public class gauge_chart_panel extends ChartPanel {
     }
 }
 
+/**
+ * 
+ * The ColorGradientSampler class provides a utility method to obtain a color
+ * from a gradient, given a start color,
+ * 
+ * a middle color and an end color, and a value in the range [0.0, 1.0]
+ * representing the position along the gradient.
+ * 
+ * The color returned is calculated by interpolating between the start and end
+ * colors using the middle color as a pivot.
+ */
 class color_gradient_sampler {
+
+    /**
+     * 
+     * Returns a color from a gradient given a start color, a middle color, an end
+     * color, and a value in the range [0.0, 1.0].
+     * The color returned is calculated by interpolating between the start and end
+     * colors using the middle color as a pivot.
+     * 
+     * @param startColor  the starting color of the gradient
+     * @param middleColor the middle color of the gradient
+     * @param endColor    the ending color of the gradient
+     * @param value       a value in the range [0.0, 1.0] representing the position
+     *                    along the gradient
+     * @return the color at the given position along the gradient
+     */
     public static Color get_color_from_gradient(Color startColor, Color middleColor, Color endColor, float value) {
         float middleValue = 0.5f; // Value at which the middle color is used
         Color color;

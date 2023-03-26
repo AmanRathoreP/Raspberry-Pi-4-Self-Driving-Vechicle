@@ -1,11 +1,14 @@
-/*
- * 
- */
+/**
+
+The compass_chart_panel class is a custom ChartPanel that displays a compass chart, which displays the wind direction and the expected direction.
+@see ChartPanel
+@see CompassPlot
+@see my_literals
+@author Aman Rathore
+@version 1.0
+*/
 package observer_java_GUI.src.charts_panels;
 
-/*
- * @author Aman Rathore
- */
 import java.awt.Color;
 import java.awt.Font;
 import org.jfree.chart.ChartPanel;
@@ -17,12 +20,20 @@ import org.jfree.data.general.DefaultValueDataset;
 import observer_java_GUI.src.others.my_literals;
 
 public class compass_chart_panel extends ChartPanel {
+        /**
+         * The available types of needles to display in the compass chart.
+         */
     public static final String[] NEEDLE_TYPES = { "Arrow", "Line", "Long", "Pin", "Plum", "Pointer", "Ship", "Wind" };
     private DefaultValueDataset compassData = new DefaultValueDataset(Double.valueOf(0.0));
     private DefaultValueDataset shipData = new DefaultValueDataset(Double.valueOf(0.0));
     private CompassPlot compassPlot = new CompassPlot(this.compassData);
     private JFreeChart chart;
 
+    /**
+     * Constructs a new compass chart panel with a specified title.
+     * 
+     * @param title the title of the compass chart
+     */
     public compass_chart_panel(String title) {
         super(null);
         this.compassPlot.addDataset(this.shipData);
@@ -49,9 +60,14 @@ public class compass_chart_panel extends ChartPanel {
         TextTitle subtitle = new TextTitle(title, new Font("SansSerif", Font.BOLD, 18));
         this.chart.addSubtitle(subtitle);
         this.chart.setTitle((TextTitle) null);
-
     }
 
+    /**
+     * Sets the wind and direction values for the compass chart.
+     * 
+     * @param direction_value the value of the direction
+     * @param wind_value      the value of the wind
+     */
     public void set_value(float direction_value, float wind_value) {
         this.compassData.setValue(Double.valueOf(wind_value));
         this.shipData.setValue(Double.valueOf(direction_value));
