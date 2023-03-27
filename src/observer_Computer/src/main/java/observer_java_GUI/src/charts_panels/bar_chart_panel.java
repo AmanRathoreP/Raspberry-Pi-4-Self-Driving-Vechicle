@@ -4,7 +4,7 @@ A bar chart panel that displays a bar chart using the JFreeChart library.
 @see CategoryPlot
 @see my_literals
 @author Aman Rathore
-@version 1.0
+@version 1.1
 */
 package observer_java_GUI.src.charts_panels;
 
@@ -38,9 +38,13 @@ public class bar_chart_panel extends ChartPanel {
      * @param category_axis_label the label for the category axis
      * @param value_axis_label    the label for the value axis
      * @param orientation         the orientation of the chart
+     * @param min_value           the minimum value bar chart can plot, Use
+     *                            Double.MIN_VALUE of don't want to fix any range
+     * @param max_value           the maximum value bar chart can plot, Use
+     *                            Double.MAX_VALUE of don't want to fix any range
      */
     public bar_chart_panel(String title, String category_axis_label, String value_axis_label,
-            PlotOrientation orientation) {
+            PlotOrientation orientation, double min_value, double max_value) {
         super(null);
         dataset = new DefaultCategoryDataset();
 
@@ -67,8 +71,8 @@ public class bar_chart_panel extends ChartPanel {
         renderer.setDrawBarOutline(false);
         renderer.setShadowVisible(true);
         renderer.setSeriesPaint(0, Color.decode((String) my_literals.CONSTANTS.get("SERIES COLOR")));
-        ((NumberAxis) plot.getRangeAxis()).setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-
+        ((NumberAxis) range_axis).setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        range_axis.setRange(min_value, max_value);
         this.setChart(chart);
 
     }

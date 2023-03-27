@@ -23,12 +23,13 @@ import observer_java_GUI.src.charts_panels.chart_layout_panel;
 import observer_java_GUI.src.charts_panels.panel_recorder;
 
 public class Scene_modes_panel extends chart_layout_panel implements Runnable {
+    private static final long serialVersionUID = 1L;
     private pie_chart_panel pie_chart_of_total_time;
     private pie_chart_panel pie_chart_of_n_time;
     private bar_chart_panel live_bar_chart = new bar_chart_panel("Speed in different wheels in \'n\' time",
             "Wheels area",
             "Speed in terms of % of max speed",
-            PlotOrientation.HORIZONTAL);
+            PlotOrientation.HORIZONTAL, -100, 100);
     private Time_input_panel n_input_panel;
 
     public Scene_modes_panel() {
@@ -51,10 +52,13 @@ public class Scene_modes_panel extends chart_layout_panel implements Runnable {
 
         live_bar_chart.set_value(5, "Average Speed", "Left");
         live_bar_chart.set_value(5, "Top Speed", "Left");
+        live_bar_chart.set_value(-50, "Current Speed", "Left");
         live_bar_chart.set_value(5, "Average Speed", "Combine");
         live_bar_chart.set_value(5, "Top Speed", "Combine");
+        live_bar_chart.set_value(5, "Current Speed", "Combine");
         live_bar_chart.set_value(1.4, "Average Speed", "Right");
         live_bar_chart.set_value(1, "Top Speed", "Right");
+        live_bar_chart.set_value(-1, "Current Speed", "Right");
 
         pie_chart_of_n_time.set_value("Right Drive", 0.7);
         pie_chart_of_n_time.set_value("Front Drive", 1.7);
