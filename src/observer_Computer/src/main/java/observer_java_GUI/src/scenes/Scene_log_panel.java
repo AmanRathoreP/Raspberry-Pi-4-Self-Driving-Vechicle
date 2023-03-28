@@ -195,21 +195,12 @@ public class Scene_log_panel extends JPanel implements Runnable {
 
     private void save_logs_to_file(String string_to_save) {
         File selected_file = null;
-        if (!(Desktop.isDesktopSupported()
-                && (!((Boolean) (my_literals.CONSTANTS
-                        .get("USE JAVA SWING IN-BUILD FILE EXPLORER")))))) {
-            JFileChooser fileChooser = new JFileChooser();
-            int result = fileChooser.showSaveDialog(this);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                selected_file = fileChooser.getSelectedFile();
-            }
-        } else {
-            FileDialog fileDialog = new FileDialog((new javax.swing.JFrame()), "Save File", FileDialog.SAVE);
-            fileDialog.setVisible(true);
-            if (fileDialog.getFile() != null) {
-                selected_file = new File(fileDialog.getDirectory(), fileDialog.getFile());
-            }
-        }
+        JFileChooser file_chooser = new JFileChooser();
+        file_chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        file_chooser.setMultiSelectionEnabled(false);
+        int result = file_chooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION)
+            selected_file = file_chooser.getSelectedFile();
 
         if (selected_file != null) {
             try {

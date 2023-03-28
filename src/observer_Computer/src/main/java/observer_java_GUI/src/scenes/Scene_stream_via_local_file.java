@@ -109,23 +109,6 @@ public class Scene_stream_via_local_file extends JPanel {
             }
         });
         button_select_file.addActionListener(e -> {
-            if (Desktop.isDesktopSupported()
-                    && (!((Boolean) (my_literals.CONSTANTS
-                            .get("USE JAVA SWING IN-BUILD FILE EXPLORER"))))) {
-                FileDialog file_dialog = new FileDialog((new javax.swing.JFrame()), "Select File", FileDialog.LOAD);
-                file_dialog.setVisible(true);
-                if (file_dialog.getFile() != null) {
-                    File file = new File(file_dialog.getDirectory(), file_dialog.getFile());
-                    if (is_file_type_right(file)) {
-                        file_selected = file;
-                        text_field_for_file_name.setText(file.getAbsolutePath());
-                    } else {
-                        file_selected = null;
-                        text_field_for_file_name.setText("");
-                        show_error_message("Invalid file type. Please select a text or CSV file.");
-                    }
-                }
-            } else {
                 JFileChooser file_chooser = new JFileChooser();
                 file_chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 file_chooser.setMultiSelectionEnabled(false);
@@ -139,7 +122,6 @@ public class Scene_stream_via_local_file extends JPanel {
                         file_selected = null;
                         text_field_for_file_name.setText("");
                         show_error_message("Invalid file type. Please select a text or CSV file.");
-                    }
                 }
             }
         });
