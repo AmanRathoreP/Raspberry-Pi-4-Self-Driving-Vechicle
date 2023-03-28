@@ -76,6 +76,7 @@ public class my_literals {
                     put("EXPECTED DIRECTION NEEDLE TYPE FOR COMPASS CHART", 7);
                     put("DIRECTION NEEDLE TYPE FOR COMPASS CHART", 5);
                     put("HIGHLIGHT COLOR", "#7e98e4");
+                    put("AUTO RESIZE WINDOW EVERY TIME", true);
         }
     };
     /* constants finished */
@@ -141,29 +142,37 @@ public class my_literals {
                                     "<html><body>Defines the type of arrow used in direction needle of compass chart<br>0 for <i>Arrow</i><br>1 for <i>Line</i><br>2 for <i>Long</i><br>3 for <i>Pin</i><br>4 for <i>Plum</i><br>5 for <i>Pointer</i><br>6 for <i>Ship</i><br>7 for <i>Wind</i><br>Default value is <b>5</b></body></html>");
                     put("HIGHLIGHT COLOR",
                                     "<html><body>For example it is the color used to fill the outer circle of the compass chart<br>Default value is <b>#7e98e4</b></body></html>");
+                    put("AUTO RESIZE WINDOW EVERY TIME",
+                                    "<html><body>Weather to automatically resize the window every time you navigate to a different panel/stage<br>Default value is <b>true</b></body></html>");
         }
     };
     /* constants' tooltip finished */
 
+    /**
+     * @author Aman Rathore
+     * @apiNote Update the value of the values of the constants according to the
+     *          configuration file provided
+     * @return true if the literals are updated according to config file
+     * @return false if the literals are not updated according to config file due to
+     *         some security or IO reasons etc.
+     * @param use_of_config_file put it true if you want to use a config file
+     * @throws FileNotFoundException          if Json file is not present, use
+     *                                        reset_config() method to create a
+     *                                        config file
+     * @throws IOException                    if Json file can't be read/write may
+     *                                        be due to
+     *                                        security reasons
+     * @throws IllegalStateException          if not all configuration stuff is
+     *                                        present in
+     *                                        the config file
+     * @throws ArrayIndexOutOfBoundsException if configuration file is not written
+     *                                        properly
+     **/
     public static boolean update_literals(boolean use_of_config_file)
-            throws FileNotFoundException, IOException {
-        /**
-         * @author Aman Rathore
-         * @apiNote Update the value of the values of the constants according to the
-         *          configuration file provided
-         * @return true if the literals are updated according to config file
-         * @return false if the literals are not updated according to config file due to
-         *         some security or IO reasons etc.
-         * @param use_of_config_file put it true if you want to use a config file
-         * @throws FileNotFoundException if Json file is not present, use
-         *                               reset_config() method to create a config file
-         * @throws IOException           if Json file can't be read/write may be due to
-         *                               security reasons
-         **/
+                    throws FileNotFoundException, IOException, IllegalStateException {
 
         USE_CONFIG_FILE = use_of_config_file;
         if (USE_CONFIG_FILE) {
-            try {
                 Map<String, Object> temp_constants_for_comparison = observer_java_GUI.src.others.my_json_reader_writer
                         .read_json_from_file(CONFIG_FILE_PATH);
                 if (CONSTANTS.keySet().equals(temp_constants_for_comparison.keySet())) {
@@ -174,10 +183,6 @@ public class my_literals {
                             "Not all the constants are present in the json file\nTry resetting the json file");
                 }
                 return true;
-            } catch (Exception e) {
-                logger.addLog(e.toString(), logger.log_level.SEVERE);
-                return false;
-            }
         } else {
             return false;
         }

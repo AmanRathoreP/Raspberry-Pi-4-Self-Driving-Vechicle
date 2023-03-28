@@ -56,16 +56,34 @@ public class app extends JFrame {
 
     public app(String scene_to_open) {
         super("My App");
+        this.logger = new my_logger();
         try {
             System.out.println(my_literals.update_literals(true));
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
+            JOptionPane.showMessageDialog(null,
+                    "<html><body>No json configuration file is present, using app defaults!<br>Try resetting the file from the app!</body></html>",
+                    "No configuration file found", JOptionPane.WARNING_MESSAGE);
             logger.addLog(e.toString(), logger.log_level.WARNING);
-            // e.printStackTrace();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             logger.addLog(e.toString(), logger.log_level.WARNING);
             // e.printStackTrace();
+        } catch (IllegalStateException e) {
+            JOptionPane.showMessageDialog(null,
+                    "Your json configuration file is not having all the vars so please recheck it or reset the configuration file!",
+                    "Incomplete json!", JOptionPane.ERROR_MESSAGE);
+            logger.addLog(e.toString(), logger.log_level.WARNING);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            JOptionPane.showMessageDialog(null,
+                    "Unable to render Configuration file please use proper notations in json file!", "Corrupt json!",
+                    JOptionPane.ERROR_MESSAGE);
+            logger.addLog(e.toString(), logger.log_level.WARNING);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "Something bad is going on in configuration file please delete it and then reset it via app!",
+                    "Dirty json!",
+                    JOptionPane.ERROR_MESSAGE);
+            logger.addLog(e.toString(), logger.log_level.WARNING);
         }
         try {
             if ((boolean) my_literals.CONSTANTS.get("USE SYSTEM'S UI MANAGER"))
@@ -74,7 +92,6 @@ public class app extends JFrame {
             // TODO: Handle exception
             e.printStackTrace();
         }
-        this.logger = new my_logger();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize((Integer) my_literals.CONSTANTS.get("MAIN WINDOW WIDTH"),
                 (Integer) my_literals.CONSTANTS.get("MAIN WINDOW HEIGHT"));
@@ -197,7 +214,9 @@ public class app extends JFrame {
 
     private void show_scene(String scene_name) {
         ((CardLayout) (contentPanel.getLayout())).show(contentPanel, scene_name);
-        setSize(scenes_map.get(scene_name).getPreferredSize());
+        if ((boolean) my_literals.CONSTANTS.get("AUTO RESIZE WINDOW EVERY TIME")) {
+            setSize(scenes_map.get(scene_name).getPreferredSize());
+        }
         current_opened_scene = scene_name;
     }
 
