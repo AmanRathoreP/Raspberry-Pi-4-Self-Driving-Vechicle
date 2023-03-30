@@ -24,7 +24,8 @@
 
 
 CC=g++
-CFLAGS=-g -Wall
+OPTIMIZATION=-O0
+CFLAGS=-g -Wall $(OPTIMIZATION)
 SRC=src
 BIN=build
 RUNNABLE=main
