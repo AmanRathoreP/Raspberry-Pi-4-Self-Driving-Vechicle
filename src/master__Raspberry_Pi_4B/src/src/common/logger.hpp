@@ -56,16 +56,14 @@ public:
     /**
      * @brief Logs a message with the specified log level, location, and message format.
      * @param level The log level of the message.
-     * @param format The format of the message.
-     * @param args The arguments to the message format.
+     * @param msg The message
      */
-    template <typename... Args>
-    void log(LogLevel level, const std::string &format, Args... args)
+    void log(LogLevel level, const std::string msg)
     {
         if (level >= m_logLevel)
         {
             std::stringstream message;
-            message << "[ " << level_to_string(level) << " ][ " << getTimestamp() << " ][ " << msg_logged_at << " ]: " << format << std::endl;
+            message << "[ " << level_to_string(level) << " ][ " << getTimestamp() << " ][ " << msg_logged_at << " ]: " << msg << std::endl;
             if (m_logToFile)
             {
                 m_fileStream << message.str();
@@ -75,13 +73,11 @@ public:
     }
     /**
      * @brief Logs a message with the default log level i.e, INFO, location, and message format.
-     * @param format The format of the message.
-     * @param args The arguments to the message format.
+     * @param msg The message
      */
-    template <typename... Args>
-    void log(const std::string &format, Args... args)
+    void log(const std::string msg)
     {
-        log(LogLevel::INFO, format);
+        log(LogLevel::INFO, msg);
     }
 
 private:

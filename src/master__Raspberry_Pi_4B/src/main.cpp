@@ -18,6 +18,10 @@ int main()
         {
             val = val * i * j * i * j * i * j * i * j * i * j;
         }
+        if (i % 100000 == 0)
+        {
+            logger.log(LogLevel::DEBUG, std::to_string(i) + " iterations completed!");
+        }
     }
 
     auto end = std::chrono::high_resolution_clock::now();
