@@ -9,18 +9,27 @@
 </p>
 
 
-## Features
+# Features
 
 * Stop signs detection
 * Road lane following
 * Turn Indicators
 * Stop light(back side SDV)
+* [Observer for *development stages*](#about-observer)
+  * Live logs(of SDV or itself etc.)
+  * Real-Time charts such as gauge chart, compass chart, scatter plot etc.
+  * Interactive GUI
+  * Fully customization with GUI
+  * Scheduling the server for connection
+  * Analyzing the data from previous run
+  * and many more.....
+  * > All features are highly customizable, and created by keeping large audience in mind
 
-## Quick start
+# Quick start
 
 First setup pico-sdk c environment ...
 
-### About the files
+## About the files
 ```
 📦Raspberry-Pi-4-Self-Driving-Vechicle
  ┣ 📂others                         # Contains some of the informative files, see internal 📜README.md from more details
@@ -53,8 +62,20 @@ First setup pico-sdk c environment ...
  ┣ 📜issues.md                      # file containing some of the issues/problems regarding the project
  ┗ 📜README.md                      # file containing all these lines and detailed information about the project
 ```
+## About Observer
+Observer is a person which can use a desktop app in order to communicate with the SDV to see some live data of the SDV in order to really see what's happening in it. The application for the observer is developed purely in Java and been focused on analyzing data as much as possible to get some cool insights.
+Previously the observer application was in python and it was a bare minimum software. However, current application is a GUI based application and have some cool analytical features like live logs, different types of charts such as bar chart, gauge chart, pie chart, etc. and many more. Some of it's images are provided below. 
 
-## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](issues.md)
+![config panel](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/config%20panel.png)
+![log panel](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/log%20panel.gif)
+![logs panel(image)](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/logs%20panel(image).png)
+![modes panel](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/modes%20panel.gif)
+![server panel](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/server%20panel.gif)
+![speed panel(tooltip)](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/speed%20panel(tooltip).png)
+![speed panel](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/speed%20panel.gif)
+![usage panel](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/usage%20panel.png)
+
+# Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](issues.md)
 
 Thank you for considering contributing to Raspberry pi Self Driving car!
 
@@ -65,21 +86,21 @@ We welcome any type of contribution, _not only code_. You can help with:
 - **New Features**: You can suggest an modifications or just ask for advancements in the old features of SDV.
 - **Code**: Take a look at the [open issues](issues.md). Even if you can't write the code yourself, you can comment on them, showing that you care about a given issue matters. It helps us to handel them
 
-## Demo
+# Demo
 
 <!-- You can find some of the images or videos [here](demo.md) -->
 ![img1](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/20230122_092916.jpg)
 ![img2](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/20230122_092934.jpg)
 ![gif1](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/20230119_105513_AdobeExpress%20(1).gif)
 
-## Author
+# Author
 
 - [@Aman](https://www.github.com/AmanRathoreP)
    - [GitHub](https://www.github.com/AmanRathoreM)
    - [Telegram](https://t.me/aman0864)
    - Email -> *aman.proj.rel@gmail.com*
 
-## Facts
+# Facts
 - History
   - This is the 8<sup>th</sup> version of the vehicle. Previous versions are not tracked by any version control system.
   - It was initially started in 2019-20 as just an obstacle avoiding vehicle.
@@ -89,7 +110,7 @@ We welcome any type of contribution, _not only code_. You can help with:
   - Later I decided to showcase this same SDV at the competition.
   - The development of this particular version(from scratch) took about 50hrs. However the knowledge and research is of years of hardwork.
   - A similar vehicle was developed in order to test the hardware potential of the chassis. [Here is the GitHub repo of that project](https://github.com/AmanRathoreP/Bluetooth-wireless-car-with-various-features "Bluetooth-wireless-car-with-various-features"). However, the code base of both the projects are quite different.
-## License
+# License
 
 [MIT License](https://choosealicense.com/licenses/mit/)
 
