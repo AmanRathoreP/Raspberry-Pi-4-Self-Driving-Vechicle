@@ -1,0 +1,1 @@
+# This directory contains file for the user which will drive the vehicle (not really) i.e. user will take control of the vehicle in certain ambiguous situation via this QT app, or it can take control any time.
