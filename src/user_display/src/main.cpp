@@ -1,18 +1,17 @@
-
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
-
 int main(int argc, char *argv[])
 {
+    QGuiApplication::setApplicationName("User's Display");
+
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-    const QUrl url(u"qrc:/user_display/src/ui/home.qml"_qs);
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
-        &app, []() { QCoreApplication::exit(-1); },
-        Qt::QueuedConnection);
-    engine.load(url);
+
+    engine.load(QUrl(u"qrc:/user_display/src/ui/home.qml"_qs));
+    if (engine.rootObjects().isEmpty())
+        return -1;
 
     return app.exec();
 }

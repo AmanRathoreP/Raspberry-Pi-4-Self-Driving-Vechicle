@@ -15,7 +15,9 @@ qt_add_executable(appuser_display
 qt_add_qml_module(appuser_display
     URI user_display
     VERSION 1.0
-    QML_FILES src/ui/home.qml
+    QML_FILES
+        "src/ui/home.qml"
+        "src/ui/pages/logger.qml"
 )
 
 set_target_properties(appuser_display PROPERTIES
