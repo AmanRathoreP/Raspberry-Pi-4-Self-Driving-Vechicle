@@ -20,7 +20,6 @@ ApplicationWindow {
 
     Action {
         id: navigateBackAction
-        icon.source: stackView.depth > 1 ? "./../../resources/icons/back.svg" : "./../../resources/icons/drawer.svg"
         onTriggered: {
             if (stackView.depth > 1) {
                 stackView.pop()
@@ -34,7 +33,6 @@ ApplicationWindow {
 
     Action {
         id: optionsMenuAction
-        icon.source: "./../../resources/icons/.svg"
         onTriggered: optionsMenu.open()
     }
 
@@ -44,6 +42,7 @@ ApplicationWindow {
             anchors.fill: parent
 
             ToolButton {
+                icon.source: stackView.depth > 1 ? "https://www.svgrepo.com/show/238203/backward.svg" : "https://www.svgrepo.com/show/509382/menu.svg"
                 action: navigateBackAction
             }
 
@@ -58,6 +57,7 @@ ApplicationWindow {
             }
 
             ToolButton {
+                icon.source: "https://www.svgrepo.com/show/452277/dot-stack.svg"
                 action:optionsMenuAction
 
                 Menu {
@@ -121,10 +121,8 @@ ApplicationWindow {
                 text: "<html><body>Home screen is the place where user can select weather he/she wants<br><ul><li>Semi-Automatic Control</li><li>Automatic Control</li><li>Manual Control</li></ul></body></html>"
                 anchors{
                     margins: 20
-                    top: logo.bottom
                     left: parent.left
                     right: parent.right
-                    bottom: arrow.top
                 }
                 horizontalAlignment: Label.AlignHCenter
                 verticalAlignment: Label.AlignVCenter
