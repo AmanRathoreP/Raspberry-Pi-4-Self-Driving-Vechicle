@@ -97,13 +97,13 @@ ApplicationWindow {
                 highlighted: ListView.isCurrentItem
                 onClicked: {
                     listView.currentIndex = index
-                    stackView.push(model.source)
+                    stackView.push(Qt.createComponent(model.source))
                     drawer.close()
                 }
             }
 
             model: ListModel {
-                ListElement { title: "Vehicle's Logs"; source: "qrc:/src/ui/pages/logger.qml" }
+                ListElement { title: "Vehicle's Logs"; source: "./pages/logger.qml" }
             }
 
             ScrollIndicator.vertical: ScrollIndicator { }
@@ -159,4 +159,5 @@ ApplicationWindow {
             }
         }
     }
+
 }

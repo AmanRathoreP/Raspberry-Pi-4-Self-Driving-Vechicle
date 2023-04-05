@@ -1,9 +1,15 @@
 import QtQuick
 import QtQuick.Controls
 
-ScrollablePage {
+Page {
     Label {
-        text: "Displays the logs of the SDV"
-        anchors.top: parent.top
+        text: "<html><h1>Displays the logs of the SDV</h1></html>"
+        anchors{
+            top:parent.top
+            right:parent.right
+            left: parent.left
+        }                horizontalAlignment: Label.AlignHCenter
+        verticalAlignment: Label.AlignVCenter
+        wrapMode: Label.Wrap
     }
 }
