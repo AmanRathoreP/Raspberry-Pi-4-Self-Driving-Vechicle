@@ -11,13 +11,6 @@ ApplicationWindow {
     visible: true
     title: "User Display for SDV"
 
-
-    Settings {
-        id: settings
-        property string style
-    }
-
-
     Action {
         id: navigateBackAction
         onTriggered: {
@@ -42,7 +35,7 @@ ApplicationWindow {
             anchors.fill: parent
 
             ToolButton {
-                icon.source: stackView.depth > 1 ? "https://www.svgrepo.com/show/238203/backward.svg" : "https://www.svgrepo.com/show/509382/menu.svg"
+                icon.source: stackView.depth > 1 ? "qrc:/graphics/images/icons/resources/icons/back.svg" : "qrc:/graphics/images/icons/resources/icons/menu.svg"
                 action: navigateBackAction
             }
 
@@ -57,7 +50,7 @@ ApplicationWindow {
             }
 
             ToolButton {
-                icon.source: "https://www.svgrepo.com/show/452277/dot-stack.svg"
+                icon.source: "qrc:/graphics/images/icons/resources/icons/dot-stack.svg"
                 action:optionsMenuAction
 
                 Menu {
