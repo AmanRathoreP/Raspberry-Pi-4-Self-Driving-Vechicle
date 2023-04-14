@@ -4,4 +4,9 @@
         <file>resources/icons/dot-stack.svg</file>
         <file>resources/icons/menu.svg</file>
     </qresource>
+    <qresource prefix="/designs/tabs/controls">
+        <file>src/ui/others/control-tabs/Semi-Automatic.qml</file>
+        <file>src/ui/others/control-tabs/Manual.qml</file>
+        <file>src/ui/others/control-tabs/Automatic.qml</file>
+    </qresource>
 </RCC>

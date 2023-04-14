@@ -40,46 +40,22 @@ Page {
         currentIndex: tabBar.currentIndex
 
         Item{
-            Label {
-                text: "<html><body><h1>Semi-Automatic Control stuff</h1></body></html>"
-                anchors{
-                    margins: 20
-                    left: parent.left
-                    right: parent.right
-                }
-                horizontalAlignment: Label.AlignHCenter
-                verticalAlignment: Label.AlignVCenter
-                wrapMode: Label.Wrap
-            }
+            Component.onCompleted: loadOtherQml("qrc:/designs/tabs/controls/src/ui/others/control-tabs/Semi-Automatic.qml",this)
         }
         Item{
-            Label {
-                text: "<html><body><h1>Automatic Control stuff</h1></body></html>"
-                anchors{
-                    margins: 20
-                    left: parent.left
-                    right: parent.right
-                }
-                horizontalAlignment: Label.AlignHCenter
-                verticalAlignment: Label.AlignVCenter
-                wrapMode: Label.Wrap
-            }
+            Component.onCompleted: loadOtherQml("qrc:/designs/tabs/controls/src/ui/others/control-tabs/Automatic.qml",this)
         }
         Item{
-            Label {
-                text: "<html><body><h1>Manual Control stuff</h1></body></html>"
-                anchors{
-                    margins: 20
-                    left: parent.left
-                    right: parent.right
-                }
-                horizontalAlignment: Label.AlignHCenter
-                verticalAlignment: Label.AlignVCenter
-                wrapMode: Label.Wrap
-            }
+            Component.onCompleted: loadOtherQml("qrc:/designs/tabs/controls/src/ui/others/control-tabs/Manual.qml",this)
         }
-        }
+    }
 
+    function loadOtherQml(qmlFile, componentId) {
+        var myTab = Qt.createComponent(qmlFile);
+        if (myTab.status === Component.Ready) {
+            myTab.createObject(componentId).anchors.fill=componentId
+        }
+    }
 
 }
 

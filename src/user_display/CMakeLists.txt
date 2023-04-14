@@ -21,6 +21,9 @@ qt_add_qml_module(appuser_display
         "src/ui/Main.qml"
         "src/ui/pages/home.qml"
         "src/ui/pages/logger.qml"
+        "src/ui/others/control-tabs/Semi-Automatic.qml"
+        "src/ui/others/control-tabs/Automatic.qml"
+        "src/ui/others/control-tabs/Manual.qml"
 )
 
 set_target_properties(appuser_display PROPERTIES
