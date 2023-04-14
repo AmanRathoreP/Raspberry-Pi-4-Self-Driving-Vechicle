@@ -8,11 +8,11 @@ Page {
         currentIndex: swipeView.currentIndex
 
         TabButton {
-            text: "Semi-Automatic"
+            text: "Hybrid"
             ToolTip {
                 delay:50
                 text: "Provides semeless transition between the automatic and the manual controls"
-                visible: parent.hovered
+                visible: (parent.hovered || parent.pressed) && showToolTips
             }
         }
         TabButton {
@@ -20,7 +20,7 @@ Page {
             ToolTip {
                 delay:50
                 text: "Full automatic system no need for any human driver"
-                visible: parent.hovered
+                visible: (parent.hovered || parent.pressed) && showToolTips
             }
         }
         TabButton {
@@ -28,7 +28,7 @@ Page {
             ToolTip {
                 delay:50
                 text: "Just shows some extra information about the environment but only driver can control hardware of the vehicle"
-                visible: parent.hovered
+                visible: (parent.hovered || parent.pressed) && showToolTips
             }
         }
     }
