@@ -106,26 +106,8 @@ ApplicationWindow {
     StackView {
         id: stackView
         anchors.fill: parent
-
-        initialItem: Pane {
-            id: pane
-
-            Label {
-                text: "<html><body>Home screen is the place where user can select weather he/she wants<br><ul><li>Semi-Automatic Control</li><li>Automatic Control</li><li>Manual Control</li></ul></body></html>"
-                anchors{
-                    margins: 20
-                    left: parent.left
-                    right: parent.right
-                }
-                horizontalAlignment: Label.AlignHCenter
-                verticalAlignment: Label.AlignVCenter
-                wrapMode: Label.Wrap
-            }
-
-
-        }
+        initialItem: Qt.createComponent("./pages/home.qml")
     }
-
 
 
     Dialog {
