@@ -3,6 +3,7 @@
         <file>resources/icons/back.svg</file>
         <file>resources/icons/dot-stack.svg</file>
         <file>resources/icons/menu.svg</file>
+        <file>resources/icons/reset.svg</file>
     </qresource>
     <qresource prefix="/designs/tabs/controls">
         <file>src/ui/others/control-tabs/Semi-Automatic.qml</file>

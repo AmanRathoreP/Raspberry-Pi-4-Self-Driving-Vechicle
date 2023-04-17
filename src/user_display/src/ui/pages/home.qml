@@ -10,25 +10,25 @@ Page {
         TabButton {
             text: "Hybrid"
             ToolTip {
-                delay:50
+                delay: parseInt(myAppSettings.get_value("delayForToolTipsToAppear"))
                 text: "Provides semeless transition between the automatic and the manual controls"
-                visible: (parent.hovered || parent.pressed) && showToolTips
+                visible: (parent.hovered || parent.pressed) && String(myAppSettings.get_value("showToolTips")).indexOf("t") !== -1 ? true : false
             }
         }
         TabButton {
             text: "Automatic"
             ToolTip {
-                delay:50
+                delay: parseInt(myAppSettings.get_value("delayForToolTipsToAppear"))
                 text: "Full automatic system no need for any human driver"
-                visible: (parent.hovered || parent.pressed) && showToolTips
+                visible: (parent.hovered || parent.pressed) && String(myAppSettings.get_value("showToolTips")).indexOf("t") !== -1 ? true : false
             }
         }
         TabButton {
             text: "Manual"
             ToolTip {
-                delay:50
+                delay: parseInt(myAppSettings.get_value("delayForToolTipsToAppear"))
                 text: "Just shows some extra information about the environment but only driver can control hardware of the vehicle"
-                visible: (parent.hovered || parent.pressed) && showToolTips
+                visible: (parent.hovered || parent.pressed) && String(myAppSettings.get_value("showToolTips")).indexOf("t") !== -1 ? true : false
             }
         }
     }

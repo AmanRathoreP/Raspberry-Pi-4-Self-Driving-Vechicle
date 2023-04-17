@@ -9,9 +9,15 @@ find_package(Qt6 6.4 REQUIRED COMPONENTS Quick)
 
 qt_standard_project_setup()
 
+set( project_sources
+   src/src/qt/myappsettingsclass.h
+   src/src/qt/myappsettingsclass.cpp
+)
+
 qt_add_executable(appuser_display
     resources.qrc
     src/main.cpp
+    ${project_sources}
 )
 
 qt_add_qml_module(appuser_display
@@ -21,6 +27,7 @@ qt_add_qml_module(appuser_display
         "src/ui/Main.qml"
         "src/ui/pages/home.qml"
         "src/ui/pages/logger.qml"
+        "src/ui/pages/app-settings.qml"
         "src/ui/others/control-tabs/Semi-Automatic.qml"
         "src/ui/others/control-tabs/Automatic.qml"
         "src/ui/others/control-tabs/Manual.qml"

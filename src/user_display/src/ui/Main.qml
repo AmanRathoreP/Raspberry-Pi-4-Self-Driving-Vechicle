@@ -103,6 +103,7 @@ ApplicationWindow {
 
             model: ListModel {
                 ListElement { title: "Vehicle's Logs"; source: "./pages/logger.qml" }
+                ListElement { title: "App Settings"; source: "./pages/app-settings.qml" }
             }
 
             ScrollIndicator.vertical: ScrollIndicator { }
