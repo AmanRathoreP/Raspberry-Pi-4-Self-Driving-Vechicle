@@ -4,6 +4,9 @@
         <file>resources/icons/dot-stack.svg</file>
         <file>resources/icons/menu.svg</file>
         <file>resources/icons/reset.svg</file>
+        <file>resources/icons/logs.svg</file>
+        <file>resources/icons/settings.svg</file>
+        <file>resources/icons/vehicle-logs.svg</file>
     </qresource>
     <qresource prefix="/designs/tabs/controls">
         <file>src/ui/others/control-tabs/Semi-Automatic.qml</file>

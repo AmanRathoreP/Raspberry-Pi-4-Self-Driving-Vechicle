@@ -26,7 +26,8 @@ qt_add_qml_module(appuser_display
     QML_FILES
         "src/ui/Main.qml"
         "src/ui/pages/home.qml"
-        "src/ui/pages/logger.qml"
+        "src/ui/pages/vehicle-logs.qml"
+        "src/ui/pages/app-logs.qml"
         "src/ui/pages/app-settings.qml"
         "src/ui/others/control-tabs/Semi-Automatic.qml"
         "src/ui/others/control-tabs/Automatic.qml"

@@ -2,6 +2,7 @@ import QtCore
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import QtQuick.Controls.Material
 
 
 ApplicationWindow {
@@ -92,7 +93,18 @@ ApplicationWindow {
 
             delegate: ItemDelegate {
                 width: listView.width
-                text: model.title
+                contentItem: Row {
+                    spacing: 10
+                    Image {
+                        source: model.iconSrc
+                        width: parent.height
+                        height: parent.height
+                    }
+                    Text {
+                        text: model.title
+                        font.pixelSize: 20
+                    }
+                }
                 highlighted: ListView.isCurrentItem
                 onClicked: {
                     listView.currentIndex = index
@@ -101,9 +113,11 @@ ApplicationWindow {
                 }
             }
 
+
             model: ListModel {
-                ListElement { title: "Vehicle's Logs"; source: "./pages/logger.qml" }
-                ListElement { title: "App Settings"; source: "./pages/app-settings.qml" }
+                ListElement { title: "Vehicle's Logs"; source: "./pages/vehicle-logs.qml"; iconSrc: "qrc:/graphics/images/icons/resources/icons/vehicle-logs.svg" }
+                ListElement { title: "App's Logs"; source: "./pages/app-logs.qml"; iconSrc: "qrc:/graphics/images/icons/resources/icons/logs.svg" }
+                ListElement { title: "App Settings"; source: "./pages/app-settings.qml"; iconSrc: "qrc:/graphics/images/icons/resources/icons/settings.svg" }
             }
 
             ScrollIndicator.vertical: ScrollIndicator { }
