@@ -11,6 +11,12 @@ ApplicationWindow {
     visible: true
     title: "User Display for SDV"
 
+    Shortcut {
+        sequences: ["Esc", "Back"]
+        enabled: stackView.depth > 1
+        onActivated: navigateBackAction.trigger()
+    }
+
     Action {
         id: navigateBackAction
         onTriggered: {
