@@ -7,10 +7,16 @@
         <file>resources/icons/logs.svg</file>
         <file>resources/icons/settings.svg</file>
         <file>resources/icons/vehicle-logs.svg</file>
+        <file>resources/icons/about.svg</file>
+        <file>resources/icons/author.svg</file>
+        <file>resources/icons/help.svg</file>
     </qresource>
     <qresource prefix="/designs/tabs/controls">
         <file>src/ui/others/control-tabs/Semi-Automatic.qml</file>
         <file>src/ui/others/control-tabs/Manual.qml</file>
         <file>src/ui/others/control-tabs/Automatic.qml</file>
+    </qresource>
+    <qresource prefix="/graphics/images/for-app">
+        <file>resources/images/display.svg</file>
     </qresource>
 </RCC>
