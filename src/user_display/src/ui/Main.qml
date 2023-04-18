@@ -97,6 +97,7 @@ ApplicationWindow {
 
             delegate: ItemDelegate {
                 width: listView.width
+                text: model.title
                 contentItem: Row {
                     spacing: 10
                     Image {
