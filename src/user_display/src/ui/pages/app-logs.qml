@@ -2,15 +2,39 @@ import QtQuick
 import QtQuick.Controls
 
 Page {
-    Label {
-        text: "<html><h1>Displays the logs of the app itself</h1></html>"
-        anchors{
-            top:parent.top
-            right:parent.right
-            left: parent.left
+
+    property ListModel myModel: ListModel {
+        ListElement { name: "Initial Item" }
+    }
+
+    function appendToList(name) {
+        myModel.append({ "name": name })
+    }
+
+    ListView {
+        width: parent.width
+        height: parent.height
+
+        model: myModel
+
+        delegate: Label {
+            width: parent.width
+            text: name
+            anchors.left: parent.left
+            wrapMode: Text.Wrap
+            Rectangle {
+                height: 1
+                width: parent.width
+                color: "gray"
+                anchors.bottom: parent.bottom
+            }
         }
-        horizontalAlignment: Label.AlignHCenter
-        verticalAlignment: Label.AlignVCenter
-        wrapMode: Label.Wrap
+
+        Button {
+            text: "Add item"
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            onClicked: appendToList("New Item")
+        }
     }
 }
