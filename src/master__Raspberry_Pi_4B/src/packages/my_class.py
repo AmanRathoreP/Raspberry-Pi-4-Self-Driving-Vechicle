@@ -15,10 +15,14 @@ import RPi.GPIO as GPIO
 
 IR_RIGHT = 40
 IR_LEFT = 38
+TRIG_PIN = 32
+ECHO_PIN = 36
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(IR_RIGHT, GPIO.IN)
 GPIO.setup(IR_LEFT, GPIO.IN)
+GPIO.setup(TRIG_PIN, GPIO.OUT)
+GPIO.setup(ECHO_PIN, GPIO.IN)
 
 
 class img_prs():
@@ -203,8 +207,10 @@ class SDC:
         self.vehicle_data = f"""b-0-0\n"""
         self.__ir_data_time = 0
         self.send_data = send_data
+        self.__sr04_distance_data = 0.1
 
         self.__update_ir_data()
+        self.__update_sr04_distance_data()
 
         if send_data:
             self.add_log("Connecting to observer...")
@@ -235,6 +241,12 @@ class SDC:
         return self.vehicle_data
 
     def get_vehicle_data(self):
+        self.__update_sr04_distance_data()
+        print(self.__sr04_distance_data)
+        if (self.__sr04_distance_data < 17):
+            self.vehicle_data = f"""b-0-0\n"""
+            return self.vehicle_data
+
         self.__update_ir_data()
         if (time.time()-self.__ir_data_time > 0.251):
             if (self.ir_data[0] == 1) & (self.ir_data[1] == 1):
@@ -282,6 +294,21 @@ class SDC:
         This function gets IR data from sensors
         """
         self.ir_data = [GPIO.input(IR_LEFT), GPIO.input(IR_RIGHT)]
+
+    def __update_sr04_distance_data(self):
+        GPIO.output(TRIG_PIN, GPIO.HIGH)
+        time.sleep(0.00001)
+        GPIO.output(TRIG_PIN, GPIO.LOW)
+
+        while GPIO.input(ECHO_PIN) == GPIO.LOW:
+            pulse_start = time.time()
+
+        while GPIO.input(ECHO_PIN) == GPIO.HIGH:
+            pulse_end = time.time()
+
+        pulse_duration = pulse_end - pulse_start
+
+        self.__sr04_distance_data = (pulse_duration * 34300) / 2
 
 
 my_sdc = SDC(True)
