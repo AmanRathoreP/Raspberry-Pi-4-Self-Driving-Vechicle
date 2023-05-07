@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import socket
 
-host, port = "192.168.0.103", 8141
+host, port = "192.168.0.104", 8141
 
 
 server = socket.socket()

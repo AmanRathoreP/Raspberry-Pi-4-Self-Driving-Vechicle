@@ -183,6 +183,7 @@ class SDC:
     img_click_time = None
     img = None
     send_data = False
+    communicate_with_text = False
 
     def send_img(self):
         if self.send_data == True:
@@ -208,6 +209,27 @@ class SDC:
         self.__ir_data_time = 0
         self.send_data = send_data
         self.__sr04_distance_data = 0.1
+        self.communicate_with_text = True
+
+        if self.communicate_with_text:
+            self.add_log(
+                "Connecting to observer for text based communication...")
+            try:
+                self.observer_text_based_communication = socket.socket(
+                    socket.AF_INET, socket.SOCK_STREAM)
+                # * Connects to server
+                self.observer_text_based_communication.connect(
+                    ("192.168.0.104", 8041))
+                # * this is necessary because call of func "SDC.add_log()" before establishing socket connection had forced SDC.send_data = False
+                self.communicate_with_text = True
+                self.add_log(
+                    "Observer connected successfully for text based communication!")
+            except:
+                self.communicate_with_text = False
+                self.add_log(
+                    "Unable to establish socket connection!, forcing \"communicate_with_text = False\"")
+        self.add_log(
+            "Object successfully created!")
 
         self.__update_ir_data()
         self.__update_sr04_distance_data()
@@ -218,7 +240,7 @@ class SDC:
                 self.observer = socket.socket(
                     socket.AF_INET, socket.SOCK_STREAM)
                 # * Connects to server
-                self.observer.connect(("192.168.0.103", 8141))
+                self.observer.connect(("192.168.0.104", 8141))
                 self.observer_connection_obj = self.observer.makefile('wb')
                 self.observer_stream = io.BytesIO()
                 self.send_data = True  # * this is necessary because call of func "SDC.add_log()" before establishing socket connection had forced SDC.send_data = False
@@ -230,10 +252,10 @@ class SDC:
         self.add_log(
             "Object successfully created!")
 
-    def add_log(self, my_log, send_data_to_observer=False):
+    def add_log(self, my_log, send_data_to_observer=True):
         self.last_log = f"{format(time.time(),'.10f')}-> {my_log}"
         print(self.last_log)
-        if (self.send_data & send_data_to_observer):
+        if (self.communicate_with_text & send_data_to_observer):
             self.__send_data_to_observer(self.last_log)
 
     def random_movement(self):
@@ -271,7 +293,7 @@ class SDC:
         force_send : bool, default=False
             This defines weather you want to send data to observer even when given object is configured to not send data to observer.
         """
-        if (self.send_data):
+        if (self.communicate_with_text):
             self.__send_data_to_observer(data_to_send)
         elif(force_send):
             self.add_log("Force send to observer!")
@@ -283,11 +305,12 @@ class SDC:
         """This takes the data in the form of string and sends it to the observer(computer in my case)
         """
         try:
-            self.observer.send(data.encode())
+            self.observer_text_based_communication.send(data.encode())
+            print(self.observer_text_based_communication.recv(1024).decode()*100)
         except:
-            self.send_data = False
+            self.communicate_with_text = False
             self.add_log(
-                "Unable communicate to observer via socket!, forcing \"send_data = False\"")
+                "Unable communicate to observer via socket!, forcing \"communicate_with_text = False\"")
 
     def __update_ir_data(self):
         """
