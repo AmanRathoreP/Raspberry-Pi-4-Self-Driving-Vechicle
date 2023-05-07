@@ -9,5 +9,5 @@ print("Server started at " + socket.gethostname() + " on port " + str(8041))
 print(f"New connection made! at address = {address}")
 while True:
     message = clientsocket.recv(1024).decode()  # * Gets the incoming message
-    clientsocket.send("data from observer".encode())
+    clientsocket.send("{h@f@0@0@50000}".encode())
     print(message)

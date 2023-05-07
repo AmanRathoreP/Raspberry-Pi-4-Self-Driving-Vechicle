@@ -185,6 +185,12 @@ class SDC:
     send_data = False
     communicate_with_text = False
 
+    vehicle_control_type = 'a'
+    vehicle_direction_to_move_in = None
+    vehicle_max_speed = None
+    vehicle_right_wheel_speed = None
+    vehicle_left_wheel_speed = None
+
     def send_img(self):
         if self.send_data == True:
             self.observer_connection_obj.write(
@@ -262,14 +268,19 @@ class SDC:
         self.vehicle_data = f"""{random.choice(['f','b','r','l'])}-{random.randint(15535,65535)}-{random.randint(15535,65535)}\n"""
         return self.vehicle_data
 
-    def get_vehicle_data(self):
-        self.__update_sr04_distance_data()
-        print(self.__sr04_distance_data)
+    def __get_vehicle_data_for_manual_driving(self):
+        return f"{self.vehicle_direction_to_move_in}-{self.vehicle_right_wheel_speed}-{self.vehicle_left_wheel_speed}\n"
+
+    def __get_vehicle_data_for_hybrid_driving(self):
+        if (int(self.vehicle_right_wheel_speed) + int(self.vehicle_left_wheel_speed) <= 0):
+            return self.__get_vehicle_data_for_auto_driving()
+        return self.__get_vehicle_data_for_manual_driving()
+
+    def __get_vehicle_data_for_auto_driving(self):
         if (self.__sr04_distance_data < 17):
             self.vehicle_data = f"""b-0-0\n"""
             return self.vehicle_data
 
-        self.__update_ir_data()
         if (time.time()-self.__ir_data_time > 0.251):
             if (self.ir_data[0] == 1) & (self.ir_data[1] == 1):
                 self.vehicle_data = f"""f-{self.avg_speed}-{self.avg_speed}\n"""
@@ -283,6 +294,19 @@ class SDC:
                 self.add_log("Both IR sensors are returning True/1!")
                 self.vehicle_data = f"""b-0-0\n"""
         return self.vehicle_data
+
+    def get_vehicle_data(self):
+        self.__update_sr04_distance_data()
+        self.__update_ir_data()
+        if(self.communicate_with_text):
+            self.__update_control_vals()
+
+        if (self.vehicle_control_type == 'h'):
+            return self.__get_vehicle_data_for_hybrid_driving()
+        elif (self.vehicle_control_type == 'm'):
+            return self.__get_vehicle_data_for_manual_driving()
+        else:
+            return self.__get_vehicle_data_for_auto_driving()
 
     def send_data_to_observer(self, data_to_send, force_send=False):
         """This takes the data in the form of ... and send it to the observer(computer in my case)
@@ -306,7 +330,6 @@ class SDC:
         """
         try:
             self.observer_text_based_communication.send(data.encode())
-            print(self.observer_text_based_communication.recv(1024).decode()*100)
         except:
             self.communicate_with_text = False
             self.add_log(
@@ -333,5 +356,24 @@ class SDC:
 
         self.__sr04_distance_data = (pulse_duration * 34300) / 2
 
+    def __update_control_vals(self):
+        try:
+            raw_data = self.observer_text_based_communication.recv(
+                1024).decode()
+            data_list = raw_data[raw_data.find(
+                '{')+1:raw_data.find('}')].split('@')
+        except:
+            self.vehicle_control_type = 'a'  # * fully automatic control
+            self.communicate_with_text = False
+            self.add_log(
+                "Unable communicate to observer via socket!, forcing \"communicate_with_text = False\"")
+            return
+        self.vehicle_control_type = data_list[0]
+        self.vehicle_direction_to_move_in = data_list[1]
+        self.vehicle_max_speed = data_list[4]
+        self.vehicle_right_wheel_speed = min(
+            data_list[2], self.vehicle_max_speed)
+        self.vehicle_left_wheel_speed = min(
+            data_list[3], self.vehicle_max_speed)
 
 my_sdc = SDC(True)
