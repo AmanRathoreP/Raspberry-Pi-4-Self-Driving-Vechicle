@@ -5,13 +5,15 @@ project(user_display VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Network Concurrent)
 
 qt_standard_project_setup()
 
 set( project_sources
    src/src/qt/myappsettingsclass.h
    src/src/qt/myappsettingsclass.cpp
+   src/src/qt/vehiclecommunication.h
+   src/src/qt/vehiclecommunication.cpp
 )
 
 qt_add_executable(appuser_display
@@ -44,6 +46,8 @@ set_target_properties(appuser_display PROPERTIES
 
 target_link_libraries(appuser_display
     PRIVATE Qt6::Quick
+    PRIVATE Qt6::Network
+    PRIVATE Qt6::Concurrent
 )
 
 install(TARGETS appuser_display

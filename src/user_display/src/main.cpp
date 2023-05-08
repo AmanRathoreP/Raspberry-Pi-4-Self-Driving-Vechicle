@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include "src/src/qt/myappsettingsclass.h"
+#include "src/src/qt/vehiclecommunication.h"
 
 int main(int argc, char *argv[])
 {
@@ -19,10 +20,13 @@ int main(int argc, char *argv[])
         }
     }
 
+    vehicleCommunication communication;
+
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("iconHeight", 42);
     engine.rootContext()->setContextProperty("iconWidth", 42);
     engine.rootContext()->setContextProperty("myAppSettings", &myAppSettings);
+    engine.rootContext()->setContextProperty("communication", &communication);
 
     engine.rootContext()->setContextProperty("showToolTips", false);
     engine.load(QUrl(u"qrc:/user_display/src/ui/Main.qml"_qs));
