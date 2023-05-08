@@ -35,7 +35,10 @@ Page {
                 left: parent.left
             }
             checked: String(myAppSettings.get_value(settingId)).indexOf("t") !== -1 ? true : false
-            onCheckedChanged: myAppSettings.set_value(settingId, checked)
+            onCheckedChanged: {
+                myAppSettings.set_value(settingId, checked)
+                labelRestartText.visible = restartText
+            }
             ToolTip {
                 text: toolTipText
                 delay: parseInt(myAppSettings.get_value("delayForToolTipsToAppear"))
@@ -97,6 +100,13 @@ Page {
                 textOfSetting: "delayForToolTipsToAppear";
                 sliderStartingValue: 0;
                 sliderEndingValue: 1000;
+                restartRequired: true
+            }
+
+            ListElement { type: "SwitchDelegate";
+                labelTextToDisplay: "Toggle Swipe";
+                toolTipTextToDisplay: "Defines weather you can use the swipe to change different mode while driving";
+                textOfSetting: "allowSwipeModeSwitch";
                 restartRequired: true
             }
         }

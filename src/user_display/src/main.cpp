@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
     myAppSettingsClass myAppSettings("app-settings.conf");
     myAppSettings.settingsList.append(qMakePair("showToolTips", true));
     myAppSettings.settingsList.append(qMakePair("delayForToolTipsToAppear", 50));
+    myAppSettings.settingsList.append(qMakePair("allowSwipeModeSwitch", false));
 
     for (int i = 0; i < myAppSettings.settingsList.size(); i++) {
         if (!myAppSettings.contains(myAppSettings.settingsList.at(i).first)) {

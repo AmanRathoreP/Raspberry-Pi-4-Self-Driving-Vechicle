@@ -38,6 +38,7 @@ Page {
         id: swipeView
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
+        interactive: String(myAppSettings.get_value("allowSwipeModeSwitch")).indexOf("t") !== -1 ? true : false
 
         Item{
             Component.onCompleted: loadOtherQml("qrc:/designs/tabs/controls/src/ui/others/control-tabs/Semi-Automatic.qml",this)
