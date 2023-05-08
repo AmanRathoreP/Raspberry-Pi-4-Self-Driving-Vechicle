@@ -10,6 +10,8 @@
         <file>resources/icons/about.svg</file>
         <file>resources/icons/author.svg</file>
         <file>resources/icons/help.svg</file>
+        <file>resources/icons/connection.svg</file>
+        <file>resources/icons/update.svg</file>
     </qresource>
     <qresource prefix="/designs/tabs/controls">
         <file>src/ui/others/control-tabs/Semi-Automatic.qml</file>
@@ -18,5 +20,6 @@
     </qresource>
     <qresource prefix="/graphics/images/for-app">
         <file>resources/images/display.svg</file>
+        <file>resources/images/connection.svg</file>
     </qresource>
 </RCC>

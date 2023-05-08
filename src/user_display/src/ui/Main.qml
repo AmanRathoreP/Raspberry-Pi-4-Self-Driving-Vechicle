@@ -75,6 +75,11 @@ ApplicationWindow {
                         icon.source: "qrc:/graphics/images/icons/resources/icons/about.svg"
                         onTriggered: aboutDialog.open()
                     }
+                    Action {
+                        text: "Connection"
+                        icon.source: "qrc:/graphics/images/icons/resources/icons/connection.svg"
+                        onTriggered: connectionDialog.open()
+                    }
                 }
             }
         }
@@ -141,7 +146,8 @@ ApplicationWindow {
         title: "About"
         x: (window.width - width) / 2
         y: (window.height - height) / 2
-        width: Math.min(window.width, window.height) / 3 * 2
+        width: window.width * 0.7
+        height: window.height * 0.8
         contentHeight: imageLogo.height * 2.5
         parent: Overlay.overlay
 
@@ -160,7 +166,7 @@ ApplicationWindow {
 
                 Image {
                     id: imageLogo
-                    width: parent.implicitWidth / 2
+                    width: parent.implicitWidth / 5
                     anchors.horizontalCenter: parent.horizontalCenter
                     fillMode: Image.PreserveAspectFit
                     source: "qrc:/graphics/images/for-app/resources/images/display.svg"
@@ -190,6 +196,83 @@ ApplicationWindow {
                 anchors.bottom: flickable.bottom
                 anchors.right: parent.right
                 anchors.rightMargin: -aboutDialog.rightPadding + 1
+            }
+        }
+    }
+
+    Dialog {
+        id: connectionDialog
+        modal: true
+        title: "Wireless Connection"
+        x: (window.width - width) / 2
+        y: (window.height - height) / 2
+        width: window.width * 0.7
+        height: window.height * 0.8
+        contentHeight: imageLogoConnection.height * 2.5
+        parent: Overlay.overlay
+
+        standardButtons: Dialog.Close
+
+        Flickable {
+            id: flickableConnection
+            clip: true
+            anchors.fill: parent
+            contentHeight: connectionColumn.height
+
+            Column {
+                id:  connectionColumn
+                spacing: 20
+                width: parent.width
+
+                Image {
+                    id: imageLogoConnection
+                    width: parent.implicitWidth / 5
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    fillMode: Image.PreserveAspectFit
+                    source: "qrc:/graphics/images/for-app/resources/images/connection.svg"
+                }
+
+                Label {
+                    width: parent.width
+                    text: "You need to establish a wireless socket communication in order to start the flight!\nBelow progress bar depicts the status of the connection"
+                    wrapMode: Label.Wrap
+                }
+
+                Button{
+                    text :"Update status"
+                    icon.source: "qrc:/graphics/images/icons/resources/icons/update.svg"
+                    onClicked: {
+                        progressBarConnection.visible = !(communication.getIsConnected());
+                        lableConnection.text = communication.getIsConnected() ? "Connected!" : "Waiting for connection...";
+                    }
+                    ToolTip {
+                        delay: parseInt(myAppSettings.get_value("delayForToolTipsToAppear"))
+                        text: "Use this button to update the status of the progress bar"
+                        visible: (parent.hovered || parent.pressed) && String(myAppSettings.get_value("showToolTips")).indexOf("t") !== -1 ? true : false
+                    }
+                }
+
+                Label {
+                    id: lableConnection
+                    width: parent.width
+                    text: communication.getIsConnected() ? "Connected!" : "Waiting for connection..."
+                }
+
+                ProgressBar {
+                    id: progressBarConnection
+                    indeterminate: true
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    visible: !(communication.getIsConnected())
+                }
+
+            }
+
+            ScrollIndicator.vertical: ScrollIndicator {
+                parent: connectionDialog.contentItem
+                anchors.top: flickableConnection.top
+                anchors.bottom: flickableConnection.bottom
+                anchors.right: parent.right
+                anchors.rightMargin: - connectionDialog.rightPadding + 1
             }
         }
     }
