@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 
 Item {
+    property bool brakeOn: false
     Row{
         padding: 5
         anchors {
@@ -34,6 +35,7 @@ Item {
             height: parent.height
             width: 50
             onValueChanged: {
+                brakeOn = false;
                 if (pressed) {
                     //                    value = 0;
                     updateData();
@@ -47,11 +49,22 @@ Item {
             height: parent.height
 
             Rectangle{
-                height: reverseColumn.height - (reverseSwitch.height*2.5)
+                height: reverseColumn.height - (reverseSwitch.height*2.5) - stopButton1.height
                 width: reverseColumn.width
                 color: "transparent"
                 anchors{
                     horizontalCenter: reverseColumn.horizontalCenter
+                }
+            }
+
+            Button {
+                id: stopButton1
+                text: "Brake"
+                highlighted: true
+                onClicked: {
+                    speedSlider.value = 0;
+                    brakeOn = true;
+                    updateData();
                 }
             }
 
@@ -77,9 +90,20 @@ Item {
 
         Rectangle{
             height: parent.height
-            width: parent.width - (reverseColumn.width + speedRangeSlider.width + speedSlider.width + (steeringDial.width * 2))
+            width: parent.width - (reverseColumn.width + speedRangeSlider.width + speedSlider.width + (steeringDial.width * 1.5) + (stopButton1.width * 2))
             color: "transparent"
 
+        }
+
+        Button {
+            id: stopButton2
+            text: "Brake"
+            highlighted: true
+            onClicked: {
+                speedSlider.value = 0;
+                brakeOn = true;
+                updateData();
+            }
         }
 
         Dial {
@@ -104,6 +128,12 @@ Item {
             direction = "l";
         } else{
             direction = reverseSwitch.checked ? "b" : "f";
+        }
+
+        if (brakeOn){
+            communication.updateData("m", direction, 0, 0, 0)
+
+            return;
         }
 
         communication.updateData("h", direction, speedSlider.value * speedRangeSlider.second.value, speedSlider.value * speedRangeSlider.second.value, speedRangeSlider.second.value)

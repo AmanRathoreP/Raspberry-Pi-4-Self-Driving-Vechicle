@@ -47,11 +47,21 @@ Item {
             height: parent.height
 
             Rectangle{
-                height: reverseColumn.height - (reverseSwitch.height*2.5)
+                height: reverseColumn.height - (reverseSwitch.height*2.5) - stopButton1.height
                 width: reverseColumn.width
                 color: "transparent"
                 anchors{
                     horizontalCenter: reverseColumn.horizontalCenter
+                }
+            }
+
+            Button {
+                id: stopButton1
+                text: "Brake"
+                highlighted: true
+                onClicked: {
+                    speedSlider.value = 0;
+                    updateData();
                 }
             }
 
@@ -76,10 +86,20 @@ Item {
         }
 
         Rectangle{
- height: parent.height
-            width: parent.width - (reverseColumn.width + speedRangeSlider.width + speedSlider.width + (steeringDial.width * 2))
+            height: parent.height
+            width: parent.width - (reverseColumn.width + speedRangeSlider.width + speedSlider.width + (steeringDial.width * 1.5) + (stopButton1.width * 2))
             color: "transparent"
 
+        }
+
+        Button {
+            id: stopButton2
+            text: "Brake"
+            highlighted: true
+            onClicked: {
+                speedSlider.value = 0;
+                updateData();
+            }
         }
 
         Dial {
