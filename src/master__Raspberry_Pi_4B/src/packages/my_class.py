@@ -225,7 +225,7 @@ class SDC:
                     socket.AF_INET, socket.SOCK_STREAM)
                 # * Connects to server
                 self.observer_text_based_communication.connect(
-                    ("192.168.0.104", 8041))
+                    ("192.168.0.101", 8011))
                 # * this is necessary because call of func "SDC.add_log()" before establishing socket connection had forced SDC.send_data = False
                 self.communicate_with_text = True
                 self.add_log(
@@ -359,21 +359,34 @@ class SDC:
     def __update_control_vals(self):
         try:
             raw_data = self.observer_text_based_communication.recv(
-                1024).decode()
-            data_list = raw_data[raw_data.find(
-                '{')+1:raw_data.find('}')].split('@')
+                1024*1024).decode()
         except:
             self.vehicle_control_type = 'a'  # * fully automatic control
             self.communicate_with_text = False
             self.add_log(
                 "Unable communicate to observer via socket!, forcing \"communicate_with_text = False\"")
             return
-        self.vehicle_control_type = data_list[0]
-        self.vehicle_direction_to_move_in = data_list[1]
-        self.vehicle_max_speed = data_list[4]
-        self.vehicle_right_wheel_speed = min(
-            data_list[2], self.vehicle_max_speed)
-        self.vehicle_left_wheel_speed = min(
-            data_list[3], self.vehicle_max_speed)
+        try:
+            start_index = raw_data.find('{')
+            end_index = raw_data.find('}')
+            if start_index < end_index:
+                data_list = raw_data[start_index+1:end_index].split('@')
+            else:
+                filtered_data = raw_data[raw_data.find('}')+1:]
+                data_list = filtered_data[filtered_data.find(
+                    '{') + 1:filtered_data.find('}')].split('@')
+            self.vehicle_control_type = data_list[0]
+            self.vehicle_direction_to_move_in = data_list[1]
+            self.vehicle_max_speed = data_list[4]
+            self.vehicle_right_wheel_speed = min(
+                data_list[2], self.vehicle_max_speed)
+            self.vehicle_left_wheel_speed = min(
+                data_list[3], self.vehicle_max_speed)
+        except:
+            self.vehicle_control_type = 'a'  # * fully automatic control
+            self.add_log("Unable to parse data from user!")
+            self.add_log(raw_data)
+
+
 
 my_sdc = SDC(True)

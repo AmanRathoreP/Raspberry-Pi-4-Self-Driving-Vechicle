@@ -21,19 +21,24 @@ Item {
             second.value: 62258
             height: parent.height
             width: 50
+            first.onMoved: updateData();
+            second.onMoved: updateData();
         }
 
         Slider {
+            id: speedSlider
             orientation: Qt.Vertical
             from: 0
-            to: 65535
+            to: 1
             value: 0
             height: parent.height
             width: 50
             onValueChanged: {
                 if (pressed) {
-                    value = 0;
+                    //                    value = 0;
+                    updateData();
                 }
+
             }
         }
 
@@ -44,7 +49,7 @@ Item {
             Rectangle{
                 height: reverseColumn.height - (reverseSwitch.height*2.5)
                 width: reverseColumn.width
-  color: "transparent"
+                color: "transparent"
                 anchors{
                     horizontalCenter: reverseColumn.horizontalCenter
                 }
@@ -63,7 +68,17 @@ Item {
                 anchors{
                     horizontalCenter: reverseColumn.horizontalCenter
                 }
+                onClicked: {
+                    updateData();
+                }
             }
+
+        }
+
+        Rectangle{
+ height: parent.height
+            width: parent.width - (reverseColumn.width + speedRangeSlider.width + speedSlider.width + (steeringDial.width * 2))
+            color: "transparent"
 
         }
 
@@ -72,12 +87,25 @@ Item {
             height: parent.height
             value: 0.5
             onValueChanged: {
-                  if (!pressed) {
-                      // If the dial is not pressed and its value is different from 0.5,
-                      // set the value to 0.5
-                      value = 0.5;
-                  }
-              }
+                updateData();
+                //                if (!pressed) {
+                //                    value = 0.5;
+                //                }
+            }
         }
+    }
+
+    function updateData() {
+        var direction = "f";
+
+        if (steeringDial.value > 0.55) {
+            direction = "r";
+        } else if (steeringDial.value < 0.45) {
+            direction = "l";
+        } else{
+            direction = reverseSwitch.checked ? "b" : "f";
+        }
+
+        communication.updateData("m", direction, speedSlider.value * speedRangeSlider.second.value, speedSlider.value * speedRangeSlider.second.value, speedRangeSlider.second.value)
     }
 }

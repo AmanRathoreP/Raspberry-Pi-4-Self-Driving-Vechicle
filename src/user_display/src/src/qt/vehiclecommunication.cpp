@@ -20,8 +20,8 @@ void vehicleCommunication::initCommunication(void)
 
         while(this->isConnected)
         {
-            startRecvData();
             startSendData();
+            startRecvData();
         }
     });
 }

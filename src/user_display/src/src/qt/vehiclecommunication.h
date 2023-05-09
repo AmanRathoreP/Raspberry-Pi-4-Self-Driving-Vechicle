@@ -25,10 +25,10 @@ private:
     QTcpServer server;
     QTcpSocket* clientSocket;
     QString raw_data_received = "";
-    QString vehicle_control_type = "m";
+    QString vehicle_control_type = "a";
     QString vehicle_direction_to_move_in = "f";
-    int vehicle_right_wheel_speed = 65000;
-    int vehicle_left_wheel_speed = 65000;
+    int vehicle_right_wheel_speed = 0;
+    int vehicle_left_wheel_speed = 0;
     int vehicle_max_speed = 65001;
     bool isConnected;
 };
