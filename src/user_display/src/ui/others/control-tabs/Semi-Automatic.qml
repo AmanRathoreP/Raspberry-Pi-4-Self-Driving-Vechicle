@@ -123,9 +123,9 @@ Item {
         var direction = "f";
 
         if (steeringDial.value > 0.55) {
-            direction = "r";
+            direction = reverseSwitch.checked ? "l" : "r";
         } else if (steeringDial.value < 0.45) {
-            direction = "l";
+            direction = reverseSwitch.checked ? "r" : "l";
         } else{
             direction = reverseSwitch.checked ? "b" : "f";
         }
