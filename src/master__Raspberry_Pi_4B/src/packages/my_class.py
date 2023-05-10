@@ -282,16 +282,16 @@ class SDC:
             return self.vehicle_data
 
         if (time.time()-self.__ir_data_time > 0.251):
-            if (self.ir_data[0] == 1) & (self.ir_data[1] == 1):
+            if (self.ir_data[0] == 0) & (self.ir_data[1] == 0):
                 self.vehicle_data = f"""f-{self.avg_speed}-{self.avg_speed}\n"""
             elif (self.ir_data[0] == 0) & (self.ir_data[1] == 1):
                 self.__ir_data_time = time.time()
-                self.vehicle_data = f"""l-{self.avg_speed*self.turning_speed_multiplier}-{self.avg_speed*self.turning_speed_multiplier}\n"""
+                self.vehicle_data = f"""r-{self.avg_speed*self.turning_speed_multiplier}-{self.avg_speed*self.turning_speed_multiplier}\n"""
             elif (self.ir_data[0] == 1) & (self.ir_data[1] == 0):
                 self.__ir_data_time = time.time()
-                self.vehicle_data = f"""r-{self.avg_speed*self.turning_speed_multiplier}-{self.avg_speed*self.turning_speed_multiplier}\n"""
+                self.vehicle_data = f"""l-{self.avg_speed*self.turning_speed_multiplier}-{self.avg_speed*self.turning_speed_multiplier}\n"""
             else:
-                self.add_log("Both IR sensors are returning True/1!")
+                self.add_log("Both IR sensors are returning False!")
                 self.vehicle_data = f"""b-0-0\n"""
         return self.vehicle_data
 

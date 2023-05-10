@@ -24,6 +24,15 @@
   * Analyzing the data from previous run
   * and many more.....
   * > All features are highly customizable, and created by keeping large audience in mind
+* [User Display as a vehicle *dashboard*](#about-user-display)
+  * Works on multiple platforms like Android, IOS, Windows, Linux, MacOs (ofcourse after compiling)
+  * Real-Time interactions
+  * Interactive GUI
+  * Fully customization with GUI
+  * Multiple driving modes
+  * Communication via Sockets
+  * and many more.....
+  * > All features are highly customizable, and created while keeping scalability in mind
 
 # Quick start
 
@@ -37,16 +46,16 @@ First setup pico-sdk c environment ...
  ┣ 📂resources                      # Files which are useful as a reference, see internal 📜README.md from more details
  ┃ ┗ 📜README.md                    # Internal 📜README of the directory 📂resources
  ┣ 📂src                            # Contains all the source code of the project
- ┃ ┣ 📂master(Raspberry Pi 4B)      # files related to master device i.e. Raspberry pi 4
+ ┃ ┣ 📂master__Raspberry_Pi_4B      # files related to master device i.e. Raspberry pi 4
  ┃ ┃ ┗ 📂src                        # source code of the master device i.e. Raspberry pi 4
  ┃ ┃ ┃ ┣ 📂packages                 # contains some of the files used by the master device
  ┃ ┃ ┃ ┃ ┗ 📜my_class.py            # file containing some of the important classes and functions
  ┃ ┃ ┃ ┗ 📜main.py                  # file responsible for execution of instructions of master device
- ┃ ┣ 📂Observer(Computer)           # files related to observer i.e. external computer(desktop in my case)
- ┃ ┃ ┗ 📂src                        # source code of the observer i.e. external computer(desktop in my case)
- ┃ ┃ ┃ ┣ 📜main.py                  # file responsible for the socket connection between the observer and the master
- ┃ ┃ ┃ ┗ 📜main_recv_img.py         # file responsible for video streaming from master to observer
- ┃ ┗ 📂slave(Pi-Pico)               # files related to slave device i.e. Raspberry pi pico
+ ┃ ┣ 📂observer_Computer            # files related to observer i.e. external computer(Windows in my case)                       # source code of the observer i.e. external computer(Windows in my case)
+ ┃ ┃ ┃ ┣ ...
+ ┃ ┣ 📂user_display                 # files related to user display i.e. external control device(Android or Windows in my case)
+ ┃ ┃ ┗ ...
+ ┃ ┗ 📂slave__Pi_Pico               # files related to slave device i.e. Raspberry pi pico
  ┃ ┃ ┣ 📂include                    # files which should be included in order to use FreeRTOS. go to FreeRTOS docs to know more
  ┃ ┃ ┃ ┗ 📜FreeRTOSConfig.h         # FreeRTOS configuration file
  ┃ ┃ ┣ 📂src                        # source code of the slave device
@@ -74,6 +83,15 @@ Previously the observer application was in python and it was a bare minimum soft
 ![speed panel(tooltip)](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/speed%20panel(tooltip).png)
 ![speed panel](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/speed%20panel.gif)
 ![usage panel](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/usage%20panel.png)
+
+## About User Display
+This is kind of dashboard of a vehicle in reality we will have physical steering wheel, paddles etc. while driving but in order to test the SDV effectively I had designed an interface which works on multiple platforms. It simulates a real SDV for the controlling software
+
+![hybrid tab in home panel](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/SDV's%20app%20(hybrid%20tab%20in%20home%20panel).jpeg)
+![navigation bar](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/SDV's%20app%20(navigation%20bar).jpeg)
+![about](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/SDV's%20app%20(about).jpeg)
+![wireless connection](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/SDV's%20app%20(wireless%20connection).jpeg)
+![settings](https://github.com/AmanRathoreP/AmanRathoreP/blob/main/imgs/SDV's%20app%20(settings).jpeg)
 
 # Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](issues.md)
 
