@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 
 Item {
+    property bool brakeOn: false
     Row{
         padding: 5
         anchors {
@@ -34,6 +35,7 @@ Item {
             height: parent.height
             width: 50
             onValueChanged: {
+                brakeOn = false;
                 if (pressed) {
                     //                    value = 0;
                     updateData();
@@ -61,6 +63,7 @@ Item {
                 highlighted: true
                 onClicked: {
                     speedSlider.value = 0;
+                    brakeOn = true;
                     updateData();
                 }
             }
@@ -98,6 +101,7 @@ Item {
             highlighted: true
             onClicked: {
                 speedSlider.value = 0;
+                brakeOn = true;
                 updateData();
             }
         }
@@ -126,6 +130,13 @@ Item {
             direction = reverseSwitch.checked ? "b" : "f";
         }
 
-        communication.updateData("m", direction, speedSlider.value * speedRangeSlider.second.value, speedSlider.value * speedRangeSlider.second.value, speedRangeSlider.second.value)
+        if (brakeOn){
+            communication.updateData("m", direction, 0, 0, 0)
+
+            return;
+        }
+
+        var speedOfWheels = (speedSlider.value * (speedRangeSlider.second.value - speedRangeSlider.first.value)) + speedRangeSlider.first.value
+        communication.updateData("m", direction, speedOfWheels, speedOfWheels, speedRangeSlider.second.value)
     }
 }

@@ -136,6 +136,7 @@ Item {
             return;
         }
 
-        communication.updateData("h", direction, speedSlider.value * speedRangeSlider.second.value, speedSlider.value * speedRangeSlider.second.value, speedRangeSlider.second.value)
+        var speedOfWheels = (speedSlider.value * (speedRangeSlider.second.value - speedRangeSlider.first.value)) + speedRangeSlider.first.value
+        communication.updateData("m", direction, speedOfWheels, speedOfWheels, speedRangeSlider.second.value)
     }
 }
