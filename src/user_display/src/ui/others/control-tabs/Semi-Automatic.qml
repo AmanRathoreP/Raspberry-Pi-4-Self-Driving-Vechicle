@@ -136,7 +136,7 @@ Item {
             return;
         }
 
-        var speedOfWheels = (speedSlider.value * (speedRangeSlider.second.value - speedRangeSlider.first.value)) + speedRangeSlider.first.value
+        var speedOfWheels = speedSlider.value * speedRangeSlider.second.value
         communication.updateData("m", direction, speedOfWheels, speedOfWheels, speedRangeSlider.second.value)
     }
 }
