@@ -15,6 +15,7 @@
 * Road lane following
 * Turn Indicators
 * Stop light(back side SDV)
+* Stopping on any obstacle which is in front
 * [Observer for *development stages*](#about-observer)
   * Live logs(of SDV or itself etc.)
   * Real-Time charts such as gauge chart, compass chart, scatter plot etc.
