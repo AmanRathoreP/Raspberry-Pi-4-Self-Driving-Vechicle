@@ -183,7 +183,7 @@ class SDC:
     img_click_time = None
     img = None
     send_data = False
-    communicate_with_text = False
+    communicate_with_text = True
 
     vehicle_control_type = 'a'
     vehicle_direction_to_move_in = None
@@ -215,25 +215,10 @@ class SDC:
         self.__ir_data_time = 0
         self.send_data = send_data
         self.__sr04_distance_data = 0.1
-        self.communicate_with_text = True
 
         if self.communicate_with_text:
-            self.add_log(
-                "Connecting to observer for text based communication...")
-            try:
-                self.observer_text_based_communication = socket.socket(
-                    socket.AF_INET, socket.SOCK_STREAM)
-                # * Connects to server
-                self.observer_text_based_communication.connect(
-                    ("192.168.0.101", 8011))
-                # * this is necessary because call of func "SDC.add_log()" before establishing socket connection had forced SDC.send_data = False
-                self.communicate_with_text = True
-                self.add_log(
-                    "Observer connected successfully for text based communication!")
-            except:
-                self.communicate_with_text = False
-                self.add_log(
-                    "Unable to establish socket connection!, forcing \"communicate_with_text = False\"")
+            self.establish_text_based_communication()
+
         self.add_log(
             "Object successfully created!")
 
@@ -263,6 +248,24 @@ class SDC:
         print(self.last_log)
         if (self.communicate_with_text & send_data_to_observer):
             self.__send_data_to_observer(self.last_log)
+
+    def establish_text_based_communication(self):
+        self.add_log(
+            "Connecting to observer for text based communication...")
+        try:
+            self.observer_text_based_communication = socket.socket(
+                socket.AF_INET, socket.SOCK_STREAM)
+            # * Connects to server
+            self.observer_text_based_communication.connect(
+                ("192.168.0.101", 8011))
+            # * this is necessary because call of func "SDC.add_log()" before establishing socket connection had forced SDC.send_data = False
+            self.communicate_with_text = True
+            self.add_log(
+                "Observer connected successfully for text based communication!")
+        except:
+            self.communicate_with_text = False
+            self.add_log(
+                "Unable to establish socket connection!, forcing \"communicate_with_text = False\"")
 
     def random_movement(self):
         self.vehicle_data = f"""{random.choice(['f','b','r','l'])}-{random.randint(15535,65535)}-{random.randint(15535,65535)}\n"""
@@ -298,8 +301,8 @@ class SDC:
     def get_vehicle_data(self):
         self.__update_sr04_distance_data()
         self.__update_ir_data()
-        if(self.communicate_with_text):
-            self.__update_control_vals()
+        
+        self.__update_control_vals()
 
         if (self.vehicle_control_type == 'h'):
             return self.__get_vehicle_data_for_hybrid_driving()
@@ -334,6 +337,7 @@ class SDC:
             self.communicate_with_text = False
             self.add_log(
                 "Unable communicate to observer via socket!, forcing \"communicate_with_text = False\"")
+            self.establish_text_based_communication()
 
     def __update_ir_data(self):
         """
@@ -365,6 +369,7 @@ class SDC:
             self.communicate_with_text = False
             self.add_log(
                 "Unable communicate to observer via socket!, forcing \"communicate_with_text = False\"")
+            self.establish_text_based_communication()
             return
         try:
             start_index = raw_data.find('{')
